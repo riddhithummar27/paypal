@@ -9,9 +9,18 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.106",
+    "@paypal/agent-toolkit": "^1.11.0",
+    "@paypal/react-paypal-js": "^10.6.1",
+    "ag-grid-community": "^36.2.0",
+    "ag-grid-react": "^36.2.0",
+    "ai": "^7.0.159",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.66.0",
     "next": "16.4.3",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
