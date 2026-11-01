@@ -10,6 +10,7 @@ import { BryntumDispatchScheduler } from '@/components/BryntumDispatchScheduler'
 import { AutonomousAgentConsole } from '@/components/AutonomousAgentConsole';
 import { RewardsModal } from '@/components/RewardsModal';
 import { ApiDocsModal } from '@/components/ApiDocsModal';
+import { SponsorShowcaseModal } from '@/components/SponsorShowcaseModal';
 
 import {
   INITIAL_FOOD_LISTINGS,
@@ -29,6 +30,7 @@ export default function Home() {
 
   const [isRewardsOpen, setIsRewardsOpen] = useState(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState(false);
+  const [isSponsorsOpen, setIsSponsorsOpen] = useState(false);
 
   const [stats, setStats] = useState({
     mealsRescued: 2490,
@@ -197,6 +199,7 @@ export default function Home() {
         setActiveTab={setActiveTab}
         onOpenRewards={() => setIsRewardsOpen(true)}
         onOpenApiDocs={() => setIsApiDocsOpen(true)}
+        onOpenSponsors={() => setIsSponsorsOpen(true)}
         stats={stats}
       />
 
@@ -283,6 +286,11 @@ export default function Home() {
       <ApiDocsModal
         isOpen={isApiDocsOpen}
         onClose={() => setIsApiDocsOpen(false)}
+      />
+
+      <SponsorShowcaseModal
+        isOpen={isSponsorsOpen}
+        onClose={() => setIsSponsorsOpen(false)}
       />
     </div>
   );

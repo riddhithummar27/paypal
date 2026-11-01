@@ -19,6 +19,7 @@ interface NavbarProps {
   setActiveTab: (tab: string) => void;
   onOpenRewards: () => void;
   onOpenApiDocs: () => void;
+  onOpenSponsors: () => void;
   stats: {
     mealsRescued: number;
     co2Kg: number;
@@ -32,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab,
   onOpenRewards,
   onOpenApiDocs,
+  onOpenSponsors,
   stats,
 }) => {
   const tabs = [
@@ -134,21 +136,30 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Right Tools / Modals */}
         <div className="flex items-center gap-2">
           <button
+            onClick={onOpenSponsors}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffc439] text-[#001435] hover:bg-[#f2b828] shadow-md transition-all cursor-pointer"
+            title="Official Sponsor Tools & Prize Alignments"
+          >
+            <Award className="w-3.5 h-3.5 text-[#001435]" />
+            <span>Sponsors (5 Active)</span>
+          </button>
+
+          <button
             onClick={onOpenRewards}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#ffc439]/10 text-[#ffc439] border border-[#ffc439]/30 hover:bg-[#ffc439]/20 transition-all"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#ffc439]/10 text-[#ffc439] border border-[#ffc439]/30 hover:bg-[#ffc439]/20 transition-all cursor-pointer"
             title="View Sustainability Badges and Rewards"
           >
             <Award className="w-3.5 h-3.5 text-[#ffc439]" />
-            <span className="hidden sm:inline">Impact Rewards</span>
+            <span>Rewards</span>
           </button>
 
           <button
             onClick={onOpenApiDocs}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0070ba]/15 text-[#009cde] border border-[#0070ba]/30 hover:bg-[#0070ba]/25 transition-all"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0070ba]/15 text-[#009cde] border border-[#0070ba]/30 hover:bg-[#0070ba]/25 transition-all cursor-pointer"
             title="APIMatic & OpenAPI Specs"
           >
             <FileCode className="w-3.5 h-3.5 text-[#009cde]" />
-            <span className="hidden sm:inline">API Specs</span>
+            <span>API Specs</span>
           </button>
         </div>
       </div>
