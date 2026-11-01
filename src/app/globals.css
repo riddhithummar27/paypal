@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #070e1d;
+  --foreground: #f4f6fa;
+
+  /* Official PayPal Brand Palette */
+  --paypal-deep-navy: #001c48;
+  --paypal-classic-blue: #003087;
+  --paypal-vibrant-blue: #0070ba;
+  --paypal-light-blue: #009cde;
+  --paypal-gold: #ffc439;
+  --paypal-gold-hover: #f2b828;
+  --paypal-dark-surface: #0b182f;
+  --paypal-card: #0f2242;
+  --paypal-border: #1b3866;
+  --paypal-text-dark: #001435;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paypal-deep-navy: var(--paypal-deep-navy);
+  --color-paypal-classic-blue: var(--paypal-classic-blue);
+  --color-paypal-vibrant-blue: var(--paypal-vibrant-blue);
+  --color-paypal-light-blue: var(--paypal-light-blue);
+  --color-paypal-gold: var(--paypal-gold);
+  --color-paypal-gold-hover: var(--paypal-gold-hover);
+  --color-paypal-dark-surface: var(--paypal-dark-surface);
+  --color-paypal-card: var(--paypal-card);
+  --color-paypal-border: var(--paypal-border);
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at top left, #0b1a38 0%, #060d1b 60%, #03070f 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+/* PayPal Branded Buttons */
+.paypal-btn-gold {
+  background-color: #ffc439;
+  color: #001435;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(255, 196, 57, 0.28);
+}
+.paypal-btn-gold:hover {
+  background-color: #f2b828;
+  box-shadow: 0 6px 20px 0 rgba(255, 196, 57, 0.42);
+  transform: translateY(-1px);
+}
+
+.paypal-btn-blue {
+  background-color: #0070ba;
+  color: #ffffff;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(0, 112, 186, 0.35);
+}
+.paypal-btn-blue:hover {
+  background-color: #005ea6;
+  box-shadow: 0 6px 20px 0 rgba(0, 112, 186, 0.5);
+  transform: translateY(-1px);
+}
+
+/* AG Grid Dark Theme Customization with PayPal Palette */
+.ag-theme-quartz-dark {
+  --ag-background-color: #0c1a33 !important;
+  --ag-header-background-color: #071326 !important;
+  --ag-odd-row-background-color: #0e1e3b !important;
+  --ag-border-color: #19335c !important;
+  --ag-row-hover-color: #152b52 !important;
+  --ag-selected-row-background-color: #0070ba26 !important;
+  --ag-font-family: inherit !important;
 }

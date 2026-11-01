@@ -7,7 +7,6 @@ import {
   Flame,
   ShieldCheck,
   Plus,
-  AlertTriangle,
   Clock,
   DollarSign,
   CheckCircle2,
@@ -114,59 +113,59 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
 
   return (
     <section className="space-y-6">
-      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+      <div className="bg-[#0a1830] border border-[#1b3866] p-6 rounded-2xl shadow-xl">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0070ba]/20 text-[#009cde] border border-[#0070ba]/40 mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-[#ffc439]" />
             <span>AI Food Safety & Dynamic Pricing Scanner</span>
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl font-black text-white tracking-tight">
             List Surplus Food for Donation or Discounted Rescue
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Whether you are a university canteen, hostel, bakery, or hotel buffet, list your surplus portions here. Free donations remain 100% free; discounted sales link directly to PayPal.
+          <p className="text-xs text-slate-300 mt-1">
+            Connect canteens, bakeries, hostels, and hotels with local demand. Free donations remain 100% free; discounted surplus settles via PayPal Sandbox.
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Input Form */}
-        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-[#0c1c38] border border-[#19355e] rounded-2xl p-6 space-y-5 shadow-xl">
           {isSuccess && (
             <div className="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Listing uploaded successfully and broadcast to AI Rescue Agent & AG Grid!
+              Listing uploaded successfully and broadcast to the AI Rescue Agent & AG Grid!
             </div>
           )}
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Food Item / Surplus Description *</label>
+            <label className="text-xs font-bold text-slate-200">Food Item / Surplus Description *</label>
             <input
               type="text"
               required
               placeholder="e.g. 25 Freshly Baked Bagels & Pastries, 40 Portions Vegetable Biryani"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#0070ba]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Donor Name</label>
+              <label className="text-xs font-bold text-slate-200">Donor Name</label>
               <input
                 type="text"
                 value={donorName}
                 onChange={(e) => setDonorName(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3.5 py-2.5 text-xs text-white"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Donor Type</label>
+              <label className="text-xs font-bold text-slate-200">Donor Type</label>
               <select
                 value={donorType}
                 onChange={(e) => setDonorType(e.target.value as any)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3.5 py-2.5 text-xs text-white"
               >
                 <option value="Restaurant">Restaurant</option>
                 <option value="University Canteen">University Canteen / Hostel</option>
@@ -177,23 +176,23 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Category</label>
+              <label className="text-xs font-bold text-slate-200">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3.5 py-2.5 text-xs text-white"
               >
                 <option value="Meals">Cooked Meals</option>
                 <option value="Bakery">Bakery & Pastry</option>
                 <option value="Produce">Produce / Fruits & Veg</option>
-                <option value="Dairy">Dairy & Dairy Products</option>
-                <option value="Packaged">Packaged / Dry Goods</option>
+                <option value="Dairy">Dairy Products</option>
+                <option value="Packaged">Packaged Goods</option>
               </select>
             </div>
           </div>
 
           {/* Pricing Model Choice */}
-          <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 space-y-3">
+          <div className="p-4 rounded-xl bg-[#071326] border border-[#1b3866] space-y-3">
             <label className="text-xs font-bold text-slate-200">Redistribution Type:</label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
@@ -204,7 +203,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
                   onChange={() => setIsFree(true)}
                   className="text-emerald-500 focus:ring-emerald-500"
                 />
-                <span className="font-semibold text-emerald-400">100% Free Donation</span> (To Shelters / NGOs)
+                <span className="font-bold text-emerald-400">100% Free Donation</span> (To Shelters / NGOs)
               </label>
               <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
                 <input
@@ -212,9 +211,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
                   name="pricingModel"
                   checked={!isFree}
                   onChange={() => setIsFree(false)}
-                  className="text-blue-500 focus:ring-blue-500"
+                  className="text-[#0070ba] focus:ring-[#0070ba]"
                 />
-                <span className="font-semibold text-blue-400">Discounted Surplus Sale</span> (via PayPal Sandbox)
+                <span className="font-bold text-[#009cde]">Discounted Surplus Sale</span> (via PayPal Sandbox)
               </label>
             </div>
 
@@ -228,7 +227,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
                     min="1"
                     value={originalPrice}
                     onChange={(e) => setOriginalPrice(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white mt-1"
+                    className="w-full bg-[#0b1a33] border border-[#1b3866] rounded-lg px-3 py-1.5 text-xs text-white mt-1"
                   />
                 </div>
                 <div className="text-xs text-slate-400 pt-4">
@@ -241,32 +240,32 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
           {/* Portions, Pickup Window & Temp Storage */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Total Portions</label>
+              <label className="text-xs font-bold text-slate-200">Total Portions</label>
               <input
                 type="number"
                 min="1"
                 value={portions}
                 onChange={(e) => setPortions(parseInt(e.target.value, 10) || 1)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3.5 py-2.5 text-xs text-white"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Pickup Cutoff (Minutes)</label>
+              <label className="text-xs font-bold text-slate-200">Pickup Cutoff (Minutes)</label>
               <input
                 type="number"
                 min="10"
                 max="360"
                 value={pickupMinutes}
                 onChange={(e) => setPickupMinutes(parseInt(e.target.value, 10) || 45)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3.5 py-2.5 text-xs text-white"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Storage Temperature</label>
+              <label className="text-xs font-bold text-slate-200">Storage Temperature</label>
               <select
                 value={storageTemp}
                 onChange={(e) => setStorageTemp(e.target.value as any)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white"
+                className="w-full bg-[#071326] border border-[#1b3866] rounded-xl px-3 py-2.5 text-xs text-white"
               >
                 <option value="Hot (>60°C)">Hot Held (&gt;60°C)</option>
                 <option value="Chilled (<5°C)">Chilled (&lt;5°C)</option>
@@ -277,17 +276,17 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
 
           {/* Allergens Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Contains Allergens (Select all that apply):</label>
+            <label className="text-xs font-bold text-slate-200">Contains Allergens (Select all that apply):</label>
             <div className="flex flex-wrap gap-2">
               {allergenOptions.map((item) => (
                 <button
                   type="button"
                   key={item}
                   onClick={() => handleToggleAllergen(item)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                     selectedAllergens.includes(item)
-                      ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
-                      : 'bg-slate-800 border-slate-700 text-slate-400'
+                      ? 'bg-[#ffc439]/20 border-[#ffc439]/60 text-[#ffc439]'
+                      : 'bg-[#071326] border-[#1b3866] text-slate-400'
                   }`}
                 >
                   {item}
@@ -297,13 +296,13 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
           </div>
 
           {/* Food Safety Declaration */}
-          <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700 flex items-start gap-3">
+          <div className="p-3.5 rounded-xl bg-[#071326] border border-[#1b3866] flex items-start gap-3">
             <input
               type="checkbox"
               id="safety"
               checked={safetyDeclared}
               onChange={(e) => setSafetyDeclared(e.target.checked)}
-              className="mt-0.5 rounded text-emerald-500 focus:ring-emerald-500"
+              className="mt-0.5 rounded text-[#0070ba] focus:ring-[#0070ba]"
             />
             <label htmlFor="safety" className="text-xs text-slate-300 cursor-pointer">
               <strong className="text-white">Donor Food Safety & Hygiene Declaration:</strong> I confirm this food was prepared under clean, hygienic standards, handled with food-grade utensils, and stored at designated temperature limits.
@@ -315,15 +314,15 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
               type="button"
               onClick={handleRunAiScanner}
               disabled={isAnalyzing}
-              className="flex-1 py-3 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 flex items-center justify-center gap-2 transition-all"
+              className="flex-1 py-3 rounded-xl text-xs font-bold bg-[#071326] hover:bg-[#0f2242] text-[#009cde] border border-[#0070ba]/40 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span>{isAnalyzing ? 'Scanning with AI...' : 'Run AI Dynamic Pricing Scan'}</span>
+              <Sparkles className="w-4 h-4 text-[#ffc439]" />
+              <span>{isAnalyzing ? 'Scanning with AI...' : 'Run Dynamic Pricing Scan'}</span>
             </button>
 
             <button
               type="submit"
-              className="flex-1 py-3 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all"
+              className="flex-1 py-3 rounded-xl text-xs font-bold paypal-btn-gold flex items-center justify-center gap-2 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Publish Surplus Listing</span>
@@ -332,33 +331,33 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
         </form>
 
         {/* Right: AI Intelligence Panel */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+        <div className="bg-[#0c1c38] border border-[#19355e] rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-xl">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Live AI Safety & Pricing Preview</span>
+            <div className="flex items-center gap-2 text-xs font-extrabold text-[#009cde] uppercase tracking-wider">
+              <ShieldCheck className="w-4 h-4 text-[#ffc439]" />
+              <span>Live AI Pricing & Safety Preview</span>
             </div>
 
             {aiAnalysis ? (
               <div className="space-y-3">
-                <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 space-y-2">
+                <div className="p-4 rounded-xl bg-[#071326] border border-[#1b3866] space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400">Recommended Price:</span>
-                    <span className="text-2xl font-black text-emerald-400">
+                    <span className="text-xs text-slate-400">Suggested Price:</span>
+                    <span className="text-2xl font-black text-[#ffc439]">
                       ${aiAnalysis.recommendedPrice}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-400">Suggested Markdown:</span>
-                    <span className="font-bold text-blue-400">{aiAnalysis.discountPercent}% OFF</span>
+                    <span className="text-slate-400">Dynamic Markdown:</span>
+                    <span className="font-bold text-[#009cde]">{aiAnalysis.discountPercent}% OFF</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400">Estimated Rescue Rate:</span>
-                    <span className="font-bold text-amber-300">{aiAnalysis.estimatedRescueProbability}</span>
+                    <span className="font-bold text-emerald-400">{aiAnalysis.estimatedRescueProbability}</span>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700 text-xs text-slate-300 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-[#071326] border border-[#1b3866] text-xs text-slate-300 space-y-1.5">
                   <span className="font-bold text-white">Food Safety Guideline:</span>
                   {aiAnalysis.safetyRecommendations?.map((rec: string, i: number) => (
                     <p key={i} className="text-[11px] text-slate-400">• {rec}</p>
@@ -370,21 +369,21 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({ onAddListing }) => {
                 </p>
               </div>
             ) : (
-              <div className="p-6 rounded-xl bg-slate-800/40 border border-dashed border-slate-700 text-center space-y-2">
+              <div className="p-6 rounded-xl bg-[#071326] border border-dashed border-[#1b3866] text-center space-y-2">
                 <Clock className="w-8 h-8 text-slate-500 mx-auto" />
                 <p className="text-xs text-slate-400">
-                  Click <strong>"Run AI Dynamic Pricing Scan"</strong> to calculate shelf-life decay discounts and food safety transit windows.
+                  Click <strong>"Run Dynamic Pricing Scan"</strong> to calculate dynamic decay discounts and food safety transit windows.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-300 space-y-1">
-            <span className="font-bold flex items-center gap-1 text-blue-400">
+          <div className="p-3.5 rounded-xl bg-[#001c48] border border-[#0070ba]/40 text-[11px] text-slate-200 space-y-1">
+            <span className="font-bold flex items-center gap-1 text-[#ffc439]">
               <DollarSign className="w-3.5 h-3.5" /> PayPal Merchant Settlement
             </span>
             <p>
-              Discounted surplus sales settle instantly to your configured merchant sandbox account upon customer QR pickup verification.
+              Discounted surplus sales settle directly to your configured merchant sandbox account upon customer QR pickup verification.
             </p>
           </div>
         </div>
