@@ -70,8 +70,8 @@ The application is configured to run out-of-the-box with pre-seeded demo records
 
 ### 2. Clone and Install
 ```bash
-git clone https://github.com/your-username/foodloop-paypal-ai.git
-cd foodloop-paypal-ai
+git clone https://github.com/riddhithummar27/paypal.git
+cd paypal
 npm install
 ```
 
@@ -80,7 +80,7 @@ Copy `.env.example` to `.env.local`:
 ```bash
 cp .env.example .env.local
 ```
-*(If no custom PayPal credentials are set, the app runs in **High-Fidelity Sandbox Testing Mode**, allowing judges to test every checkout and agent workflow without typing credentials!)*
+*(If no custom PayPal credentials are set, the app runs in **High-Fidelity Sandbox Testing Mode**, allowing judges to test every checkout, payout, and agent workflow out-of-the-box!)*
 
 ### 4. Run Development Server
 ```bash
@@ -92,28 +92,36 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ## 🧪 3-Minute Judge Evaluation Walkthrough
 
-Follow these steps to experience the complete platform in under 3 minutes:
+Follow these steps to experience the complete platform across all 6 light-theme modules:
 
-1. **Test AI Dynamic Pricing & PayPal Checkout**:
-   - Navigate to **"Surplus Deals"**.
-   - Review the dynamic decay discount on bakery and meal items.
-   - Click **"Pay with PayPal"** $\rightarrow$ Click **"Pay with PayPal Sandbox"** in the modal.
-   - Observe the instant generation of the **Digital QR Pickup Voucher** with verified pickup passcode.
-2. **Test Agentic "Pay-It-Forward" Sponsorship**:
-   - Navigate to **"Sponsor Meals"**.
-   - Select an urgent night shelter campaign (e.g. *St. Jude Community Mission*).
-   - Select **5 Meals ($12.50)** $\rightarrow$ Click **"Confirm & Pay via PayPal Sandbox"**.
-   - Notice the live progress bar and total meals sponsored counter update in real time!
-3. **Experience the AG Grid Matrix**:
-   - Navigate to **"NGO Logistics"**.
-   - Test full-text search, column sorting, and category filters.
-   - Click **"Export to CSV"** to generate an instant logistics dispatch manifest.
-   - Click **"Claim Batch"** on any available batch to dispatch couriers.
-4. **Trigger the 30-Minute Rescue Challenge**:
-   - Navigate to **"Rescue Agent"**.
-   - Click **"Run 30-Minute Rescue Challenge (80 Meals)"**.
-   - Watch the autonomous agent logs stream in real-time as the 80 mess portions are geo-clustered, batch-split across shelters, and dispatched to couriers.
-   - Try typing a custom prompt: *"Sponsor 10 meals for the youth shelter via PayPal"*.
+1. **Module 1: Home (`/`)**:
+   - Inspect the live Pod #8841 rescue timer and 4 verified metrics cards.
+   - Click **"Verify QR Handshake"** to simulate cryptographic custody token release via `/api/custody/verify`.
+   - Click the gold **"Sponsors (5)"** button in the top navigation to view the comprehensive sponsor compliance matrix.
+
+2. **Module 2: Explore Food**:
+   - Browse the split-map and verified surplus listings stream with live countdown tickers.
+   - Click any card to open the slide-over specification sheet with temperature compliance logs.
+   - Click **"Pay with PayPal ($4.50)"** to trigger PayPal Orders v2 sandbox checkout and generate a digital pickup voucher.
+
+3. **Module 3: Autonomous AI Rescue Agent**:
+   - Review the v2.4 Engine status and toggle **"Manual Override"** to test operator control.
+   - Click **"Run 30-Minute Rescue Challenge (80 Meals)"** to watch real-time multi-drop geo-clustering, shelter capacity balancing, and automated dispatch creation via `/api/ai/rescue-agent`.
+
+4. **Module 4: Donor Portal**:
+   - Check the live Surplus Ledger Balance ($148.20 USD) and click **"Instant PayPal Payout"** to execute `/api/paypal/payout`.
+   - Click **"Download Tax Slip (PDF)"** for an IRS 501(c)(3) deduction certificate.
+   - Use the **"Dispatch Surplus Batch"** form to create a new live listing via `/api/listings`.
+
+5. **Module 5: NGO & Shelter Logistics Hub**:
+   - Experience the **AG Grid Enterprise-Style Matrix** with quick search, multi-column sorting, and **"Export Dispatch CSV"**.
+   - Review the **Bryntum Visual Hourly Dispatch Timeline** and live courier telematics.
+   - Test the **Intake Verification Terminal** with simulated NFC / manual key scan.
+
+6. **Module 6: Transparent Impact & ESG Scope 3**:
+   - Inspect verified circular economy metrics (142,890 meals rescued, 89.4 MT CO2e avoided).
+   - Export audit-grade reports via **"Export Raw CSV"** and **"Download ESG Scope 3 Report"**.
+   - Test the **Community Table Meal Sponsorship** portal with $5, $25, or $100 PayPal tiers.
 
 ---
 
@@ -123,9 +131,16 @@ All endpoints are documented in the **OpenAPI 3.1** specification available at `
 
 * `POST /api/paypal/create-order` — Initializes a PayPal v2 Sandbox checkout order.
 * `POST /api/paypal/capture-order` — Captures and verifies transaction completion.
-* `POST /api/ai/pricing-engine` — Computes dynamic decay curve based on cutoff window and food category.
+* `POST /api/paypal/payout` — Executes batch merchant payouts to donors via PayPal Payouts API.
+* `POST /api/paypal/agent-toolkit` — Inspects and executes `@paypal/agent-toolkit` tools.
+* `GET /api/listings` — Retrieves all active and claimed food listings.
+* `POST /api/listings` — Dispatches new surplus food lots into the system.
+* `PATCH /api/listings` — Updates batch status (claim, fulfill).
+* `GET /api/dispatches` — Retrieves Bryntum courier schedule slots.
+* `POST /api/custody/verify` — Validates QR / NFC custody handshakes and releases escrow.
 * `POST /api/ai/rescue-agent` — Computes multi-shelter batch allocation matrix.
-* `POST /api/ai/agent-chat` — Natural language function calling via the `@paypal/agent-toolkit`.
+* `POST /api/ai/pricing-engine` — Computes dynamic decay curve based on cutoff window and category.
+* `GET /api/openapi.json` — OpenAPI 3.1 schema ready for APIMatic Context Plugins.
 
 ---
 

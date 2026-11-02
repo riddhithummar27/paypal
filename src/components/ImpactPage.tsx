@@ -357,6 +357,18 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 expand_more
               </span>
             </div>
+            {/* Sponsors Showcase */}
+            {onOpenSponsors && (
+              <button
+                onClick={onOpenSponsors}
+                className="px-3 py-2 rounded-lg bg-[#ffc439] hover:bg-[#f2b72b] text-[#001d59] font-black text-xs cursor-pointer shadow-sm flex items-center gap-1.5 transition-all shrink-0"
+                title="View Hackathon Sponsor Tech Integrations"
+              >
+                <span className="material-symbols-outlined text-[18px]">award_star</span>
+                <span className="hidden sm:inline">Sponsors (5)</span>
+              </button>
+            )}
+
             <button
               aria-label="Toggle Color Scheme"
               className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all cursor-pointer"
