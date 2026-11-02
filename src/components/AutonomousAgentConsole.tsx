@@ -352,22 +352,6 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
               </button>
             )}
 
-            <button
-              aria-label="Toggle Color Scheme"
-              className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">light_mode</span>
-            </button>
-            <button
-              aria-label="Notifications"
-              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all"
-              type="button"
-              onClick={() => showToast('14 active nodes operating nominally in real-time.')}
-            >
-              <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
-            </button>
             <div className="flex items-center gap-1 pl-1">
               <img
                 alt="Profile"

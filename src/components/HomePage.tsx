@@ -217,26 +217,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               </button>
             )}
 
-            {/* Toggle Theme */}
-            <button
-              aria-label="Toggle Color Scheme"
-              className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all cursor-pointer"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">light_mode</span>
-            </button>
-
-            {/* Notifications */}
-            <button
-              aria-label="Notifications"
-              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all cursor-pointer"
-              type="button"
-              onClick={() => showToast('Smart Pod #8841 cold-chain verified.')}
-            >
-              <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
-            </button>
-
             {/* Profile Avatar */}
             <div className="flex items-center gap-1 pl-1 cursor-pointer">
               <img
