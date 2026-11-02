@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { HomePage } from '@/components/HomePage';
+import { ExploreFoodPage } from '@/components/ExploreFoodPage';
 import { Navbar } from '@/components/Navbar';
 import { SurplusMarketplace } from '@/components/SurplusMarketplace';
 import { MealSponsorship } from '@/components/MealSponsorship';
@@ -205,13 +206,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col antialiased">
-      {/* If activeTab is home, show the new Home Page design */}
+      {/* If activeTab is home or marketplace, show the dedicated bespoke page designs */}
       {activeTab === 'home' ? (
         <HomePage
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
           setActiveRole={setActiveRole}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
+        />
+      ) : activeTab === 'marketplace' ? (
+        <ExploreFoodPage
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+          onOrderCompleted={handleOrderCompleted}
         />
       ) : (
         <>
