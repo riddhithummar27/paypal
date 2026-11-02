@@ -42,6 +42,11 @@ export const HomePage: React.FC<HomePageProps> = ({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  const handleVerifyQr = () => {
+    setIsQrVerified(true);
+    showToast('Handover Token #8841 Authenticated & Escrow Released');
+  };
+
   const testimonials = [
     {
       id: 1,
@@ -73,22 +78,32 @@ export const HomePage: React.FC<HomePageProps> = ({
   ];
 
   return (
-    <div className="bg-[#071426] font-body-md text-[#d7e3fc] antialiased selection:bg-[#0070E0] selection:text-white min-h-screen flex flex-col">
+    <div className="bg-[#f7f9fc] font-sans text-[#191c1e] antialiased min-h-screen flex flex-col selection:bg-[#005ab6]/20 selection:text-[#001d59]">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-[#0A1B30] text-white px-5 py-3.5 rounded-xl shadow-2xl border border-[#0070E0] flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-[#38bdf8] text-[22px]">verified</span>
-          <span className="font-label-md text-label-md font-semibold">{toastMessage}</span>
+        <div className="fixed top-20 right-6 z-50 bg-[#001d59] text-white px-5 py-3 rounded-xl shadow-2xl border border-[#b4c5ff]/30 flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
+          <span className="font-semibold text-sm">{toastMessage}</span>
         </div>
       )}
 
-      {/* FIXED TOP HEADER */}
-      <header className="fixed top-0 w-full z-50 bg-[#0A1B30]/90 backdrop-blur-xl border-b border-[#1A365D] shadow-[0_4px_24px_rgba(0,0,0,0.45)]">
-        <div className="h-16 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md">
+      {/* FIXED TOP HEADER - EXACT STITCH UI */}
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-[#e6e8eb] shadow-[0_1px_8px_rgba(0,48,135,0.06)]">
+        <div className="h-16 max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
+          
           {/* Logo & Navigation */}
-          <div className="flex items-center gap-space-lg shrink-0">
+          <div className="flex items-center gap-6 shrink-0">
+            {/* Back to Home arrow */}
+            <button
+              onClick={() => onNavigate('home')}
+              className="flex items-center text-[#747683] hover:text-[#001d59] transition-colors cursor-pointer"
+              title="Home"
+            >
+              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+            </button>
+
             <a
-              className="flex items-center gap-space-sm cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer"
               href="#"
               onClick={(e) => {
                 e.preventDefault();
@@ -97,47 +112,49 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <img
                 alt="FOODLOOP Brand Logo"
-                className="h-8 w-auto object-contain brightness-110 drop-shadow-[0_0_8px_rgba(0,112,224,0.35)]"
+                className="h-8 w-auto object-contain"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="font-headline-sm text-headline-sm text-white font-extrabold tracking-tight">
+              <span className="font-extrabold text-[18px] text-[#001d59] tracking-tight">
                 FOODLOOP
               </span>
             </a>
-            <nav className="hidden xl:flex items-center gap-space-md">
+
+            {/* Main Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-6 ml-2">
               <a
                 aria-current="page"
-                className="transition-colors py-space-xs px-space-xs text-white font-bold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#0070E0] cursor-pointer"
+                className="transition-colors py-1 px-1 text-[#001d59] font-bold border-b-2 border-[#001d59] text-[14px] cursor-pointer"
                 onClick={() => onNavigate('home')}
               >
                 Home
               </a>
               <a
-                className="font-label-lg text-label-lg text-[#94A3B8] hover:text-white transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('explore-food')}
               >
                 Explore Food
               </a>
               <a
-                className="font-label-lg text-label-lg text-[#94A3B8] hover:text-white transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('ai-rescue-agent')}
               >
                 AI Rescue Agent
               </a>
               <a
-                className="font-label-lg text-label-lg text-[#94A3B8] hover:text-white transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('donor-portal')}
               >
                 Donor Portal
               </a>
               <a
-                className="font-label-lg text-label-lg text-[#94A3B8] hover:text-white transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('ngo-hub')}
               >
                 NGO Hub
               </a>
               <a
-                className="font-label-lg text-label-lg text-[#94A3B8] hover:text-white transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('impact')}
               >
                 Impact
@@ -145,71 +162,66 @@ export const HomePage: React.FC<HomePageProps> = ({
             </nav>
           </div>
 
-          {/* Right Header Utilities */}
-          <div className="flex items-center gap-space-sm justify-end flex-1 max-w-2xl">
+          {/* Search, Active Role Switcher, Theme & Profile Controls */}
+          <div className="flex items-center gap-3 justify-end flex-1 max-w-2xl">
+            {/* Search Input */}
             <div className="relative hidden md:block w-full max-w-xs">
-              <span className="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-[#64748B] text-[20px]">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#747683] text-[20px]">
                 search
               </span>
               <input
-                className="w-full h-10 pl-9 pr-space-md bg-[#0F223D] border border-[#1E3A66] rounded-lg text-white placeholder:text-[#64748B] font-body-sm text-body-sm focus:outline-none focus:border-[#0070E0] focus:ring-1 focus:ring-[#0070E0] transition-all"
+                className="w-full h-10 pl-9 pr-4 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-[12px] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
                 placeholder="Search rescued batches, NGOs, donors..."
                 type="text"
               />
             </div>
-            
+
+            {/* Role Switcher */}
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
+                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-[12px] text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-transparent hover:bg-[#eceef1]"
                 value={activeRole}
                 onChange={(e) => setActiveRole(e.target.value)}
-                className="appearance-none h-10 pl-space-sm pr-space-lg bg-[#0F223D] border border-[#1E3A66] font-label-md text-label-md text-white font-bold rounded-lg cursor-pointer focus:outline-none focus:border-[#0070E0]"
               >
-                <option className="bg-[#0A1B30] text-white" value="donor">Role: Donor</option>
-                <option className="bg-[#0A1B30] text-white" value="recipient">Role: Recipient</option>
-                <option className="bg-[#0A1B30] text-white" value="ngo">Role: NGO Hub</option>
-                <option className="bg-[#0A1B30] text-white" value="admin">Role: Admin</option>
+                <option value="donor">Role: Donor</option>
+                <option value="recipient">Role: Recipient</option>
+                <option value="ngo">Role: NGO Hub</option>
+                <option value="admin">Role: Admin</option>
               </select>
-              <span className="material-symbols-outlined absolute right-space-xs top-1/2 -translate-y-1/2 text-[#64748B] text-[18px] pointer-events-none">
+              <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
               </span>
             </div>
 
-            {/* Hackathon Sponsors Modal Trigger */}
-            <button
-              aria-label="Open Hackathon Sponsors"
-              onClick={onOpenSponsors}
-              className="h-10 px-3 flex items-center justify-center rounded-lg bg-[#ffc439] hover:bg-[#f2ba36] text-[#001435] font-black text-xs transition-all shadow-md cursor-pointer"
-              type="button"
-            >
-              Sponsors (5)
-            </button>
-
+            {/* Toggle Theme */}
             <button
               aria-label="Toggle Color Scheme"
-              className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#0F223D] border border-[#1E3A66] text-[#94A3B8] hover:text-white hover:border-[#0070E0] transition-all cursor-pointer"
+              className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all cursor-pointer"
               type="button"
             >
-              <span className="material-symbols-outlined text-[20px] text-amber-400">dark_mode</span>
+              <span className="material-symbols-outlined text-[20px]">light_mode</span>
             </button>
 
+            {/* Notifications */}
             <button
               aria-label="Notifications"
-              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-[#0F223D] border border-[#1E3A66] text-[#94A3B8] hover:text-white hover:border-[#0070E0] transition-all cursor-pointer"
+              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-[#f2f4f7] text-[#444652] hover:text-[#001d59] hover:bg-[#eceef1] transition-all cursor-pointer"
               type="button"
-              onClick={() => showToast('No new urgent dispatch alerts.')}
+              onClick={() => showToast('Smart Pod #8841 cold-chain verified.')}
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#EF4444] shadow-[0_0_8px_#EF4444]"></span>
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
             </button>
 
-            <div className="flex items-center gap-space-xs pl-space-xs">
+            {/* Profile Avatar */}
+            <div className="flex items-center gap-1 pl-1 cursor-pointer">
               <img
                 alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#0070E0]/60 shadow-[0_0_10px_rgba(0,112,224,0.3)]"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
               />
-              <span className="material-symbols-outlined text-[#64748B] text-[18px] hidden sm:block cursor-pointer hover:text-white transition-colors">
+              <span className="material-symbols-outlined text-[#747683] text-[18px] hidden sm:block">
                 arrow_drop_down
               </span>
             </div>
@@ -217,174 +229,181 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </header>
 
-      {/* MAIN BODY CONTENT */}
-      <main className="w-full pt-16 bg-[#071426] flex-1">
+      {/* MAIN CONTAINER */}
+      <main className="w-full pt-16 bg-[#f7f9fc] flex-1">
         <div className="flex flex-col w-full">
+          
           {/* Subtle Ambient Glow Orbs */}
           <div className="relative w-full overflow-hidden">
-            <div className="absolute -top-32 left-1/4 w-[540px] h-[540px] rounded-full bg-[#0070E0]/15 blur-[150px] pointer-events-none"></div>
-            <div className="absolute top-96 -right-20 w-[480px] h-[480px] rounded-full bg-[#8065D8]/15 blur-[160px] pointer-events-none"></div>
+            <div className="absolute -top-32 left-1/4 w-[540px] h-[540px] rounded-full bg-[#d7e3ff]/35 blur-[130px] pointer-events-none"></div>
+            <div className="absolute top-96 -right-20 w-[480px] h-[480px] rounded-full bg-[#cdbdff]/30 blur-[140px] pointer-events-none"></div>
 
             {/* HERO SECTION */}
-            <section className="max-w-[1440px] mx-auto px-gutter pt-space-xl pb-space-lg">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+            <section className="max-w-[1440px] mx-auto px-4 md:px-6 pt-10 pb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                
                 {/* Hero Left Typography & Conversion */}
-                <div className="lg:col-span-7 flex flex-col items-start space-y-space-md z-10">
+                <div className="lg:col-span-7 flex flex-col items-start space-y-4 z-10">
                   {/* Institutional Verified Tag */}
-                  <div className="inline-flex items-center gap-space-xs px-3.5 py-1.5 rounded-full bg-[#0F223D]/80 border border-[#1E3A66] shadow-[0_0_15px_rgba(22,163,106,0.15)]">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f2f4f7] shadow-sm border border-[#e6e8eb]">
                     <span className="w-2 h-2 rounded-full bg-[#16A36A] animate-ping"></span>
-                    <span className="w-2 h-2 rounded-full bg-[#16A36A] -ml-2.5 shadow-[0_0_8px_#16A36A]"></span>
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-[#38bdf8] font-bold">
+                    <span className="w-2 h-2 rounded-full bg-[#16A36A] -ml-4"></span>
+                    <span className="text-[11px] uppercase tracking-wider text-[#005ab6] font-bold">
                       Decentralized Surplus Logistics
                     </span>
-                    <span className="text-[#64748B] font-label-sm">•</span>
-                    <span className="font-label-sm text-label-sm text-[#94A3B8] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px] text-[#0070E0]">verified_user</span>
+                    <span className="text-[#747683] text-[11px]">•</span>
+                    <span className="text-[11px] text-[#444652] font-semibold flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px] text-[#005ab6]">verified_user</span>
                       Instant PayPal Escrow &amp; Grants
                     </span>
                   </div>
 
-                  <h1 className="font-headline-xl text-headline-xl text-white font-extrabold tracking-tight">
+                  {/* Headline */}
+                  <h1 className="text-[40px] sm:text-[44px] lg:text-[48px] leading-[48px] sm:leading-[52px] lg:leading-[56px] text-[#001d59] font-extrabold tracking-tight">
                     Good Food.<br />
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#38bdf8] via-[#0070E0] to-[#A78BFA] drop-shadow-[0_4px_12px_rgba(0,112,224,0.3)]">
+                    <span className="text-[#005ab6] bg-clip-text text-transparent bg-gradient-to-r from-[#005ab6] via-[#0872e2] to-[#270070]">
                       Zero Waste.
                     </span>
                   </h1>
 
-                  <p className="font-body-lg text-body-lg text-[#94A3B8] max-w-xl leading-relaxed">
+                  <p className="text-[16px] leading-[24px] text-[#444652] max-w-xl">
                     Rescue surplus food and share it with someone who needs it. Powered by automated AI matching, real-time dispatch routing, and seamless PayPal micro-settlements.
                   </p>
 
                   {/* Dual CTAs & Live Trust Prompt */}
-                  <div className="flex flex-wrap items-center gap-space-md pt-space-xs w-full sm:w-auto">
+                  <div className="flex flex-wrap items-center gap-4 pt-1 w-full sm:w-auto">
                     <button
                       onClick={() => onNavigate('explore-food')}
-                      className="h-11 px-6 rounded-lg bg-[#0070E0] text-white font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-[#005bb8] shadow-[0_4px_16px_rgba(0,112,224,0.4)] transition-all duration-200 cursor-pointer"
+                      className="h-11 px-6 rounded-lg bg-[#005ab6] text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#003087] shadow-md transition-all duration-200 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[20px]">explore</span>
                       <span>Explore Food</span>
                     </button>
                     <button
                       onClick={() => onNavigate('donor-portal')}
-                      className="h-11 px-6 rounded-lg bg-[#0F223D] text-white border border-[#1E3A66] hover:border-[#0070E0] font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-[#132A4A] shadow-sm transition-all duration-200 cursor-pointer"
+                      className="h-11 px-6 rounded-lg bg-white border border-[#e0e3e6] text-[#001d59] font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#f2f4f7] shadow-sm transition-all duration-200 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[20px] text-[#38bdf8]">volunteer_activism</span>
+                      <span className="material-symbols-outlined text-[20px]">volunteer_activism</span>
                       <span>Start Donating</span>
                     </button>
-                    <div className="flex items-center gap-space-xs pl-2 text-[#94A3B8]">
-                      <span className="material-symbols-outlined text-[#0070E0] text-[22px]">payments</span>
-                      <span className="font-label-sm text-label-sm text-[#94A3B8]">PayPal Certified Escrow</span>
+                    <div className="flex items-center gap-1.5 pl-2 text-[#444652]">
+                      <span className="material-symbols-outlined text-[#005ab6] text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        payments
+                      </span>
+                      <span className="text-[11px] font-bold text-[#747683]">PayPal Certified Escrow</span>
                     </div>
                   </div>
 
-                  {/* Dynamic Operational Pulse */}
-                  <div className="pt-space-md grid grid-cols-2 sm:grid-cols-4 gap-space-md w-full">
-                    <div className="p-space-sm bg-[#10233D] border border-[#1E3A66] rounded-xl shadow-lg hover:border-[#0070E0]/60 transition-colors">
-                      <div className="font-headline-sm text-headline-sm text-white font-bold">142,890</div>
-                      <div className="font-label-sm text-label-sm text-[#64748B]">Meals Rescued</div>
+                  {/* Dynamic Operational Pulse (4 Stat Cards) */}
+                  <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
+                    <div className="p-3 bg-white rounded-xl shadow-sm border border-[#e6e8eb]">
+                      <div className="text-[20px] font-bold text-[#001d59]">142,890</div>
+                      <div className="text-[11px] text-[#747683] font-medium">Meals Rescued</div>
                     </div>
-                    <div className="p-space-sm bg-[#10233D] border border-[#1E3A66] rounded-xl shadow-lg hover:border-[#0070E0]/60 transition-colors">
-                      <div className="font-headline-sm text-headline-sm text-white font-bold">1,280</div>
-                      <div className="font-label-sm text-label-sm text-[#64748B]">Verified Donors</div>
+                    <div className="p-3 bg-white rounded-xl shadow-sm border border-[#e6e8eb]">
+                      <div className="text-[20px] font-bold text-[#001d59]">1,280</div>
+                      <div className="text-[11px] text-[#747683] font-medium">Verified Donors</div>
                     </div>
-                    <div className="p-space-sm bg-[#10233D] border border-[#1E3A66] rounded-xl shadow-lg hover:border-[#0070E0]/60 transition-colors">
-                      <div className="font-headline-sm text-headline-sm text-white font-bold">340</div>
-                      <div className="font-label-sm text-label-sm text-[#64748B]">Active NGOs</div>
+                    <div className="p-3 bg-white rounded-xl shadow-sm border border-[#e6e8eb]">
+                      <div className="text-[20px] font-bold text-[#001d59]">340</div>
+                      <div className="text-[11px] text-[#747683] font-medium">Active NGOs</div>
                     </div>
-                    <div className="p-space-sm bg-[#10233D] border border-[#1E3A66] rounded-xl shadow-lg hover:border-[#0070E0]/60 transition-colors">
-                      <div className="font-headline-sm text-headline-sm text-[#38bdf8] font-bold">89.4 T</div>
-                      <div className="font-label-sm text-label-sm text-[#64748B]">CO₂ Prevented</div>
+                    <div className="p-3 bg-white rounded-xl shadow-sm border border-[#e6e8eb]">
+                      <div className="text-[20px] font-bold text-[#005ab6]">89.4 T</div>
+                      <div className="text-[11px] text-[#747683] font-medium">CO₂ Prevented</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Hero Right: Bespoke Smart Food Rescue Container Mockup */}
-                <div className="lg:col-span-5 relative mt-space-md lg:mt-0">
-                  <div className="relative bg-[#10233D] border border-[#1E3A66] p-space-md rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden">
+                <div className="lg:col-span-5 relative mt-6 lg:mt-0">
+                  {/* Glassmorphic Rescue Node Backdrop Card */}
+                  <div className="relative bg-white p-4 rounded-[24px] shadow-xl overflow-hidden border border-[#e6e8eb]">
+                    
                     {/* Top Status Rim */}
-                    <div className="flex items-center justify-between pb-space-sm mb-space-sm bg-[#0A1B30] border border-[#1A365D] p-space-sm rounded-xl">
-                      <div className="flex items-center gap-space-xs">
-                        <div className="w-3 h-3 rounded-full bg-[#16A36A] animate-pulse shadow-[0_0_8px_#16A36A]"></div>
-                        <span className="font-label-md text-label-md text-white font-bold">Smart Rescue Pod #8841</span>
+                    <div className="flex items-center justify-between pb-2 mb-3 bg-[#f2f4f7] p-2.5 rounded-xl">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#16A36A] animate-pulse"></div>
+                        <span className="text-[13px] font-bold text-[#001d59]">Smart Rescue Pod #8841</span>
                       </div>
-                      <span className="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-[#132A4A] border border-[#1E3A66] text-[#94A3B8] font-medium">
+                      <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#e0e3e6] text-[#444652] font-semibold">
                         IoT Cold-Chain Safe
                       </span>
                     </div>
 
                     {/* Visual Media with Badge Scrim */}
-                    <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-[#071426] border border-[#1E3A66]/60">
+                    <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-[#eceef1]">
                       <img
-                        className="w-full h-full object-cover brightness-90 contrast-105"
-                        alt="Commercial kitchen prep station with sealed produce crates and sourdough"
+                        className="w-full h-full object-cover"
+                        alt="Commercial kitchen stainless prep station with high grade sealed organic produce crates, artisan sourdough bread and ripe local fruits"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLasxaugMQHdFiWZAY-B4u_ZwrZ8cPTsQuzfty65jPGnU7iUo_1AQwK3pB7SFBBOj7Q6xvts1XZceyAwUts3VXHjUyu_tzKR_YBPyoaeYE27364kNWxyLXV1bimnguwA-tx9RC9jd2T3xkeq05e_oykDyCJRH9xwm-_wD1_cb0E0th0DxVHZiZdLSQpBdiqDgwrmbiSOj41ncGx74JXajIf1v08FMTmeK2HQdBLtc"
                       />
+                      
                       {/* Expiry Countdown Shield */}
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0A1B30]/90 border border-[#F5A623]/40 backdrop-blur-md shadow-lg">
-                        <span className="material-symbols-outlined text-[16px] text-[#F5A623]">timer</span>
-                        <span className="font-label-sm text-label-sm font-bold text-[#F5A623]">
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm border border-[#e6e8eb]">
+                        <span className="material-symbols-outlined text-[16px] text-[#D97706]">timer</span>
+                        <span className="text-[11px] font-bold text-[#D97706]">
                           {formatTimer(countdownSeconds)} Remaining
                         </span>
                       </div>
+
                       {/* AI Route Allocation Pill */}
-                      <div className="absolute bottom-3 left-3 right-3 p-space-xs rounded-lg bg-[#0A1B30]/90 border border-[#1E3A66] backdrop-blur-md text-white flex items-center justify-between">
+                      <div className="absolute bottom-3 left-3 right-3 p-2 rounded-lg bg-[#003087]/95 backdrop-blur-md text-white flex items-center justify-between shadow-lg">
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#38bdf8] text-[18px]">auto_awesome</span>
-                          <span className="font-label-sm text-label-sm text-white">
-                            AI Match: Oasis Community Kitchen (0.8 mi)
-                          </span>
+                          <span className="material-symbols-outlined text-[#abc7ff] text-[18px]">auto_awesome</span>
+                          <span className="text-[11px] text-white font-medium">AI Match: Oasis Community Kitchen (0.8 mi)</span>
                         </div>
-                        <span className="font-label-sm text-label-sm bg-[#0070E0] px-2 py-0.5 rounded text-white font-bold shadow-[0_0_8px_rgba(0,112,224,0.5)]">
+                        <span className="text-[10px] bg-[#005ab6] px-2 py-0.5 rounded text-white font-bold">
                           99.4% Fit
                         </span>
                       </div>
                     </div>
 
                     {/* Real-Time Flight Tracker Component */}
-                    <div className="mt-space-md pt-space-xs">
-                      <div className="flex items-center justify-between text-[#94A3B8] mb-space-xs">
-                        <span className="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-[#64748B]">
+                    <div className="mt-4 pt-1">
+                      <div className="flex items-center justify-between text-[#444652] mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#747683]">
                           Rescue Flight Vector
                         </span>
-                        <span className="font-label-sm text-label-sm text-[#38bdf8] font-bold">
+                        <span className="text-[11px] text-[#005ab6] font-bold">
                           Autonomous Dispatch
                         </span>
                       </div>
-                      <div className="grid grid-cols-4 gap-1 p-1 bg-[#0A1B30] border border-[#1A365D] rounded-lg text-center font-label-sm text-label-sm">
-                        <div className="py-1 rounded bg-[#16A36A]/20 text-[#4ade80] border border-[#16A36A]/40 font-bold flex items-center justify-center gap-1">
+                      
+                      {/* Flight Bar Tracker */}
+                      <div className="grid grid-cols-4 gap-1 p-1 bg-[#f2f4f7] rounded-lg text-center text-[11px]">
+                        <div className="py-1 rounded bg-[#16A36A]/15 text-[#16A36A] font-bold flex items-center justify-center gap-1">
                           <span className="material-symbols-outlined text-[14px]">check_circle</span> Logged
                         </div>
-                        <div className="py-1 rounded bg-[#0070E0]/25 text-[#38bdf8] border border-[#0070E0]/40 font-bold flex items-center justify-center gap-1">
+                        <div className="py-1 rounded bg-[#005ab6]/15 text-[#005ab6] font-bold flex items-center justify-center gap-1">
                           <span className="material-symbols-outlined text-[14px]">sync</span> Matched
                         </div>
-                        <div className="py-1 rounded bg-[#10233D] text-[#64748B]">En Route</div>
-                        <div className="py-1 rounded bg-[#10233D] text-[#64748B]">Claimed</div>
+                        <div className="py-1 rounded bg-[#eceef1] text-[#747683] font-medium">En Route</div>
+                        <div className="py-1 rounded bg-[#eceef1] text-[#747683] font-medium">Claimed</div>
                       </div>
                     </div>
 
                     {/* Instant QR & Escrow Claim Section */}
-                    <div className="mt-space-sm p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-space-sm">
-                        <div className="w-12 h-12 bg-[#0F223D] border border-[#1E3A66] p-1.5 rounded-lg shadow-sm flex items-center justify-center shrink-0">
-                          <svg className="w-full h-full text-[#38bdf8]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 2h4v4h-4v-4zm-4-4h2v2h-2v-2zm2 2h2v2h-2v-2zm-2 2h2v4h-2v-4zm4-2h2v2h-2v-2zm0-4h4v2h-4v-2z" />
+                    <div className="mt-3 p-2.5 bg-[#f2f4f7] rounded-xl flex items-center justify-between border border-[#e6e8eb]">
+                      <div className="flex items-center gap-3">
+                        {/* Inline SVG QR Representation */}
+                        <div className="w-11 h-11 bg-white p-1 rounded-lg shadow-sm flex items-center justify-center shrink-0 border border-[#e0e3e6]">
+                          <svg className="w-full h-full text-[#001d59]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 2h4v4h-4v-4zm-4-4h2v2h-2v-2zm2 2h2v2h-2v-2zm-2 2h2v4h-2v-4zm4-2h2v2h-2v-2zm0-4h4v2h-4v-2z"></path>
                           </svg>
                         </div>
                         <div>
-                          <div className="font-label-sm text-label-sm text-white font-bold">
-                            {isQrVerified ? 'QR Handover Authenticated' : 'One-Touch Handover QR'}
-                          </div>
-                          <div className="font-body-sm text-body-sm text-[#64748B]">
-                            {isQrVerified ? 'Custody proof minted #0x8841...c2' : 'Zero-touch authentication code'}
-                          </div>
+                          <div className="text-[12px] font-bold text-[#001d59]">One-Touch Handover QR</div>
+                          <div className="text-[11px] text-[#747683]">Zero-touch authentication code</div>
                         </div>
                       </div>
                       <button
-                        onClick={() => {
-                          setIsQrVerified(true);
-                          showToast('Digital handover token verified via PayPal Sandbox!');
-                        }}
-                        className="px-3.5 py-1.5 rounded-lg bg-[#0070E0] text-white font-label-sm text-label-sm font-bold shadow-[0_2px_10px_rgba(0,112,224,0.3)] hover:bg-[#005bb8] transition-colors cursor-pointer"
+                        onClick={handleVerifyQr}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold shadow-sm transition-colors cursor-pointer ${
+                          isQrVerified
+                            ? 'bg-[#16A36A] text-white'
+                            : 'bg-white text-[#005ab6] hover:bg-[#e6e8eb]'
+                        }`}
                       >
                         {isQrVerified ? 'Verified ✓' : 'Verify'}
                       </button>
@@ -392,45 +411,44 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
 
                   {/* Overlapping Micro Metric Float */}
-                  <div className="-mt-6 -ml-4 relative z-20 bg-[#0F223D]/95 border border-[#1E3A66] backdrop-blur-md px-4 py-2.5 rounded-xl shadow-xl inline-flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#16A36A]/20 border border-[#16A36A]/40 flex items-center justify-center text-[#4ade80] shadow-[0_0_10px_rgba(22,163,106,0.3)]">
+                  <div className="-mt-6 -ml-3 relative z-20 bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg inline-flex items-center gap-3 border border-[#e6e8eb]">
+                    <div className="w-8 h-8 rounded-full bg-[#16A36A]/15 flex items-center justify-center text-[#16A36A]">
                       <span className="material-symbols-outlined text-[18px]">eco</span>
                     </div>
                     <div>
-                      <div className="font-label-sm text-label-sm font-bold text-white">+34.2 kg Diverted</div>
-                      <div className="font-body-sm text-body-sm text-[#64748B]">Verified by Metro Bakeries</div>
+                      <div className="text-[12px] font-bold text-[#001d59]">+34.2 kg Diverted</div>
+                      <div className="text-[11px] text-[#747683]">Verified by Metro Bakeries</div>
                     </div>
                   </div>
                 </div>
+
               </div>
             </section>
 
             {/* VERIFIED INSTITUTIONAL TRUST & PAYPAL PARTNERS */}
-            <section className="w-full bg-[#0A1B30]/80 border-y border-[#1A365D] py-space-md">
-              <div className="max-w-[1440px] mx-auto px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md">
-                <div className="flex items-center gap-space-sm text-[#94A3B8] shrink-0">
-                  <span className="material-symbols-outlined text-[#0070E0] text-[22px]">verified</span>
-                  <span className="font-label-md text-label-md font-bold uppercase tracking-wider text-white">
+            <section className="w-full bg-[#f2f4f7]/70 py-4 border-y border-[#e6e8eb] my-4">
+              <div className="max-w-[1440px] mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-[#444652] shrink-0">
+                  <span className="material-symbols-outlined text-[#005ab6] text-[22px]">verified</span>
+                  <span className="text-[12px] font-bold uppercase tracking-wider text-[#001d59]">
                     Certified Redistribution Network:
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center justify-center md:justify-end gap-space-lg text-[#94A3B8] font-label-md text-label-md">
+                <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 text-[#747683] text-[13px] font-medium">
                   <div className="flex items-center gap-2">
-                    <span className="font-headline-sm text-headline-sm font-black tracking-tighter text-white">PayPal</span>
-                    <span className="text-xs px-2 py-0.5 rounded bg-[#0070E0]/20 border border-[#0070E0]/40 text-[#38bdf8] font-bold">
-                      Giving Fund API
-                    </span>
+                    <span className="text-[18px] font-black tracking-tighter text-[#001d59]">PayPal</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded bg-[#e0e3e6] text-[#005ab6] font-bold">Giving Fund API</span>
                   </div>
-                  <div className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[18px] text-[#38bdf8]">local_shipping</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[18px]">local_shipping</span>
                     <span>FoodRescue.Global</span>
                   </div>
-                  <div className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[18px] text-[#38bdf8]">apartment</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[18px]">apartment</span>
                     <span>Urban Table Network</span>
                   </div>
-                  <div className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[18px] text-[#38bdf8]">shield</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[18px]">shield</span>
                     <span>HACCP Safety Standard</span>
                   </div>
                 </div>
@@ -438,125 +456,126 @@ export const HomePage: React.FC<HomePageProps> = ({
             </section>
 
             {/* HOW IT WORKS: 3-STEP INTUITIVE PIPELINE */}
-            <section className="max-w-[1440px] mx-auto px-gutter py-space-xl">
-              <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-xl">
-                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#0F223D] border border-[#1E3A66] text-[#38bdf8] font-label-sm text-label-sm font-bold mb-space-xs shadow-sm">
+            <section className="max-w-[1440px] mx-auto px-4 md:px-6 py-10">
+              <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-10">
+                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#f2f4f7] text-[#005ab6] text-[11px] font-bold mb-2 border border-[#e6e8eb]">
                   <span className="material-symbols-outlined text-[16px]">cycle</span> Seamless Operations
                 </div>
-                <h2 className="font-headline-lg text-headline-lg text-white font-bold">
+                <h2 className="text-[28px] sm:text-[32px] font-bold text-[#001d59] tracking-tight">
                   Redistributing Surplus in 3 Simple Steps
                 </h2>
-                <p className="font-body-lg text-body-lg text-[#94A3B8] mt-2">
+                <p className="text-[15px] text-[#444652] mt-2">
                   From commercial kitchen surpluses to local community tables in less than two hours.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
                 {/* Step 1 */}
-                <div className="p-space-lg rounded-[20px] bg-[#10233D] border border-[#1E3A66] shadow-lg flex flex-col justify-between hover:border-[#0070E0] hover:shadow-[0_8px_30px_rgba(0,112,224,0.15)] transition-all duration-300">
+                <div className="p-6 rounded-[20px] bg-white shadow-sm border border-[#e6e8eb] flex flex-col justify-between hover:shadow-md transition-all duration-300">
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#0F223D] border border-[#1E3A66] flex items-center justify-center text-[#38bdf8] mb-space-md shadow-inner">
+                    <div className="w-12 h-12 rounded-xl bg-[#eceef1] flex items-center justify-center text-[#005ab6] mb-4">
                       <span className="material-symbols-outlined text-[28px]">post_add</span>
                     </div>
-                    <div className="font-label-sm text-label-sm text-[#38bdf8] font-bold uppercase tracking-wider">Step 01</div>
-                    <h3 className="font-headline-sm text-headline-sm text-white font-bold mt-1">List Surplus Food</h3>
-                    <p className="font-body-md text-body-md text-[#94A3B8] mt-2 leading-relaxed">
+                    <div className="text-[11px] text-[#005ab6] font-bold uppercase tracking-wider">Step 01</div>
+                    <h3 className="text-[18px] text-[#001d59] font-bold mt-1">List Surplus Food</h3>
+                    <p className="text-[13px] text-[#444652] mt-2 leading-relaxed">
                       Snap a picture or sync your kitchen inventory. Specify batch portions, temperature parameters, and pickup expiry windows in seconds.
                     </p>
                   </div>
-                  <div className="mt-space-lg pt-space-sm bg-[#0A1B30] border border-[#1A365D] p-space-sm rounded-xl">
-                    <div className="flex items-center justify-between font-label-sm text-label-sm">
-                      <span className="text-[#94A3B8]">OCR Recognition</span>
-                      <span className="text-[#4ade80] font-bold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#16A36A]"></span> Instant Tagging
-                      </span>
+                  <div className="mt-6 pt-3 bg-[#f2f4f7] p-3 rounded-xl border border-[#e6e8eb]">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#444652] font-medium">OCR Recognition</span>
+                      <span className="text-[#16A36A] font-bold">Instant Tagging</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Step 2 */}
-                <div className="p-space-lg rounded-[20px] bg-[#10233D] border border-[#1E3A66] shadow-lg flex flex-col justify-between hover:border-[#0070E0] hover:shadow-[0_8px_30px_rgba(0,112,224,0.15)] transition-all duration-300">
+                <div className="p-6 rounded-[20px] bg-white shadow-sm border border-[#e6e8eb] flex flex-col justify-between hover:shadow-md transition-all duration-300">
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#0070E0]/20 border border-[#0070E0]/40 flex items-center justify-center text-[#38bdf8] mb-space-md shadow-[0_0_15px_rgba(0,112,224,0.25)]">
+                    <div className="w-12 h-12 rounded-xl bg-[#dbe1ff] flex items-center justify-center text-[#001d59] mb-4">
                       <span className="material-symbols-outlined text-[28px]">hub</span>
                     </div>
-                    <div className="font-label-sm text-label-sm text-[#38bdf8] font-bold uppercase tracking-wider">Step 02</div>
-                    <h3 className="font-headline-sm text-headline-sm text-white font-bold mt-1">AI Connects Nearby</h3>
-                    <p className="font-body-md text-body-md text-[#94A3B8] mt-2 leading-relaxed">
+                    <div className="text-[11px] text-[#005ab6] font-bold uppercase tracking-wider">Step 02</div>
+                    <h3 className="text-[18px] text-[#001d59] font-bold mt-1">AI Connects Nearby</h3>
+                    <p className="text-[13px] text-[#444652] mt-2 leading-relaxed">
                       Our automated matching algorithm instantly notifies nearby shelters, food banks, and individuals based on volume, route logistics, and cold storage capacity.
                     </p>
                   </div>
-                  <div className="mt-space-lg pt-space-sm bg-[#0A1B30] border border-[#1A365D] p-space-sm rounded-xl">
-                    <div className="flex items-center justify-between font-label-sm text-label-sm">
-                      <span className="text-[#94A3B8]">Radius Optimization</span>
-                      <span className="text-[#38bdf8] font-bold">&lt; 3.5 Miles Priority</span>
+                  <div className="mt-6 pt-3 bg-[#f2f4f7] p-3 rounded-xl border border-[#e6e8eb]">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#444652] font-medium">Radius Optimization</span>
+                      <span className="text-[#005ab6] font-bold">&lt; 3.5 Miles Priority</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Step 3 */}
-                <div className="p-space-lg rounded-[20px] bg-[#10233D] border border-[#1E3A66] shadow-lg flex flex-col justify-between hover:border-[#0070E0] hover:shadow-[0_8px_30px_rgba(0,112,224,0.15)] transition-all duration-300">
+                <div className="p-6 rounded-[20px] bg-white shadow-sm border border-[#e6e8eb] flex flex-col justify-between hover:shadow-md transition-all duration-300">
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#16A36A]/20 border border-[#16A36A]/40 flex items-center justify-center text-[#4ade80] mb-space-md shadow-[0_0_15px_rgba(22,163,106,0.25)]">
+                    <div className="w-12 h-12 rounded-xl bg-[#eceef1] flex items-center justify-center text-[#16A36A] mb-4">
                       <span className="material-symbols-outlined text-[28px]">qr_code_scanner</span>
                     </div>
-                    <div className="font-label-sm text-label-sm text-[#38bdf8] font-bold uppercase tracking-wider">Step 03</div>
-                    <h3 className="font-headline-sm text-headline-sm text-white font-bold mt-1">Collect via Dynamic QR</h3>
-                    <p className="font-body-md text-body-md text-[#94A3B8] mt-2 leading-relaxed">
+                    <div className="text-[11px] text-[#005ab6] font-bold uppercase tracking-wider">Step 03</div>
+                    <h3 className="text-[18px] text-[#001d59] font-bold mt-1">Collect via Dynamic QR</h3>
+                    <p className="text-[13px] text-[#444652] mt-2 leading-relaxed">
                       Recipients arrive with encrypted mobile tokens. The single scan completes chain-of-custody tracking, releases donor tax certificates, and settles logistics tips.
                     </p>
                   </div>
-                  <div className="mt-space-lg pt-space-sm bg-[#0A1B30] border border-[#1A365D] p-space-sm rounded-xl">
-                    <div className="flex items-center justify-between font-label-sm text-label-sm">
-                      <span className="text-[#94A3B8]">Custody Settlement</span>
-                      <span className="text-[#4ade80] font-bold">100% Tax Compliant</span>
+                  <div className="mt-6 pt-3 bg-[#f2f4f7] p-3 rounded-xl border border-[#e6e8eb]">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#444652] font-medium">Custody Settlement</span>
+                      <span className="text-[#16A36A] font-bold">100% Tax Compliant</span>
                     </div>
                   </div>
                 </div>
+
               </div>
             </section>
 
             {/* INTERACTIVE ROLE SHOWCASE SECTION */}
-            <section className="max-w-[1440px] mx-auto px-gutter py-space-xl">
-              <div className="bg-[#10233D] border border-[#1E3A66] rounded-[28px] p-space-lg md:p-space-xl shadow-xl">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
+            <section className="max-w-[1440px] mx-auto px-4 md:px-6 py-10">
+              <div className="bg-[#f2f4f7] rounded-[28px] p-6 md:p-10 border border-[#e6e8eb]">
+                
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
                   <div>
-                    <div className="font-label-sm text-label-sm uppercase tracking-wider text-[#38bdf8] font-bold">
+                    <div className="text-[11px] uppercase tracking-wider text-[#005ab6] font-bold">
                       Adaptive Operational Modes
                     </div>
-                    <h2 className="font-headline-lg text-headline-lg text-white font-bold mt-1">
+                    <h2 className="text-[28px] sm:text-[32px] font-bold text-[#001d59] mt-1 tracking-tight">
                       Built For Every Stakeholder
                     </h2>
                   </div>
 
                   {/* Role Selector Tabs */}
-                  <div className="inline-flex p-1 bg-[#0A1B30] border border-[#1A365D] rounded-xl gap-1">
+                  <div className="inline-flex p-1 bg-[#e0e3e6] rounded-xl gap-1">
                     <button
                       onClick={() => setSelectedRoleTab('donor')}
-                      className={`px-4 py-2 rounded-lg font-label-md text-label-md font-bold transition-all cursor-pointer ${
+                      className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-all cursor-pointer ${
                         selectedRoleTab === 'donor'
-                          ? 'bg-[#0070E0] text-white shadow-md'
-                          : 'text-[#94A3B8] hover:text-white'
+                          ? 'bg-white text-[#001d59] shadow-sm'
+                          : 'text-[#444652] hover:text-[#001d59]'
                       }`}
                     >
                       For Donors
                     </button>
                     <button
                       onClick={() => setSelectedRoleTab('recipient')}
-                      className={`px-4 py-2 rounded-lg font-label-md text-label-md font-bold transition-all cursor-pointer ${
+                      className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-all cursor-pointer ${
                         selectedRoleTab === 'recipient'
-                          ? 'bg-[#0070E0] text-white shadow-md'
-                          : 'text-[#94A3B8] hover:text-white'
+                          ? 'bg-white text-[#001d59] shadow-sm'
+                          : 'text-[#444652] hover:text-[#001d59]'
                       }`}
                     >
                       For Recipients
                     </button>
                     <button
                       onClick={() => setSelectedRoleTab('ngo')}
-                      className={`px-4 py-2 rounded-lg font-label-md text-label-md font-bold transition-all cursor-pointer ${
+                      className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-all cursor-pointer ${
                         selectedRoleTab === 'ngo'
-                          ? 'bg-[#0070E0] text-white shadow-md'
-                          : 'text-[#94A3B8] hover:text-white'
+                          ? 'bg-white text-[#001d59] shadow-sm'
+                          : 'text-[#444652] hover:text-[#001d59]'
                       }`}
                     >
                       For NGOs &amp; Shelters
@@ -564,37 +583,36 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                 </div>
 
-                {/* Role Panels */}
                 {/* Panel 1: Donor */}
                 {selectedRoleTab === 'donor' && (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                    <div className="lg:col-span-5 space-y-space-md">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0070E0]/20 border border-[#0070E0]/40 text-[#38bdf8] font-label-sm text-label-sm font-bold">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div className="lg:col-span-5 space-y-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dbe1ff] text-[#001d59] text-[11px] font-bold">
                         <span className="material-symbols-outlined text-[16px]">store</span> Restaurants &amp; Supermarkets
                       </span>
-                      <h3 className="font-headline-md text-headline-md text-white font-bold">
+                      <h3 className="text-[22px] font-bold text-[#001d59] tracking-tight">
                         Turn Cost Centers into Social Equity &amp; Tax Deductions
                       </h3>
-                      <p className="font-body-md text-body-md text-[#94A3B8] leading-relaxed">
+                      <p className="text-[14px] text-[#444652] leading-relaxed">
                         Commercial kitchens lose thousands monthly to surplus disposal fees. FOODLOOP enables kitchen managers to log unused ingredients in seconds, automate FDA-compliant food rescue records, and collect instant tax write-off receipts through PayPal Giving Fund.
                       </p>
-                      <div className="space-y-space-xs font-body-md text-body-md text-[#d7e3fc]">
+                      <div className="space-y-2 text-[13px] text-[#001d59] font-medium">
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>Automatic 501(c)(3) valuation ledgers</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>Zero kitchen disruption with scheduled pickups</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>ESG sustainability metrics for quarterly audits</span>
                         </div>
                       </div>
                       <button
                         onClick={() => onNavigate('donor-portal')}
-                        className="inline-flex items-center gap-2 font-label-lg text-label-lg text-[#38bdf8] font-bold hover:text-white transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-2 text-[14px] text-[#005ab6] font-bold hover:underline cursor-pointer pt-2"
                       >
                         <span>Explore Donor Portal</span>
                         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -602,44 +620,36 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
 
                     <div className="lg:col-span-7">
-                      <div className="bg-[#132A4A] border border-[#1E3A66] p-space-lg rounded-[20px] shadow-lg">
-                        <div className="flex items-center justify-between mb-space-md pb-space-xs">
+                      <div className="bg-white p-6 rounded-[20px] shadow-sm border border-[#e6e8eb]">
+                        <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#f2f4f7]">
                           <div>
-                            <div className="font-label-sm text-label-sm text-[#64748B] uppercase">Active Listing Stream</div>
-                            <div className="font-headline-sm text-headline-sm text-white font-bold">
-                              Artisan Kitchen - Downtown
-                            </div>
+                            <div className="text-[10px] text-[#747683] uppercase font-bold tracking-wider">Active Listing Stream</div>
+                            <div className="text-[16px] font-bold text-[#001d59]">Artisan Kitchen - Downtown</div>
                           </div>
-                          <span className="px-3 py-1 rounded-full bg-[#16A36A]/20 border border-[#16A36A]/40 text-[#4ade80] font-label-sm text-label-sm font-bold flex items-center gap-1 shadow-[0_0_10px_rgba(22,163,106,0.2)]">
+                          <span className="px-3 py-1 rounded-full bg-[#16A36A]/15 text-[#16A36A] text-[11px] font-bold flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#16A36A] animate-pulse"></span> Live Broadcast
                           </span>
                         </div>
-                        <div className="space-y-space-sm">
-                          <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl flex items-center justify-between">
-                            <div className="flex items-center gap-space-sm">
-                              <span className="material-symbols-outlined text-[#38bdf8] text-[24px]">bakery_dining</span>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-[#f2f4f7] rounded-xl flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#005ab6] text-[24px]">bakery_dining</span>
                               <div>
-                                <div className="font-label-md text-label-md font-bold text-white">
-                                  Fresh Sourdough &amp; Baguettes (42 units)
-                                </div>
-                                <div className="font-body-sm text-body-sm text-[#64748B]">
-                                  Prepped 6 hrs ago • Ready for pickup
-                                </div>
+                                <div className="text-[13px] font-bold text-[#001d59]">Fresh Sourdough &amp; Baguettes (42 units)</div>
+                                <div className="text-[11px] text-[#747683]">Prepped 6 hrs ago • Ready for pickup</div>
                               </div>
                             </div>
-                            <span className="font-label-md text-label-md text-[#4ade80] font-bold">Claimed in 4m</span>
+                            <span className="text-[12px] text-[#16A36A] font-bold">Claimed in 4m</span>
                           </div>
-                          <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl flex items-center justify-between">
-                            <div className="flex items-center gap-space-sm">
-                              <span className="material-symbols-outlined text-[#38bdf8] text-[24px]">soup_kitchen</span>
+                          <div className="p-3 bg-[#f2f4f7] rounded-xl flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#005ab6] text-[24px]">soup_kitchen</span>
                               <div>
-                                <div className="font-label-md text-label-md font-bold text-white">
-                                  Prepared Vegetable Curry (18 kg)
-                                </div>
-                                <div className="font-body-sm text-body-sm text-[#64748B]">Chilled 3°C • Vacuum insulated</div>
+                                <div className="text-[13px] font-bold text-[#001d59]">Prepared Vegetable Curry (18 kg)</div>
+                                <div className="text-[11px] text-[#747683]">Chilled 3°C • Vacuum insulated</div>
                               </div>
                             </div>
-                            <span className="font-label-md text-label-md text-[#38bdf8] font-bold">En Route Driver</span>
+                            <span className="text-[12px] text-[#005ab6] font-bold">En Route Driver</span>
                           </div>
                         </div>
                       </div>
@@ -649,34 +659,34 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                 {/* Panel 2: Recipient */}
                 {selectedRoleTab === 'recipient' && (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                    <div className="lg:col-span-5 space-y-space-md">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0070E0]/20 border border-[#0070E0]/40 text-[#38bdf8] font-label-sm text-label-sm font-bold">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div className="lg:col-span-5 space-y-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001d59] text-[11px] font-bold">
                         <span className="material-symbols-outlined text-[16px]">person_pin_circle</span> Neighborhood Residents
                       </span>
-                      <h3 className="font-headline-md text-headline-md text-white font-bold">
+                      <h3 className="text-[22px] font-bold text-[#001d59] tracking-tight">
                         Dignified, Fresh &amp; Hyperlocal Nutrition
                       </h3>
-                      <p className="font-body-md text-body-md text-[#94A3B8] leading-relaxed">
+                      <p className="text-[14px] text-[#444652] leading-relaxed">
                         Browse safe, surplus meals from your favorite local cafes, catering venues, and farm markets. Filter dietary preferences like vegan, gluten-free, or halal and claim packages for collection without awkward handoffs.
                       </p>
-                      <div className="space-y-space-xs font-body-md text-body-md text-[#d7e3fc]">
+                      <div className="space-y-2 text-[13px] text-[#001d59] font-medium">
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>GPS radius alerts when fresh batches drop</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>No shame, 100% private QR verification</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>Always free or pay-what-you-can PayPal donation</span>
                         </div>
                       </div>
                       <button
                         onClick={() => onNavigate('explore-food')}
-                        className="inline-flex items-center gap-2 font-label-lg text-label-lg text-[#38bdf8] font-bold hover:text-white transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-2 text-[14px] text-[#005ab6] font-bold hover:underline cursor-pointer pt-2"
                       >
                         <span>Browse Nearby Food</span>
                         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -684,41 +694,33 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
 
                     <div className="lg:col-span-7">
-                      <div className="bg-[#132A4A] border border-[#1E3A66] p-space-lg rounded-[20px] shadow-lg">
-                        <div className="flex items-center justify-between mb-space-md">
-                          <div className="font-headline-sm text-headline-sm text-white font-bold">
-                            Nearby Available Right Now
-                          </div>
-                          <span className="font-label-sm text-label-sm text-[#38bdf8] font-bold">Within 2.0 mi</span>
+                      <div className="bg-white p-6 rounded-[20px] shadow-sm border border-[#e6e8eb]">
+                        <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#f2f4f7]">
+                          <div className="text-[16px] font-bold text-[#001d59]">Nearby Available Right Now</div>
+                          <span className="text-[11px] text-[#005ab6] font-bold">Within 2.0 mi</span>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
-                          <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl">
-                            <div className="font-label-md text-label-md font-bold text-white">Green Grocer Organic Bag</div>
-                            <div className="font-body-sm text-body-sm text-[#64748B]">Apples, kale, carrots • 4.2 kg</div>
-                            <div className="mt-space-sm flex items-center justify-between">
-                              <span className="font-label-sm text-label-sm text-[#F5A623] font-bold">Expires in 2h</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="p-3 bg-[#f2f4f7] rounded-xl border border-[#e6e8eb]">
+                            <div className="text-[13px] font-bold text-[#001d59]">Green Grocer Organic Bag</div>
+                            <div className="text-[11px] text-[#747683]">Apples, kale, carrots • 4.2 kg</div>
+                            <div className="mt-3 flex items-center justify-between">
+                              <span className="text-[11px] text-[#D97706] font-bold">Expires in 2h</span>
                               <button
-                                onClick={() => {
-                                  showToast('Green Grocer Organic Bag reserved! Check Explore Food.');
-                                  onNavigate('explore-food');
-                                }}
-                                className="px-3 py-1 bg-[#0070E0] text-white rounded font-label-sm text-label-sm font-semibold hover:bg-[#005bb8] transition-colors cursor-pointer"
+                                onClick={() => onNavigate('explore-food')}
+                                className="px-3 py-1 bg-[#005ab6] text-white rounded font-bold text-[11px] cursor-pointer"
                               >
                                 Reserve
                               </button>
                             </div>
                           </div>
-                          <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl">
-                            <div className="font-label-md text-label-md font-bold text-white">Harvest Salad Bowls (x6)</div>
-                            <div className="font-body-sm text-body-sm text-[#64748B]">Fresh prepped salads • Vegan</div>
-                            <div className="mt-space-sm flex items-center justify-between">
-                              <span className="font-label-sm text-label-sm text-[#F5A623] font-bold">Expires in 1h</span>
+                          <div className="p-3 bg-[#f2f4f7] rounded-xl border border-[#e6e8eb]">
+                            <div className="text-[13px] font-bold text-[#001d59]">Harvest Salad Bowls (x6)</div>
+                            <div className="text-[11px] text-[#747683]">Fresh prepped salads • Vegan</div>
+                            <div className="mt-3 flex items-center justify-between">
+                              <span className="text-[11px] text-[#D97706] font-bold">Expires in 1h</span>
                               <button
-                                onClick={() => {
-                                  showToast('Harvest Salad Bowls reserved! Check Explore Food.');
-                                  onNavigate('explore-food');
-                                }}
-                                className="px-3 py-1 bg-[#0070E0] text-white rounded font-label-sm text-label-sm font-semibold hover:bg-[#005bb8] transition-colors cursor-pointer"
+                                onClick={() => onNavigate('explore-food')}
+                                className="px-3 py-1 bg-[#005ab6] text-white rounded font-bold text-[11px] cursor-pointer"
                               >
                                 Reserve
                               </button>
@@ -732,34 +734,34 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                 {/* Panel 3: NGO */}
                 {selectedRoleTab === 'ngo' && (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                    <div className="lg:col-span-5 space-y-space-md">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#8065D8]/20 border border-[#8065D8]/40 text-[#cdbdff] font-label-sm text-label-sm font-bold">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div className="lg:col-span-5 space-y-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e7deff] text-[#001d59] text-[11px] font-bold">
                         <span className="material-symbols-outlined text-[16px]">corporate_fare</span> Community Non-Profits
                       </span>
-                      <h3 className="font-headline-md text-headline-md text-white font-bold">
+                      <h3 className="text-[22px] font-bold text-[#001d59] tracking-tight">
                         High-Capacity Logistics for Food Pantries &amp; Shelters
                       </h3>
-                      <p className="font-body-md text-body-md text-[#94A3B8] leading-relaxed">
+                      <p className="text-[14px] text-[#444652] leading-relaxed">
                         Manage bulk intakes without telephone tag. Connect directly with university campuses, event venues, and wholesale distributors offering large pallet-scale rescue shipments.
                       </p>
-                      <div className="space-y-space-xs font-body-md text-body-md text-[#d7e3fc]">
+                      <div className="space-y-2 text-[13px] text-[#001d59] font-medium">
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>Fleet dispatch routing &amp; cargo monitoring</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>Cold-chain compliance temperature logs</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[#4ade80]">check_circle</span>
+                          <span className="material-symbols-outlined text-[#16A36A] text-[20px]">check_circle</span>
                           <span>PayPal Grant micro-funding integrations</span>
                         </div>
                       </div>
                       <button
                         onClick={() => onNavigate('ngo-hub')}
-                        className="inline-flex items-center gap-2 font-label-lg text-label-lg text-[#38bdf8] font-bold hover:text-white transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-2 text-[14px] text-[#005ab6] font-bold hover:underline cursor-pointer pt-2"
                       >
                         <span>Register NGO Operations</span>
                         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -767,118 +769,115 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
 
                     <div className="lg:col-span-7">
-                      <div className="bg-[#132A4A] border border-[#1E3A66] p-space-lg rounded-[20px] shadow-lg">
-                        <div className="font-headline-sm text-headline-sm text-white font-bold mb-space-sm">
-                          Bulk Intake Coordination
-                        </div>
-                        <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl mb-space-xs">
+                      <div className="bg-white p-6 rounded-[20px] shadow-sm border border-[#e6e8eb]">
+                        <div className="text-[16px] font-bold text-[#001d59] mb-3">Bulk Intake Coordination</div>
+                        <div className="p-3 bg-[#f2f4f7] rounded-xl mb-2 border border-[#e6e8eb]">
                           <div className="flex justify-between items-center">
-                            <span className="font-label-md text-label-md font-bold text-white">Downtown Convention Hall</span>
-                            <span className="font-label-sm text-label-sm text-[#4ade80] font-bold">320 Meals Ready</span>
+                            <span className="text-[13px] font-bold text-[#001d59]">Downtown Convention Hall</span>
+                            <span className="text-[11px] text-[#16A36A] font-bold">320 Meals Ready</span>
                           </div>
-                          <div className="font-body-sm text-body-sm text-[#64748B] mt-1">
-                            Requires van transport • Heated transit boxes
-                          </div>
+                          <div className="text-[11px] text-[#747683] mt-1">Requires van transport • Heated transit boxes</div>
                         </div>
-                        <div className="p-space-sm bg-[#0A1B30] border border-[#1A365D] rounded-xl">
+                        <div className="p-3 bg-[#f2f4f7] rounded-xl border border-[#e6e8eb]">
                           <div className="flex justify-between items-center">
-                            <span className="font-label-md text-label-md font-bold text-white">City Center Food Bank</span>
-                            <span className="font-label-sm text-label-sm text-[#38bdf8] font-bold">Dock Bay 2 Assigned</span>
+                            <span className="text-[13px] font-bold text-[#001d59]">City Center Food Bank</span>
+                            <span className="text-[11px] text-[#005ab6] font-bold">Dock Bay 2 Assigned</span>
                           </div>
-                          <div className="font-body-sm text-body-sm text-[#64748B] mt-1">ETA: 18 mins • Driver: Alex M.</div>
+                          <div className="text-[11px] text-[#747683] mt-1">ETA: 18 mins • Driver: Alex M.</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
+
               </div>
             </section>
 
             {/* LIVE IMPACT TESTIMONIAL CAROUSEL */}
-            <section className="max-w-[1440px] mx-auto px-gutter py-space-xl">
-              <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-space-lg">
+            <section className="max-w-[1440px] mx-auto px-4 md:px-6 py-10">
+              <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8">
                 <div>
-                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-[#38bdf8] font-bold">
+                  <span className="text-[11px] uppercase tracking-wider text-[#005ab6] font-bold">
                     Voices from the Loop
                   </span>
-                  <h2 className="font-headline-lg text-headline-lg text-white font-bold mt-1">Real Human Impact</h2>
+                  <h2 className="text-[28px] sm:text-[32px] font-bold text-[#001d59] mt-1 tracking-tight">
+                    Real Human Impact
+                  </h2>
                 </div>
-                <div className="flex items-center gap-space-xs mt-space-sm md:mt-0">
+                <div className="flex items-center gap-2 mt-4 md:mt-0">
                   <button
                     aria-label="Previous quote"
                     onClick={() => setTestimonialIndex((prev) => (prev > 0 ? prev - 1 : testimonials.length - 1))}
-                    className="w-10 h-10 rounded-full bg-[#10233D] border border-[#1E3A66] flex items-center justify-center hover:border-[#0070E0] hover:text-white transition-colors text-[#94A3B8] cursor-pointer"
+                    className="w-10 h-10 rounded-full bg-[#f2f4f7] flex items-center justify-center hover:bg-[#eceef1] transition-colors text-[#001d59] cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[20px]">west</span>
                   </button>
                   <button
                     aria-label="Next quote"
                     onClick={() => setTestimonialIndex((prev) => (prev < testimonials.length - 1 ? prev + 1 : 0))}
-                    className="w-10 h-10 rounded-full bg-[#10233D] border border-[#1E3A66] flex items-center justify-center hover:border-[#0070E0] hover:text-white transition-colors text-[#94A3B8] cursor-pointer"
+                    className="w-10 h-10 rounded-full bg-[#f2f4f7] flex items-center justify-center hover:bg-[#eceef1] transition-colors text-[#001d59] cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[20px]">east</span>
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-                {testimonials.map((t, idx) => {
-                  const isActive = idx === testimonialIndex;
-                  return (
-                    <div
-                      key={t.id}
-                      className={`bg-[#10233D] border rounded-[20px] p-space-lg shadow-lg flex flex-col justify-between transition-all duration-300 ${
-                        isActive ? 'border-[#0070E0] shadow-[0_8px_30px_rgba(0,112,224,0.2)]' : 'border-[#1E3A66] hover:border-[#0070E0]/60'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center gap-1 text-[#F5A623] mb-space-sm drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <span key={star} className="material-symbols-outlined text-[18px]">
-                              star
-                            </span>
-                          ))}
-                        </div>
-                        <p className="font-body-md text-body-md text-[#94A3B8] italic leading-relaxed">{t.quote}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {testimonials.map((t) => (
+                  <div key={t.id} className="bg-white p-6 rounded-[20px] shadow-sm border border-[#e6e8eb] flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1 text-[#D97706] mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                        ))}
                       </div>
-                      <div className="flex items-center gap-space-sm mt-space-lg pt-space-sm border-t border-[#1E3A66]/60">
-                        <img className="w-11 h-11 rounded-full object-cover ring-2 ring-[#0070E0]/40" alt={t.name} src={t.image} />
-                        <div>
-                          <div className="font-label-md text-label-md font-bold text-white">{t.name}</div>
-                          <div className="font-body-sm text-body-sm text-[#64748B]">{t.role}</div>
-                        </div>
+                      <p className="text-[14px] text-[#444652] italic leading-relaxed">
+                        {t.quote}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 mt-6 pt-3 border-t border-[#f2f4f7]">
+                      <img
+                        className="w-11 h-11 rounded-full object-cover"
+                        alt={t.name}
+                        src={t.image}
+                      />
+                      <div>
+                        <div className="text-[13px] font-bold text-[#001d59]">{t.name}</div>
+                        <div className="text-[11px] text-[#747683]">{t.role}</div>
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </section>
 
             {/* CALL TO ACTION BANNER */}
-            <section className="max-w-[1440px] mx-auto px-gutter pb-space-xl">
-              <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0A1B30] via-[#0F223D] to-[#1E3A66] border border-[#1E3A66] p-space-xl text-white shadow-2xl">
-                <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[#0070E0]/25 blur-3xl pointer-events-none"></div>
-                <div className="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-[#8065D8]/20 blur-3xl pointer-events-none"></div>
-                <div className="relative z-10 max-w-2xl space-y-space-md">
-                  <span className="px-3.5 py-1.5 rounded-full bg-[#0070E0]/20 border border-[#0070E0]/40 backdrop-blur-md font-label-sm text-label-sm font-bold uppercase tracking-wider text-[#38bdf8] inline-block shadow-[0_0_15px_rgba(0,112,224,0.3)]">
+            <section className="max-w-[1440px] mx-auto px-4 md:px-6 pb-14">
+              <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#001d59] via-[#003087] to-[#3d1b92] p-8 md:p-12 text-white shadow-xl">
+                <div className="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-[#005ab6]/20 blur-3xl pointer-events-none"></div>
+                <div className="relative z-10 max-w-2xl space-y-4">
+                  <span className="px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-bold uppercase tracking-wider text-[#d7e3ff] inline-block">
                     Join The Loop Today
                   </span>
-                  <h2 className="font-headline-lg text-headline-lg font-extrabold text-white">
-                    Every Meal Deserves a Chance.<br />Start Rescuing in Your City.
+                  <h2 className="text-[28px] sm:text-[34px] font-extrabold text-white leading-tight">
+                    Every Meal Deserves a Chance.<br />
+                    Start Rescuing in Your City.
                   </h2>
-                  <p className="font-body-lg text-body-lg text-[#94A3B8]">
+                  <p className="text-[16px] text-[#dbe1ff] leading-relaxed">
                     Whether you are a commercial donor, a local relief organization, or an individual champion, zero food waste starts with your next action.
                   </p>
-                  <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
+                  <div className="flex flex-wrap items-center gap-4 pt-2">
                     <button
                       onClick={() => onNavigate('explore-food')}
-                      className="h-11 px-6 rounded-lg bg-[#0070E0] text-white font-label-lg text-label-lg font-bold flex items-center justify-center hover:bg-[#005bb8] shadow-[0_4px_16px_rgba(0,112,224,0.4)] transition-all cursor-pointer"
+                      className="h-11 px-6 rounded-lg bg-white text-[#001d59] font-bold text-[14px] flex items-center justify-center hover:bg-[#f2f4f7] transition-all cursor-pointer shadow-md"
                     >
                       Claim Food Nearby
                     </button>
                     <button
                       onClick={() => onNavigate('donor-portal')}
-                      className="h-11 px-6 rounded-lg bg-[#0A1B30] text-white border border-[#1E3A66] font-label-lg text-label-lg font-bold flex items-center justify-center hover:border-[#0070E0] hover:bg-[#132A4A] transition-all cursor-pointer"
+                      className="h-11 px-6 rounded-lg bg-[#005ab6] text-white font-bold text-[14px] flex items-center justify-center hover:bg-[#0070ba] transition-all cursor-pointer shadow-md"
                     >
                       Register as Donor
                     </button>
@@ -886,41 +885,34 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
             </section>
+
           </div>
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="w-full bg-[#0A1B30] border-t border-[#1A365D] mt-space-xl py-space-xl shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
-        <div className="max-w-[1440px] mx-auto px-gutter">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-space-md">
-            <div className="flex items-center gap-space-sm">
+      {/* FOOTER - EXACT STITCH UI */}
+      <footer className="w-full bg-white shadow-[0_-1px_6px_rgba(0,48,135,0.03)] border-t border-[#e0e3e6] py-8">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
               <img
                 alt="FOODLOOP Brand Logo"
-                className="h-6 w-auto object-contain brightness-110 drop-shadow-[0_0_6px_rgba(0,112,224,0.3)]"
+                className="h-6 w-auto object-contain"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="font-headline-sm text-headline-sm text-white font-extrabold tracking-tight">FOODLOOP</span>
-              <span className="font-body-sm text-body-sm text-[#94A3B8] ml-space-sm hidden sm:inline">
+              <span className="font-extrabold text-[16px] text-[#001d59] tracking-tight">FOODLOOP</span>
+              <span className="text-[12px] text-[#747683] ml-2 hidden sm:inline">
                 Every Meal Deserves a Chance.
               </span>
             </div>
-            <div className="flex items-center gap-space-lg font-label-md text-label-md text-[#94A3B8]">
-              <a className="hover:text-white transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Privacy Policy
-              </a>
-              <a className="hover:text-white transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Fintech Ledger Terms
-              </a>
-              <a className="hover:text-white transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                API Docs
-              </a>
-              <a className="hover:text-white transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Support
-              </a>
+            <div className="flex items-center gap-6 text-[13px] font-semibold text-[#444652]">
+              <a className="hover:text-[#001d59] transition-colors" href="#">Privacy Policy</a>
+              <a className="hover:text-[#001d59] transition-colors" href="#">Fintech Ledger Terms</a>
+              <a className="hover:text-[#001d59] transition-colors" href="#">API Docs</a>
+              <a className="hover:text-[#001d59] transition-colors" href="#">Support</a>
             </div>
           </div>
-          <div className="mt-space-lg text-center md:text-left font-body-sm text-body-sm text-[#64748B]">
+          <div className="mt-6 text-center md:text-left text-[11px] text-[#747683]">
             © 2025 FOODLOOP Global Redistribution Technologies. Institutional Grade Logistics &amp; Settlement.
           </div>
         </div>
