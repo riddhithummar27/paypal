@@ -11,6 +11,7 @@ import { NgoLogisticsGrid } from '@/components/NgoLogisticsGrid';
 import { BryntumDispatchScheduler } from '@/components/BryntumDispatchScheduler';
 import { AutonomousAgentConsole } from '@/components/AutonomousAgentConsole';
 import { NgoHubPage } from '@/components/NgoHubPage';
+import { ImpactPage } from '@/components/ImpactPage';
 import { RewardsModal } from '@/components/RewardsModal';
 import { ApiDocsModal } from '@/components/ApiDocsModal';
 import { SponsorShowcaseModal } from '@/components/SponsorShowcaseModal';
@@ -248,6 +249,14 @@ export default function Home() {
           setActiveRole={setActiveRole}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onClaimBatch={handleClaimBatch}
+        />
+      ) : activeTab === 'sponsorship' ? (
+        <ImpactPage
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+          onSponsorshipCompleted={handleSponsorshipCompleted}
         />
       ) : (
         <>
