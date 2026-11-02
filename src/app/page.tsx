@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { HomePage } from '@/components/HomePage';
 import { Navbar } from '@/components/Navbar';
 import { SurplusMarketplace } from '@/components/SurplusMarketplace';
 import { MealSponsorship } from '@/components/MealSponsorship';
@@ -22,7 +23,8 @@ import {
 import { FoodListing, SponsorshipCampaign, DispatchSlot, RewardProfile } from '@/types/foodloop';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<string>('marketplace');
+  const [activeTab, setActiveTab] = useState<string>('home');
+  const [activeRole, setActiveRole] = useState<string>('donor');
   const [listings, setListings] = useState<FoodListing[]>(INITIAL_FOOD_LISTINGS);
   const [campaigns, setCampaigns] = useState<SponsorshipCampaign[]>(INITIAL_SPONSORSHIPS);
   const [dispatchSlots, setDispatchSlots] = useState<DispatchSlot[]>(INITIAL_DISPATCH_SLOTS);
@@ -33,10 +35,10 @@ export default function Home() {
   const [isSponsorsOpen, setIsSponsorsOpen] = useState(false);
 
   const [stats, setStats] = useState({
-    mealsRescued: 2490,
-    co2Kg: 6225,
-    moneySaved: 14850,
-    mealsSponsored: 480,
+    mealsRescued: 142890,
+    co2Kg: 89400,
+    moneySaved: 48250,
+    mealsSponsored: 1280,
   });
 
   // Handle surplus consumer checkout via PayPal
@@ -92,7 +94,7 @@ export default function Home() {
   // Handle new surplus listing by a donor
   const handleAddListing = (newListing: FoodListing) => {
     setListings((prev) => [newListing, ...prev]);
-    setActiveTab('ngo'); // Switch to AG Grid to show new row immediately
+    setActiveTab('ngo');
   };
 
   // Handle batch claim by an NGO in AG Grid
@@ -191,90 +193,109 @@ export default function Home() {
     }
   };
 
+  // Route switcher translation
+  const handlePageNavigation = (page: string) => {
+    if (page === 'home') setActiveTab('home');
+    else if (page === 'explore-food') setActiveTab('marketplace');
+    else if (page === 'ai-rescue-agent') setActiveTab('agent');
+    else if (page === 'donor-portal') setActiveTab('donor');
+    else if (page === 'ngo-hub') setActiveTab('ngo');
+    else if (page === 'impact') setActiveTab('sponsorship');
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white">
-      {/* Top Navbar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenRewards={() => setIsRewardsOpen(true)}
-        onOpenApiDocs={() => setIsApiDocsOpen(true)}
-        onOpenSponsors={() => setIsSponsorsOpen(true)}
-        stats={stats}
-      />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col antialiased">
+      {/* If activeTab is home, show the new Home Page design */}
+      {activeTab === 'home' ? (
+        <HomePage
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+        />
+      ) : (
+        <>
+          {/* Subpage Header with Back to Home button */}
+          <div className="bg-surface-container-lowest border-b border-surface-container-high px-gutter py-2.5 flex items-center justify-between text-xs sticky top-0 z-40">
+            <button
+              onClick={() => setActiveTab('home')}
+              className="flex items-center gap-1.5 font-bold text-primary hover:text-secondary transition-colors cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+              <span>Back to Home</span>
+            </button>
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
-        {activeTab === 'marketplace' && (
-          <SurplusMarketplace
-            listings={listings}
-            onOrderCompleted={handleOrderCompleted}
-          />
-        )}
-
-        {activeTab === 'sponsorship' && (
-          <MealSponsorship
-            campaigns={campaigns}
-            onSponsorshipCompleted={handleSponsorshipCompleted}
-          />
-        )}
-
-        {activeTab === 'donor' && <DonorPortal onAddListing={handleAddListing} />}
-
-        {activeTab === 'ngo' && (
-          <NgoLogisticsGrid
-            listings={listings}
-            onClaimBatch={handleClaimBatch}
-          />
-        )}
-
-        {activeTab === 'scheduler' && (
-          <BryntumDispatchScheduler
-            slots={dispatchSlots}
-            onStatusUpdate={handleDispatchStatusUpdate}
-          />
-        )}
-
-        {activeTab === 'agent' && (
-          <AutonomousAgentConsole
-            initialLogs={INITIAL_AGENT_LOGS}
-            onTriggerRescueChallenge={handleTriggerRescueChallenge}
-            onAgentAction={handleAgentAction}
-          />
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-8 px-4 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="space-y-1 text-center md:text-left">
-            <div className="font-bold text-slate-300">
-              FOODLOOP 2.0 • Build What's Next with PayPal and AI
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-on-surface-variant">Active Module:</span>
+              <span className="px-2 py-0.5 rounded bg-secondary-fixed text-primary font-bold uppercase text-[10px]">
+                {activeTab}
+              </span>
             </div>
-            <p>
-              Autonomous Surplus Intelligence & Redistribution. Powered by PayPal Agent Toolkit, AG Grid, Bryntum & APIMatic.
-            </p>
+
+            <button
+              onClick={() => setIsSponsorsOpen(true)}
+              className="px-2.5 py-1 rounded bg-[#ffc439] text-[#001435] font-black text-[11px] cursor-pointer"
+            >
+              Sponsors (5)
+            </button>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-400">
-            <button
-              onClick={() => setIsApiDocsOpen(true)}
-              className="hover:text-white transition-colors"
-            >
-              OpenAPI 3.1 Specs
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setIsRewardsOpen(true)}
-              className="hover:text-white transition-colors"
-            >
-              Impact Ledger
-            </button>
-            <span>•</span>
-            <span className="text-emerald-400 font-mono">MIT Open Source</span>
-          </div>
-        </div>
-      </footer>
+          <Navbar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            onOpenRewards={() => setIsRewardsOpen(true)}
+            onOpenApiDocs={() => setIsApiDocsOpen(true)}
+            onOpenSponsors={() => setIsSponsorsOpen(true)}
+            stats={stats}
+          />
+
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+            {activeTab === 'marketplace' && (
+              <SurplusMarketplace
+                listings={listings}
+                onOrderCompleted={handleOrderCompleted}
+              />
+            )}
+
+            {activeTab === 'sponsorship' && (
+              <MealSponsorship
+                campaigns={campaigns}
+                onSponsorshipCompleted={handleSponsorshipCompleted}
+              />
+            )}
+
+            {activeTab === 'donor' && <DonorPortal onAddListing={handleAddListing} />}
+
+            {activeTab === 'ngo' && (
+              <div className="space-y-8">
+                <NgoLogisticsGrid
+                  listings={listings}
+                  onClaimBatch={handleClaimBatch}
+                />
+                <BryntumDispatchScheduler
+                  slots={dispatchSlots}
+                  onStatusUpdate={handleDispatchStatusUpdate}
+                />
+              </div>
+            )}
+
+            {activeTab === 'scheduler' && (
+              <BryntumDispatchScheduler
+                slots={dispatchSlots}
+                onStatusUpdate={handleDispatchStatusUpdate}
+              />
+            )}
+
+            {activeTab === 'agent' && (
+              <AutonomousAgentConsole
+                initialLogs={INITIAL_AGENT_LOGS}
+                onTriggerRescueChallenge={handleTriggerRescueChallenge}
+                onAgentAction={handleAgentAction}
+              />
+            )}
+          </main>
+        </>
+      )}
 
       {/* Modals */}
       <RewardsModal
