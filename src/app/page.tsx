@@ -222,6 +222,14 @@ export default function Home() {
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onOrderCompleted={handleOrderCompleted}
         />
+      ) : activeTab === 'donor' ? (
+        <DonorPortal
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+          onAddListing={handleAddListing}
+        />
       ) : (
         <>
           {/* Subpage Header with Back to Home button */}
@@ -273,7 +281,6 @@ export default function Home() {
               />
             )}
 
-            {activeTab === 'donor' && <DonorPortal onAddListing={handleAddListing} />}
 
             {activeTab === 'ngo' && (
               <div className="space-y-8">
