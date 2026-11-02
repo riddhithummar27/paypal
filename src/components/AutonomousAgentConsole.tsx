@@ -30,14 +30,14 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
   onTriggerRescueChallenge,
   onAgentAction,
 }) => {
-  // Countdown timer state
+  // Countdown timer state (43m 42s)
   const [secondsLeft, setSecondsLeft] = useState(43 * 60 + 42);
   const [isOverrideActive, setIsOverrideActive] = useState(false);
   const [isDispatched, setIsDispatched] = useState(false);
   const [isRouteLocked, setIsRouteLocked] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // High-volume queue matched state
+  // High-volume batch queue matched state
   const [matchedQueues, setMatchedQueues] = useState<Record<string, boolean>>({});
 
   // Activity Log State
@@ -74,7 +74,7 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
     },
   ]);
 
-  // Interval timer
+  // Interval timer for countdown
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
@@ -108,8 +108,8 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
     const nextState = !isOverrideActive;
     setIsOverrideActive(nextState);
     if (nextState) {
-      addLog('Manual Override Active (Autonomous Rule #41 Paused)', 'Just now • Operator locked autonomous trigger', 'lock');
-      showToast('Manual override engaged. Autonomous dispatches paused.');
+      addLog('Manual Override Active (Autonomous Rule #41 Paused)', 'Just now • Operator locked autonomous trigger', 'lock_reset');
+      showToast('Manual override engaged. Autonomous dispatches held.');
     } else {
       addLog('Manual Override Released (Autonomous Redistribution Resumed)', 'Just now • Node engine returned to auto mode', 'lock_open');
       showToast('Manual override disengaged. Autonomous engine running.');
@@ -119,7 +119,7 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
   const handleForceDispatch = () => {
     if (isDispatched) return;
     setIsDispatched(true);
-    addLog('Manual Force Dispatch executed by Operator', 'Just now • Dispatch tokens confirmed #FL-8842', 'rocket_launch');
+    addLog('Manual Force Dispatch executed by Operator', 'Just now • Dispatch tokens confirmed #FL-8842', 'check');
     showToast('Force dispatch executed! Van Unit #09 and Elena K. authorized.');
 
     if (onTriggerRescueChallenge) {
@@ -190,17 +190,17 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
   };
 
   return (
-    <div className="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col">
+    <div className="bg-[#071426] font-body-md text-[#d7e3fc] antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-primary text-on-primary px-4 py-3 rounded-xl shadow-2xl border border-secondary-fixed/30 flex items-center gap-2 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[20px]">check_circle</span>
+        <div className="fixed top-20 right-6 z-50 bg-[#10233D] text-cyan-300 border border-cyan-500/50 px-4 py-3 rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.3)] flex items-center gap-2 animate-bounce">
+          <span className="material-symbols-outlined text-cyan-400 text-[20px]">check_circle</span>
           <span className="font-label-md text-label-md font-semibold">{toastMessage}</span>
         </div>
       )}
 
-      {/* FIXED TOP HEADER */}
-      <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,48,135,0.06)]">
+      {/* HEADER */}
+      <header className="fixed top-0 w-full z-50 bg-[#0A1B30]/95 backdrop-blur-xl border-b border-[#1A365D] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
         <div className="h-16 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md">
           <div className="flex items-center gap-space-lg shrink-0">
             <a
@@ -213,59 +213,62 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
             >
               <img
                 alt="FOODLOOP Brand Logo"
-                className="h-8 w-auto object-contain"
+                className="h-8 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(56,189,248,0.4)]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="font-headline-sm text-headline-sm text-primary tracking-tight">FOODLOOP</span>
+              <span className="font-headline-sm text-headline-sm text-cyan-400 font-extrabold tracking-tight">FOODLOOP</span>
             </a>
-            <nav className="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-bold">
+            <nav className="hidden xl:flex items-center gap-space-md" data-active-classes="text-cyan-400 font-bold">
               <a
-                className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-label-lg text-label-lg text-slate-400 hover:text-cyan-300 transition-colors py-space-xs px-space-xs cursor-pointer"
+                data-path="home"
                 onClick={() => onNavigate?.('home')}
               >
                 Home
               </a>
               <a
-                className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-label-lg text-label-lg text-slate-400 hover:text-cyan-300 transition-colors py-space-xs px-space-xs cursor-pointer"
+                data-path="explore-food"
                 onClick={() => onNavigate?.('explore-food')}
               >
                 Explore Food
               </a>
               <a
                 aria-current="page"
-                className="transition-colors py-space-xs px-space-xs text-primary font-bold cursor-pointer"
+                className="transition-colors py-space-xs px-space-xs text-cyan-400 font-bold border-b-2 border-cyan-400 cursor-pointer"
+                data-path="ai-rescue-agent"
                 onClick={() => onNavigate?.('ai-rescue-agent')}
               >
                 AI Rescue Agent
               </a>
               <a
-                className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-label-lg text-label-lg text-slate-400 hover:text-cyan-300 transition-colors py-space-xs px-space-xs cursor-pointer"
+                data-path="donor-portal"
                 onClick={() => onNavigate?.('donor-portal')}
               >
                 Donor Portal
               </a>
               <a
-                className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-label-lg text-label-lg text-slate-400 hover:text-cyan-300 transition-colors py-space-xs px-space-xs cursor-pointer"
+                data-path="ngo-hub"
                 onClick={() => onNavigate?.('ngo-hub')}
               >
                 NGO Hub
               </a>
               <a
-                className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-space-xs px-space-xs cursor-pointer"
+                className="font-label-lg text-label-lg text-slate-400 hover:text-cyan-300 transition-colors py-space-xs px-space-xs cursor-pointer"
+                data-path="impact"
                 onClick={() => onNavigate?.('impact')}
               >
                 Impact
               </a>
             </nav>
           </div>
-
           <div className="flex items-center gap-space-sm justify-end flex-1 max-w-2xl">
             <div className="relative hidden md:block w-full max-w-xs">
-              <span className="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">
-                search
-              </span>
+              <span className="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
               <input
-                className="w-full h-10 pl-9 pr-space-md bg-surface-container-low rounded-lg text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/20 transition-all"
+                className="w-full h-10 pl-9 pr-space-md bg-[#10233D] border border-[#1A365D] rounded-lg text-slate-200 placeholder:text-slate-500 font-body-sm text-body-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all"
                 placeholder="Search rescued batches, NGOs, donors..."
                 type="text"
               />
@@ -273,717 +276,664 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
+                className="appearance-none h-10 pl-space-sm pr-space-lg bg-[#10233D] border border-[#1A365D] font-label-md text-label-md text-cyan-300 font-semibold rounded-lg cursor-pointer focus:outline-none focus:border-cyan-400"
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
-                className="appearance-none h-10 pl-space-sm pr-space-lg bg-surface-container-low font-label-md text-label-md text-primary font-bold rounded-lg cursor-pointer focus:outline-none"
               >
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin</option>
+                <option className="bg-[#0A1B30]" value="donor">Role: Donor</option>
+                <option className="bg-[#0A1B30]" value="recipient">Role: Recipient</option>
+                <option className="bg-[#0A1B30]" value="ngo">Role: NGO Hub</option>
+                <option className="bg-[#0A1B30]" value="admin">Role: Admin</option>
               </select>
-              <span className="material-symbols-outlined absolute right-space-xs top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none">
-                expand_more
-              </span>
+              <span className="material-symbols-outlined absolute right-space-xs top-1/2 -translate-y-1/2 text-cyan-400 text-[18px] pointer-events-none">expand_more</span>
             </div>
             <button
               aria-label="Toggle Color Scheme"
-              className="h-10 w-10 flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all"
+              className="h-10 w-10 flex items-center justify-center rounded-lg bg-[#10233D] border border-[#1A365D] text-cyan-300 hover:text-cyan-200 hover:bg-[#1A365D] transition-all"
               type="button"
             >
-              <span className="material-symbols-outlined text-[20px]">light_mode</span>
-            </button>
-            <button
-              aria-label="Open Sponsors"
-              onClick={onOpenSponsors}
-              className="h-10 px-3 flex items-center justify-center rounded-lg bg-[#ffc439] hover:bg-[#f2ba36] text-[#001435] font-black text-xs transition-all shadow-sm cursor-pointer"
-              type="button"
-            >
-              Sponsors (5)
+              <span className="material-symbols-outlined text-[20px]">dark_mode</span>
             </button>
             <button
               aria-label="Notifications"
-              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all"
+              className="relative h-10 w-10 flex items-center justify-center rounded-lg bg-[#10233D] border border-[#1A365D] text-slate-300 hover:text-cyan-300 hover:bg-[#1A365D] transition-all"
               type="button"
+              onClick={() => showToast('14 active nodes operating nominally in real-time.')}
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-error"></span>
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]"></span>
             </button>
             <div className="flex items-center gap-space-xs pl-space-xs">
               <img
                 alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-cyan-500/50"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
               />
-              <span className="material-symbols-outlined text-outline text-[18px] hidden sm:block cursor-pointer hover:text-primary transition-colors">
-                arrow_drop_down
-              </span>
+              <span className="material-symbols-outlined text-slate-400 text-[18px] hidden sm:block cursor-pointer hover:text-cyan-300 transition-colors">arrow_drop_down</span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* MAIN CONTAINER */}
-      <main className="w-full pt-16 bg-background flex-1">
+      {/* MAIN CONTENT */}
+      <main className="w-full pt-16 bg-[#071426] flex-1">
         <div className="flex flex-col w-full">
           <div className="w-full max-w-[1440px] mx-auto px-gutter py-space-md flex flex-col gap-space-lg">
             
-            {/* Top Engine Status Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+            {/* Command Bar */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-[#0A1B30] border border-[#1A365D] p-space-lg rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
               <div className="flex items-center gap-space-md">
-                <div className="relative w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-md overflow-hidden">
-                  <svg
-                    className="w-7 h-7 text-secondary-fixed"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="3.5"
-                    viewBox="0 0 48 48"
-                  >
-                    <circle className="opacity-25" cx="24" cy="24" r="18" />
+                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-950 to-blue-900 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shadow-[0_0_15px_rgba(56,189,248,0.2)] overflow-hidden">
+                  <svg className="w-7 h-7 text-cyan-300 drop-shadow-[0_0_6px_rgba(56,189,248,0.8)]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" viewBox="0 0 48 48">
+                    <circle className="opacity-30" cx="24" cy="24" r="18" />
                     <path d="M15 24c0-4 4-8 9-8s9 8 9 8-4 8-9 8-9-4-9-8z" />
                     <circle cx="24" cy="7" fill="currentColor" r="2.5" />
                   </svg>
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent"></div>
                 </div>
                 <div>
                   <div className="flex items-center gap-space-xs">
-                    <span className="font-headline-md text-headline-md text-primary tracking-tight">
-                      AI Autonomous Rescue Agent
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full bg-secondary-fixed text-primary font-label-sm text-label-sm uppercase tracking-wider">
-                      v2.4 Engine
+                    <span className="font-headline-md text-headline-md text-white font-bold tracking-tight">AI Autonomous Rescue Agent</span>
+                    <span className="px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-label-sm text-label-sm uppercase tracking-wider font-semibold">v2.4 Engine</span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-emerald-400 text-xs font-mono font-bold tracking-wider shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      SYS:LIVE
                     </span>
                   </div>
                   <div className="flex items-center gap-space-xs mt-1">
                     <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400"></span>
                     </span>
-                    <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">
-                      REAL-TIME MATCHING DOCK ONLINE • 14 NODES ACTIVE
-                    </span>
+                    <span className="font-body-sm text-body-sm text-slate-300 font-mono tracking-wide">REAL-TIME MATCHING DOCK ONLINE • 14 NODES ACTIVE</span>
                   </div>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-space-sm">
-                <div className="bg-surface-container-low px-space-md py-2 rounded-lg flex items-center gap-space-sm">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">bolt</span>
+                <div className="bg-[#10233D] border border-[#1A365D] px-space-md py-2 rounded-lg flex items-center gap-space-sm">
+                  <span className="material-symbols-outlined text-amber-400 text-[20px] drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]">bolt</span>
                   <div>
-                    <div className="font-label-sm text-label-sm text-outline">AUTO DISPATCH</div>
-                    <div className="font-label-md text-label-md text-primary">Autonomous Rule #41</div>
+                    <div className="font-label-sm text-label-sm text-slate-400">AUTO DISPATCH</div>
+                    <div className="font-label-md text-label-md text-cyan-300 font-mono font-semibold">Autonomous Rule #41</div>
                   </div>
                 </div>
                 <button
-                  onClick={handleManualOverrideToggle}
-                  className={`h-11 px-space-md rounded-lg font-label-lg text-label-lg transition-all flex items-center gap-space-xs shadow-sm cursor-pointer ${
+                  className={`h-11 px-space-md rounded-lg border font-label-lg text-label-lg transition-all flex items-center gap-space-xs shadow-sm cursor-pointer ${
                     isOverrideActive
-                      ? 'bg-error-container text-on-error-container'
-                      : 'bg-surface-container hover:bg-surface-container-high text-primary'
+                      ? 'bg-red-950 border-red-500 text-red-300'
+                      : 'bg-[#10233D] hover:bg-[#1A365D] border-[#1A365D] text-slate-200 hover:text-white'
                   }`}
                   id="manual-override-btn"
+                  onClick={handleManualOverrideToggle}
                 >
-                  <span className="material-symbols-outlined text-[18px]">lock_reset</span>
+                  <span className="material-symbols-outlined text-[18px] text-amber-400">lock_reset</span>
                   {isOverrideActive ? 'Override Active (Hold Auto)' : 'Manual Override'}
                 </button>
                 <button
-                  onClick={handleForceDispatch}
-                  className={`h-11 px-space-lg rounded-lg font-label-lg text-label-lg shadow-md transition-all flex items-center gap-space-xs cursor-pointer ${
+                  className={`h-11 px-space-lg rounded-lg text-white font-label-lg text-label-lg font-bold shadow-[0_0_18px_rgba(56,189,248,0.4)] transition-all flex items-center gap-space-xs cursor-pointer ${
                     isDispatched
-                      ? 'bg-secondary text-on-secondary'
-                      : 'bg-primary hover:bg-primary-container text-on-primary'
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-500 shadow-[0_0_18px_rgba(16,185,129,0.5)]'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400'
                   }`}
                   id="instant-dispatch-btn"
+                  onClick={handleForceDispatch}
                 >
-                  {isDispatched ? (
-                    <>
-                      <span className="material-symbols-outlined text-[18px] animate-spin">refresh</span>
-                      Dispatch Confirmed
-                    </>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-[18px]">rocket_launch</span>
-                      Execute Force Dispatch
-                    </>
-                  )}
+                  <span className={`material-symbols-outlined text-[18px] ${isDispatched ? 'animate-spin' : ''}`}>
+                    {isDispatched ? 'refresh' : 'rocket_launch'}
+                  </span>
+                  {isDispatched ? 'Dispatch Confirmed' : 'Execute Force Dispatch'}
                 </button>
               </div>
             </div>
 
-            {/* Emergency Operation Banner */}
-            <div className="relative overflow-hidden bg-primary text-on-primary rounded-xl p-space-lg shadow-lg">
-              <div className="absolute -right-16 -top-16 w-64 h-64 bg-secondary-container opacity-20 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute -left-12 -bottom-12 w-48 h-48 bg-tertiary opacity-30 rounded-full blur-2xl pointer-events-none"></div>
+            {/* Urgent Perishable Countdown Card with Electric Blue & Amber Glow */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#07192f] via-[#0b213f] to-[#08182b] border border-[#1E4976] rounded-xl p-space-lg shadow-[0_0_30px_rgba(2,132,199,0.25)]">
+              <div className="absolute -right-16 -top-16 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute right-1/4 -bottom-16 w-60 h-60 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
+              <div className="absolute -left-12 -bottom-12 w-48 h-48 bg-blue-600/20 rounded-full blur-2xl pointer-events-none"></div>
               <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
                 <div className="flex items-start gap-space-md">
-                  <div className="w-10 h-10 rounded-lg bg-surface-container-lowest/10 backdrop-blur-md flex items-center justify-center shrink-0 text-secondary-fixed">
-                    <span className="material-symbols-outlined text-[24px]">crisis_alert</span>
+                  <div className="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-400/40 flex items-center justify-center shrink-0 text-cyan-300 shadow-[0_0_12px_rgba(56,189,248,0.4)]">
+                    <span className="material-symbols-outlined text-[26px] text-amber-400 animate-pulse">crisis_alert</span>
                   </div>
                   <div>
                     <div className="flex items-center gap-space-xs flex-wrap">
-                      <span className="px-2 py-0.5 rounded-full bg-error text-on-error font-label-sm text-label-sm uppercase tracking-wide">
-                        High Priority Active
-                      </span>
-                      <span className="font-label-md text-label-md text-secondary-fixed">Operation #FL-8842</span>
-                      <span className="text-on-primary/60 font-body-sm text-body-sm">
-                        • Batch Verified by Marriott Regency Chef Lead
-                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-500/60 text-red-400 font-label-sm text-label-sm uppercase tracking-wide font-bold shadow-[0_0_10px_rgba(239,68,68,0.3)]">High Priority Active</span>
+                      <span className="font-mono font-bold text-label-md text-cyan-300">Operation #FL-8842</span>
+                      <span className="text-slate-400 font-body-sm text-body-sm">• Batch Verified by Marriott Regency Chef Lead</span>
                     </div>
-                    <h2 className="font-headline-md text-headline-md text-on-primary mt-1">
+                    <h2 className="font-headline-md text-headline-md text-white font-extrabold mt-1 tracking-tight">
                       80 Ready-to-Eat Gourmet Hot Meals Available
                     </h2>
-                    <p className="font-body-md text-body-md text-on-primary/80 mt-1 max-w-3xl">
+                    <p className="font-body-md text-body-md text-slate-300 mt-1 max-w-3xl">
                       Strict cold-chain &amp; thermal window compliance required. Mandatory custody release prior to 8:30 PM EDT.
                     </p>
                   </div>
                 </div>
-                <div className="bg-surface-container-lowest/10 backdrop-blur-md rounded-xl p-space-md flex items-center justify-between lg:justify-end gap-space-lg shrink-0">
+                <div className="bg-[#051324]/90 border border-cyan-500/30 rounded-xl p-space-md flex items-center justify-between lg:justify-end gap-space-lg shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
                   <div className="text-left">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed block">
-                      Countdown Window
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-amber-400 font-bold block flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">timer</span> Countdown Window
                     </span>
-                    <div className="font-headline-lg text-headline-lg font-bold text-on-primary tracking-tight" id="countdown-timer">
+                    <div className="font-headline-lg text-headline-lg font-black text-amber-300 font-mono tracking-tight drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" id="countdown-timer">
                       {formatTimer(secondsLeft)}
                     </div>
-                    <span className="font-body-sm text-body-sm text-on-primary/70">Minutes until perish margin</span>
+                    <span className="font-body-sm text-body-sm text-slate-400">Minutes until perish margin</span>
                   </div>
-                  <div className="h-10 w-px bg-on-primary/20"></div>
+                  <div className="h-12 w-px bg-cyan-500/30"></div>
                   <div className="text-left">
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed block">
-                      Safety Score
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-cyan-400 font-bold block flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">verified_user</span> Safety Score
                     </span>
-                    <div className="font-headline-lg text-headline-lg font-bold text-on-primary tracking-tight">98.4%</div>
-                    <span className="font-body-sm text-body-sm text-on-primary/70">ISO HACCP Certified</span>
+                    <div className="font-headline-lg text-headline-lg font-black text-cyan-300 font-mono tracking-tight drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]">98.4%</div>
+                    <span className="font-body-sm text-body-sm text-slate-400">ISO HACCP Certified</span>
                   </div>
                 </div>
               </div>
-              <div className="relative z-10 w-full bg-surface-container-lowest/15 rounded-full h-1.5 mt-space-md overflow-hidden">
-                <div
-                  className="bg-secondary-fixed h-full rounded-full transition-all duration-1000"
-                  style={{ width: '72%' }}
-                ></div>
+              <div className="relative z-10 w-full bg-[#030e20] rounded-full h-2 mt-space-md overflow-hidden border border-[#1A365D]">
+                <div className="bg-gradient-to-r from-cyan-400 via-amber-400 to-red-500 h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(56,189,248,0.8)]" style={{ width: '72%' }}></div>
               </div>
             </div>
 
-            {/* Split Main Grid */}
+            {/* Grid: 5-Stage Pipeline + Radar Vector Map (Col 8) & Gauges + Live Log (Col 4) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
-              
-              {/* Left Column (8 cols) */}
               <div className="lg:col-span-8 flex flex-col gap-space-lg">
                 
-                {/* 5-Stage Autonomous Redistribution Sequence */}
-                <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                {/* 5-Stage Autonomous Redistribution Sequence Pipeline */}
+                <div className="bg-[#0A1B30] border border-[#1A365D] rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-label-sm text-label-sm uppercase text-outline tracking-wider">
-                        Automated Decision Pipeline
-                      </span>
-                      <h3 className="font-headline-sm text-headline-sm text-primary">
-                        5-Stage Autonomous Redistribution Sequence
-                      </h3>
+                      <span className="font-label-sm text-label-sm uppercase text-slate-400 tracking-wider font-mono">Automated Decision Pipeline</span>
+                      <h3 className="font-headline-sm text-headline-sm text-white font-bold">5-Stage Autonomous Redistribution Sequence</h3>
                     </div>
-                    <span className="font-label-sm text-label-sm px-2 py-1 rounded bg-secondary-fixed text-primary font-bold">
-                      Pipeline Stage 4 of 5 Running
+                    <span className="font-label-sm text-label-sm px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-mono font-bold">
+                      {isDispatched ? 'Pipeline Stage 5 of 5 Complete' : 'Pipeline Stage 4 of 5 Running'}
                     </span>
                   </div>
-
-                  <div className="relative flex items-center justify-between px-2 pt-space-xs pb-space-sm overflow-x-auto">
-                    <div className="absolute left-6 right-6 top-7 h-1 bg-surface-container -z-0"></div>
+                  <div className="relative flex items-center justify-between px-4 pt-space-xs pb-space-sm overflow-x-auto">
+                    <div className="absolute left-8 right-8 top-7 h-1 bg-[#10233D] -z-0"></div>
                     <div
-                      className="absolute left-6 top-7 h-1 bg-secondary -z-0 transition-all duration-500"
-                      style={{ width: '75%' }}
+                      className="absolute left-8 top-7 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 -z-0 transition-all duration-500 shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                      style={{ width: isDispatched ? '100%' : '75%' }}
                     ></div>
                     <div className="flex flex-col items-center gap-1 z-10">
-                      <div className="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-cyan-950 border-2 border-cyan-400 text-cyan-300 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.5)]">
                         <span className="material-symbols-outlined text-[18px]">verified</span>
                       </div>
-                      <span className="font-label-sm text-label-sm text-primary font-bold text-center mt-1">1. Ingest</span>
+                      <span className="font-label-sm text-label-sm text-cyan-300 font-bold text-center mt-1">1. Ingest</span>
                     </div>
                     <div className="flex flex-col items-center gap-1 z-10">
-                      <div className="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-cyan-950 border-2 border-cyan-400 text-cyan-300 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.5)]">
                         <span className="material-symbols-outlined text-[18px]">radar</span>
                       </div>
-                      <span className="font-label-sm text-label-sm text-primary font-bold text-center mt-1">2. Geospatial</span>
+                      <span className="font-label-sm text-label-sm text-cyan-300 font-bold text-center mt-1">2. Geospatial</span>
                     </div>
                     <div className="flex flex-col items-center gap-1 z-10">
-                      <div className="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-cyan-950 border-2 border-cyan-400 text-cyan-300 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.5)]">
                         <span className="material-symbols-outlined text-[18px]">groups</span>
                       </div>
-                      <span className="font-label-sm text-label-sm text-primary font-bold text-center mt-1">3. NGO Capacity</span>
+                      <span className="font-label-sm text-label-sm text-cyan-300 font-bold text-center mt-1">3. NGO Capacity</span>
                     </div>
                     <div className="flex flex-col items-center gap-1 z-10">
-                      <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md animate-pulse">
-                        <span className="material-symbols-outlined text-[18px]">call_split</span>
+                      <div className={`w-10 h-10 rounded-full font-bold flex items-center justify-center shadow-[0_0_16px_rgba(56,189,248,0.9)] ${
+                        isRouteLocked ? 'bg-cyan-950 border-2 border-cyan-400 text-cyan-300' : 'bg-cyan-500 text-slate-950 animate-pulse'
+                      }`}>
+                        <span className="material-symbols-outlined text-[20px]">call_split</span>
                       </div>
-                      <span className="font-label-sm text-label-sm text-secondary font-bold text-center mt-1">4. Allocation</span>
+                      <span className="font-label-sm text-label-sm text-cyan-200 font-extrabold text-center mt-1 drop-shadow-[0_0_4px_rgba(56,189,248,0.8)]">4. Allocation</span>
                     </div>
                     <div className="flex flex-col items-center gap-1 z-10">
-                      <div className="w-10 h-10 rounded-full bg-surface-container text-outline flex items-center justify-center">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                        isDispatched
+                          ? 'bg-emerald-500 text-slate-950 border-2 border-emerald-300 shadow-[0_0_16px_rgba(16,185,129,0.9)] animate-pulse'
+                          : 'bg-[#10233D] border border-[#1A365D] text-slate-500'
+                      }`}>
                         <span className="material-symbols-outlined text-[18px]">payments</span>
                       </div>
-                      <span className="font-label-sm text-label-sm text-outline text-center mt-1">5. Dispatch</span>
+                      <span className={`font-label-sm text-label-sm text-center mt-1 font-bold ${
+                        isDispatched ? 'text-emerald-400' : 'text-slate-500'
+                      }`}>5. Dispatch</span>
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
-                    <div className="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between">
+                    <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-label-sm text-label-sm text-outline uppercase font-semibold">Stage 1 Analysis</span>
-                          <span className="px-2 py-0.5 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm font-bold">
-                            Passed
-                          </span>
+                          <span className="font-mono text-label-sm text-label-sm text-slate-400 uppercase font-semibold">Stage 1 Analysis</span>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 font-label-sm text-label-sm font-bold">Passed</span>
                         </div>
-                        <h4 className="font-headline-sm text-headline-sm text-primary mt-1">Ingestion &amp; Sensor Metric</h4>
+                        <h4 className="font-headline-sm text-headline-sm text-white mt-1">Ingestion &amp; Sensor Metric</h4>
                         <div className="mt-space-sm space-y-2">
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Core Temp (Probe C-2)</span>
-                            <span className="font-bold text-primary">142.8°F (Safe Hot Holding)</span>
+                            <span className="text-slate-400">Core Temp (Probe C-2)</span>
+                            <span className="font-bold text-amber-400 font-mono">142.8°F (Safe Hot Holding)</span>
                           </div>
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Dietary Classification</span>
-                            <span className="font-bold text-primary">Halal, Nut-Free Certified</span>
+                            <span className="text-slate-400">Dietary Classification</span>
+                            <span className="font-bold text-cyan-300">Halal, Nut-Free Certified</span>
                           </div>
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Donor Reliability Score</span>
-                            <span className="font-bold text-primary">99.2% (Tier 1 Gold Donor)</span>
+                            <span className="text-slate-400">Donor Reliability Score</span>
+                            <span className="font-bold text-emerald-400 font-mono">99.2% (Tier 1 Gold Donor)</span>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-space-md pt-space-xs bg-surface-container-lowest p-space-xs rounded-lg flex items-center gap-space-xs">
-                        <span className="material-symbols-outlined text-secondary text-[18px]">check_circle</span>
-                        <span className="font-body-sm text-body-sm text-on-surface font-medium">
-                          Automatic chain-of-custody smart voucher minted.
-                        </span>
+                      <div className="mt-space-md pt-space-xs bg-[#0A1B30] border border-[#1A365D] p-space-xs rounded-lg flex items-center gap-space-xs">
+                        <span className="material-symbols-outlined text-cyan-400 text-[18px]">check_circle</span>
+                        <span className="font-body-sm text-body-sm text-slate-300 font-medium">Automatic chain-of-custody smart voucher minted.</span>
                       </div>
                     </div>
-
-                    <div className="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between">
+                    <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="font-label-sm text-label-sm text-outline uppercase font-semibold">Stage 2 &amp; 3 Scanning</span>
-                          <span className="px-2 py-0.5 rounded-full bg-secondary-fixed text-primary font-label-sm text-label-sm font-bold">
-                            Radius: 3.5 km
-                          </span>
+                          <span className="font-mono text-label-sm text-label-sm text-slate-400 uppercase font-semibold">Stage 2 &amp; 3 Scanning</span>
+                          <span className="px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-label-sm text-label-sm font-bold font-mono">Radius: 3.5 km</span>
                         </div>
-                        <h4 className="font-headline-sm text-headline-sm text-primary mt-1">Geospatial NGO Match</h4>
+                        <h4 className="font-headline-sm text-headline-sm text-white mt-1">Geospatial NGO Match</h4>
                         <div className="mt-space-sm space-y-2">
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Qualified Receivers</span>
-                            <span className="font-bold text-primary">4 Facilities Screened</span>
+                            <span className="text-slate-400">Qualified Receivers</span>
+                            <span className="font-bold text-white font-mono">4 Facilities Screened</span>
                           </div>
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Acceptance Probability</span>
-                            <span className="font-bold text-secondary">97.8% Confidence</span>
+                            <span className="text-slate-400">Acceptance Probability</span>
+                            <span className="font-bold text-cyan-300 font-mono">97.8% Confidence</span>
                           </div>
                           <div className="flex items-center justify-between text-body-sm font-body-sm">
-                            <span className="text-on-surface-variant">Volunteer Courier Availability</span>
-                            <span className="font-bold text-primary">3 Drivers in Transit Orbit</span>
+                            <span className="text-slate-400">Volunteer Courier Availability</span>
+                            <span className="font-bold text-emerald-400 font-mono">3 Drivers in Transit Orbit</span>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-space-md pt-space-xs bg-surface-container-lowest p-space-xs rounded-lg flex items-center gap-space-xs">
-                        <span className="material-symbols-outlined text-secondary text-[18px]">my_location</span>
-                        <span className="font-body-sm text-body-sm text-on-surface font-medium">
-                          Traffic index factored: Low friction on East Corridor.
-                        </span>
+                      <div className="mt-space-md pt-space-xs bg-[#0A1B30] border border-[#1A365D] p-space-xs rounded-lg flex items-center gap-space-xs">
+                        <span className="material-symbols-outlined text-cyan-400 text-[18px]">my_location</span>
+                        <span className="font-body-sm text-body-sm text-slate-300 font-medium">Traffic index factored: Low friction on East Corridor.</span>
                       </div>
                     </div>
                   </div>
-
-                  {/* Multi-Destination Partitioning Split */}
-                  <div className="bg-surface-container-high rounded-xl p-space-md mt-space-xs">
+                  <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md mt-space-xs">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
                       <div>
-                        <span className="font-label-sm text-label-sm text-outline uppercase">AI Optimal Redistribution Split</span>
-                        <h4 className="font-headline-sm text-headline-sm text-primary">Multi-Destination Partitioning</h4>
+                        <span className="font-mono text-label-sm text-label-sm text-slate-400 uppercase">AI Optimal Redistribution Split</span>
+                        <h4 className="font-headline-sm text-headline-sm text-white font-bold">Multi-Destination Partitioning</h4>
                       </div>
-                      <span className="px-3 py-1 bg-surface-container-lowest rounded-full font-label-sm text-label-sm font-bold text-primary">
-                        Zero Waste Objective
-                      </span>
+                      <span className="px-3 py-1 bg-[#0A1B30] border border-cyan-500/30 rounded-full font-label-sm text-label-sm font-bold text-cyan-300">Zero Waste Objective</span>
                     </div>
-
                     <div className="mt-space-md grid grid-cols-1 md:grid-cols-2 gap-space-md">
-                      <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm">
+                      <div className="bg-[#0A1B30] border border-[#1A365D] rounded-lg p-space-md shadow-sm">
                         <div className="flex items-center justify-between">
-                          <span className="font-label-lg text-label-lg font-bold text-primary">Shelter Hope Downtown</span>
-                          <span className="px-2 py-0.5 rounded bg-secondary-fixed text-primary font-bold font-label-sm text-label-sm">
-                            50 Meals
-                          </span>
+                          <span className="font-label-lg text-label-lg font-bold text-white">Shelter Hope Downtown</span>
+                          <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-bold font-label-sm text-label-sm font-mono">50 Meals</span>
                         </div>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">1.2 km away • Current occupancy 94%</p>
+                        <p className="font-body-sm text-body-sm text-slate-400 mt-1">1.2 km away • Current occupancy 94%</p>
                         <div className="mt-space-sm flex items-center justify-between font-body-sm text-body-sm">
-                          <span className="text-outline">Assigned Carrier</span>
-                          <span className="font-semibold text-primary">Van Unit #09 (Carlos M.)</span>
+                          <span className="text-slate-400">Assigned Carrier</span>
+                          <span className="font-semibold text-cyan-300">Van Unit #09 (Carlos M.)</span>
                         </div>
-                        <div className="w-full bg-surface-container-low h-2 rounded-full mt-2 overflow-hidden">
-                          <div className="bg-secondary h-full rounded-full" style={{ width: '62.5%' }}></div>
+                        <div className="w-full bg-[#10233D] h-2 rounded-full mt-2 overflow-hidden border border-[#1A365D]">
+                          <div className="bg-cyan-400 h-full rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]" style={{ width: '62.5%' }}></div>
                         </div>
                       </div>
-
-                      <div className="bg-surface-container-lowest rounded-lg p-space-md shadow-sm">
+                      <div className="bg-[#0A1B30] border border-[#1A365D] rounded-lg p-space-md shadow-sm">
                         <div className="flex items-center justify-between">
-                          <span className="font-label-lg text-label-lg font-bold text-primary">St. Jude Community Mission</span>
-                          <span className="px-2 py-0.5 rounded bg-secondary-fixed text-primary font-bold font-label-sm text-label-sm">
-                            30 Meals
-                          </span>
+                          <span className="font-label-lg text-label-lg font-bold text-white">St. Jude Community Mission</span>
+                          <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-bold font-label-sm text-label-sm font-mono">30 Meals</span>
                         </div>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">2.4 km away • Dinner service starts in 50m</p>
+                        <p className="font-body-sm text-body-sm text-slate-400 mt-1">2.4 km away • Dinner service starts in 50m</p>
                         <div className="mt-space-sm flex items-center justify-between font-body-sm text-body-sm">
-                          <span className="text-outline">Assigned Carrier</span>
-                          <span className="font-semibold text-primary">Cargo E-Bike (Elena K.)</span>
+                          <span className="text-slate-400">Assigned Carrier</span>
+                          <span className="font-semibold text-cyan-300">Cargo E-Bike (Elena K.)</span>
                         </div>
-                        <div className="w-full bg-surface-container-low h-2 rounded-full mt-2 overflow-hidden">
-                          <div className="bg-primary h-full rounded-full" style={{ width: '37.5%' }}></div>
+                        <div className="w-full bg-[#10233D] h-2 rounded-full mt-2 overflow-hidden border border-[#1A365D]">
+                          <div className="bg-blue-500 h-full rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" style={{ width: '37.5%' }}></div>
                         </div>
                       </div>
                     </div>
-
                     <div className="mt-space-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm pt-space-xs">
-                      <div className="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant">
-                        <span className="material-symbols-outlined text-secondary text-[20px]">account_balance_wallet</span>
+                      <div className="flex items-center gap-space-xs text-body-sm font-body-sm text-slate-300">
+                        <span className="material-symbols-outlined text-cyan-400 text-[20px]">account_balance_wallet</span>
                         <span>Automated volunteer fuel &amp; time settlement staged via FOODLOOP Instant Ledger.</span>
                       </div>
                       <button
-                        onClick={handleLockRoute}
-                        className={`px-space-md py-2 font-label-md text-label-md rounded-lg transition-all cursor-pointer ${
+                        className={`px-space-md py-2 font-label-md text-label-md font-bold rounded-lg shadow-[0_0_12px_rgba(56,189,248,0.3)] transition-all cursor-pointer ${
                           isRouteLocked
-                            ? 'bg-secondary text-on-secondary'
-                            : 'bg-primary text-on-primary hover:bg-primary-container'
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white'
                         }`}
+                        onClick={handleLockRoute}
                       >
-                        {isRouteLocked ? 'Route Authorized ✓' : 'Lock Allocation & Authorize Route'}
+                        {isRouteLocked ? 'Route Locked & Authorized ✓' : 'Lock Allocation & Authorize Route'}
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Logistical Vector Map */}
-                <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+                {/* Radar / Transit Orbit Vector Map */}
+                <div className="bg-[#0A1B30] border border-[#1A365D] rounded-xl p-space-lg shadow-sm">
                   <div className="flex items-center justify-between mb-space-md">
                     <div>
-                      <span className="font-label-sm text-label-sm uppercase text-outline tracking-wider">
-                        Logistical Vector Map
-                      </span>
-                      <h3 className="font-headline-sm text-headline-sm text-primary">
-                        Transit Orbit &amp; GPS Dispatch Routing
-                      </h3>
+                      <span className="font-mono text-label-sm text-label-sm uppercase text-slate-400 tracking-wider">Logistical Vector Map</span>
+                      <h3 className="font-headline-sm text-headline-sm text-white font-bold">Transit Orbit &amp; GPS Dispatch Routing</h3>
                     </div>
-                    <div className="flex items-center gap-space-xs">
-                      <span className="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
-                        <span className="w-2.5 h-2.5 rounded-full bg-secondary"></span> Donor
+                    <div className="flex items-center gap-space-md">
+                      <span className="flex items-center gap-1.5 font-label-sm text-label-sm text-slate-300 font-mono">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]"></span> Origin Donor
                       </span>
-                      <span className="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
-                        <span className="w-2.5 h-2.5 rounded-full bg-primary"></span> Recipients
+                      <span className="flex items-center gap-1.5 font-label-sm text-label-sm text-slate-300 font-mono">
+                        <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#38bdf8]"></span> Recipients
                       </span>
                     </div>
                   </div>
 
-                  <div className="relative w-full h-80 rounded-xl overflow-hidden bg-slate-900 border border-surface-container">
-                    {/* SVG Vector Transit Grid Map */}
-                    <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
+                  {/* Deep navy map canvas with neon glowing routes and pins */}
+                  <div className="relative w-full h-80 rounded-xl overflow-hidden bg-[#040e1b] border border-[#1A365D]">
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
                       <defs>
-                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#3959b0" strokeWidth="0.75" opacity="0.3" />
+                        {/* Map Grid */}
+                        <pattern height="40" id="grid-dark" patternUnits="userSpaceOnUse" width="40">
+                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#122744" strokeWidth="1" />
                         </pattern>
+                        {/* Radar Sweep Gradient */}
+                        <radialGradient cx="20%" cy="25%" id="radar-glow" r="65%">
+                          <stop offset="0%" stopColor="#0284c7" stopOpacity="0.3" />
+                          <stop offset="50%" stopColor="#0284c7" stopOpacity="0.05" />
+                          <stop offset="100%" stopColor="#040e1b" stopOpacity="0" />
+                        </radialGradient>
+                        <filter height="140%" id="glow-neon" width="140%" x="-20%" y="-20%">
+                          <feGaussianBlur result="blur" stdDeviation="3" />
+                          <feMerge>
+                            <feMergeNode in="blur" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
                       </defs>
-                      <rect width="100%" height="100%" fill="url(#grid)" />
-                      {/* Transit Arteries */}
-                      <path
-                        d="M 120 70 Q 280 140 540 230"
-                        fill="none"
-                        stroke="#0872e2"
-                        strokeWidth="3"
-                        strokeDasharray="6 6"
-                        className="animate-pulse"
-                      />
-                      <path
-                        d="M 120 70 Q 320 60 420 150"
-                        fill="none"
-                        stroke="#b4c5ff"
-                        strokeWidth="2.5"
-                        strokeDasharray="4 4"
-                      />
+                      <rect fill="url(#grid-dark)" height="100%" width="100%" />
+                      <rect fill="url(#radar-glow)" height="100%" width="100%" />
+                      {/* Vector City Street Arteries */}
+                      <path d="M -20,80 Q 200,70 420,120 T 900,100" fill="none" stroke="#132c4e" strokeWidth="3" />
+                      <path d="M 120,-10 L 140,350" fill="none" stroke="#132c4e" strokeWidth="2.5" />
+                      <path d="M 320,-10 L 360,350" fill="none" stroke="#132c4e" strokeWidth="2.5" />
+                      <path d="M -10,220 C 250,210 500,260 880,240" fill="none" stroke="#132c4e" strokeWidth="3" />
+                      <path d="M 620,-10 L 640,350" fill="none" stroke="#132c4e" strokeWidth="2.5" />
+                      {/* Radar Concentric Rings around Origin */}
+                      <circle cx="160" cy="80" fill="none" opacity="0.35" r="45" stroke="#38bdf8" strokeDasharray="3 3" strokeWidth="1" />
+                      <circle cx="160" cy="80" fill="none" opacity="0.25" r="95" stroke="#38bdf8" strokeDasharray="4 4" strokeWidth="1" />
+                      <circle cx="160" cy="80" fill="none" opacity="0.15" r="160" stroke="#38bdf8" strokeDasharray="5 5" strokeWidth="1" />
+                      {/* Glowing Active Dispatch Routes */}
+                      <path d="M 160,80 C 260,110 440,150 560,170" fill="none" filter="url(#glow-neon)" opacity="0.9" stroke="#38bdf8" strokeDasharray="8 5" strokeWidth="3.5" />
+                      <path d="M 160,80 C 280,140 450,230 680,250" fill="none" filter="url(#glow-neon)" opacity="0.9" stroke="#22d3ee" strokeDasharray="8 5" strokeWidth="3.5" />
+                      {/* Vehicle Courier Nodes in Transit */}
+                      <circle cx="340" cy="120" fill="#38bdf8" filter="url(#glow-neon)" r="5" />
+                      <circle cx="440" cy="205" fill="#22d3ee" filter="url(#glow-neon)" r="5" />
                     </svg>
 
-                    {/* Origin Marker */}
-                    <div className="absolute top-6 left-8 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-2 rounded-lg shadow-md flex items-center gap-space-xs z-10 border border-secondary/20">
-                      <span className="material-symbols-outlined text-secondary text-[20px]">restaurant</span>
+                    {/* Node 1: Origin */}
+                    <div className="absolute top-6 left-8 bg-[#0A1B30]/95 border border-amber-500/50 backdrop-blur-md px-3 py-2 rounded-lg shadow-[0_0_15px_rgba(251,191,36,0.3)] flex items-center gap-space-xs z-10">
+                      <div className="w-8 h-8 rounded-lg bg-amber-950/80 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                        <span className="material-symbols-outlined text-[18px]">restaurant</span>
+                      </div>
                       <div>
-                        <div className="font-label-sm text-label-sm font-bold text-primary">Marriott Regency (Origin)</div>
-                        <div className="font-body-sm text-body-sm text-outline">80 Trays Packed &amp; Ready</div>
+                        <div className="font-label-sm text-label-sm font-bold text-amber-300">Marriott Regency (Origin)</div>
+                        <div className="font-body-sm text-body-sm text-slate-400 font-mono">80 Trays Packed &amp; Ready</div>
                       </div>
                     </div>
 
-                    {/* Dest 1 Marker */}
-                    <div className="absolute bottom-8 right-12 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-2 rounded-lg shadow-md flex items-center gap-space-xs z-10 border border-primary/20">
-                      <span className="material-symbols-outlined text-primary text-[20px]">warehouse</span>
+                    {/* Node 2: Destination 1 */}
+                    <div className="absolute bottom-8 right-12 bg-[#0A1B30]/95 border border-cyan-500/50 backdrop-blur-md px-3 py-2 rounded-lg shadow-[0_0_15px_rgba(56,189,248,0.3)] flex items-center gap-space-xs z-10">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+                        <span className="material-symbols-outlined text-[18px]">warehouse</span>
+                      </div>
                       <div>
-                        <div className="font-label-sm text-label-sm font-bold text-primary">Shelter Hope (Dest. 1)</div>
-                        <div className="font-body-sm text-body-sm text-outline">ETA 14 min • Van #09</div>
+                        <div className="font-label-sm text-label-sm font-bold text-cyan-300">Shelter Hope (Dest. 1)</div>
+                        <div className="font-body-sm text-body-sm text-slate-400 font-mono">ETA 14 min • Van #09</div>
                       </div>
                     </div>
 
-                    {/* Dest 2 Marker */}
-                    <div className="absolute top-1/2 right-1/4 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-2 rounded-lg shadow-md flex items-center gap-space-xs z-10 border border-primary/20">
-                      <span className="material-symbols-outlined text-primary text-[20px]">church</span>
+                    {/* Node 3: Destination 2 */}
+                    <div className="absolute top-1/2 right-1/4 bg-[#0A1B30]/95 border border-cyan-500/50 backdrop-blur-md px-3 py-2 rounded-lg shadow-[0_0_15px_rgba(56,189,248,0.3)] flex items-center gap-space-xs z-10">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+                        <span className="material-symbols-outlined text-[18px]">church</span>
+                      </div>
                       <div>
-                        <div className="font-label-sm text-label-sm font-bold text-primary">St. Jude Mission (Dest. 2)</div>
-                        <div className="font-body-sm text-body-sm text-outline">ETA 21 min • E-Bike Elena</div>
+                        <div className="font-label-sm text-label-sm font-bold text-cyan-300">St. Jude Mission (Dest. 2)</div>
+                        <div className="font-body-sm text-body-sm text-slate-400 font-mono">ETA 21 min • E-Bike Elena</div>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
 
-              {/* Right Column (4 cols) */}
+              {/* Gauges & Live Stream (Col 4) */}
               <div className="lg:col-span-4 flex flex-col gap-space-lg">
                 
-                {/* Community Capacity Demand Gauges */}
-                <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                {/* Demand Gauges & Community Capacity Heatmap */}
+                <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-label-sm text-label-sm uppercase text-outline">Community Capacity</span>
-                      <h3 className="font-headline-sm text-headline-sm text-primary">Demand Gauges</h3>
+                      <span className="font-mono text-label-sm text-label-sm uppercase text-slate-400">Community Capacity</span>
+                      <h3 className="font-headline-sm text-headline-sm text-white font-bold">Demand Gauges</h3>
                     </div>
-                    <span className="material-symbols-outlined text-outline text-[20px]">analytics</span>
+                    <span className="material-symbols-outlined text-cyan-400 text-[20px]">analytics</span>
                   </div>
-
                   <div className="space-y-space-md">
                     <div>
                       <div className="flex justify-between items-center text-body-sm font-body-sm mb-1">
-                        <span className="font-semibold text-primary">Shelter Hope Downtown</span>
-                        <span className="font-bold text-secondary">94% Capacity</span>
+                        <span className="font-semibold text-slate-200">Shelter Hope Downtown</span>
+                        <span className="font-bold text-red-400 font-mono flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> 94% Critical
+                        </span>
                       </div>
-                      <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                        <div className="bg-secondary h-full rounded-full transition-all duration-700" style={{ width: '94%' }}></div>
+                      <div className="w-full h-2.5 bg-[#071426] rounded-full overflow-hidden border border-[#1A365D]">
+                        <div className="bg-gradient-to-r from-orange-500 to-red-500 h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(239,68,68,0.7)]" style={{ width: '94%' }}></div>
                       </div>
-                      <span className="font-body-sm text-body-sm text-outline mt-1 block">
-                        Urgent need for warm calorie-dense meals.
-                      </span>
+                      <span className="font-body-sm text-body-sm text-slate-400 mt-1 block">Urgent need for warm calorie-dense meals.</span>
                     </div>
-
                     <div>
                       <div className="flex justify-between items-center text-body-sm font-body-sm mb-1">
-                        <span className="font-semibold text-primary">St. Jude Community Mission</span>
-                        <span className="font-bold text-secondary">78% Capacity</span>
+                        <span className="font-semibold text-slate-200">St. Jude Community Mission</span>
+                        <span className="font-bold text-amber-400 font-mono flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-amber-400"></span> 78% High
+                        </span>
                       </div>
-                      <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                        <div className="bg-secondary h-full rounded-full transition-all duration-700" style={{ width: '78%' }}></div>
+                      <div className="w-full h-2.5 bg-[#071426] rounded-full overflow-hidden border border-[#1A365D]">
+                        <div className="bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(251,191,36,0.7)]" style={{ width: '78%' }}></div>
                       </div>
-                      <span className="font-body-sm text-body-sm text-outline mt-1 block">
-                        Refrigerated staging docks verified open.
-                      </span>
+                      <span className="font-body-sm text-body-sm text-slate-400 mt-1 block">Refrigerated staging docks verified open.</span>
                     </div>
-
                     <div>
                       <div className="flex justify-between items-center text-body-sm font-body-sm mb-1">
-                        <span className="font-semibold text-primary">Eastside Family Pantry</span>
-                        <span className="font-bold text-outline">42% Capacity</span>
+                        <span className="font-semibold text-slate-200">Eastside Family Pantry</span>
+                        <span className="font-bold text-emerald-400 font-mono flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400"></span> 42% Normal
+                        </span>
                       </div>
-                      <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                        <div className="bg-outline h-full rounded-full transition-all duration-700" style={{ width: '42%' }}></div>
+                      <div className="w-full h-2.5 bg-[#071426] rounded-full overflow-hidden border border-[#1A365D]">
+                        <div className="bg-gradient-to-r from-emerald-600 to-emerald-400 h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(52,211,153,0.7)]" style={{ width: '42%' }}></div>
                       </div>
-                      <span className="font-body-sm text-body-sm text-outline mt-1 block">
-                        Surplus buffer threshold normal.
-                      </span>
+                      <span className="font-body-sm text-body-sm text-slate-400 mt-1 block">Surplus buffer threshold normal.</span>
                     </div>
                   </div>
-
-                  <div className="p-space-md bg-surface-container-low rounded-xl">
-                    <span className="font-label-sm text-label-sm text-outline uppercase">
-                      Aggregate Hunger Alleviation Rate
-                    </span>
+                  <div className="p-space-md bg-[#0A1B30] border border-[#1A365D] rounded-xl">
+                    <span className="font-mono text-label-sm text-label-sm text-slate-400 uppercase">Aggregate Hunger Alleviation Rate</span>
                     <div className="flex items-baseline gap-space-xs mt-1">
-                      <span className="font-headline-lg text-headline-lg font-bold text-primary">1,420</span>
-                      <span className="font-body-sm text-body-sm text-on-surface-variant">meals saved today</span>
+                      <span className="font-headline-lg text-headline-lg font-bold text-white font-mono">1,420</span>
+                      <span className="font-body-sm text-body-sm text-slate-400">meals saved today</span>
                     </div>
-                    <div className="flex items-center gap-space-xs mt-2 text-secondary font-label-md text-label-md font-semibold">
+                    <div className="flex items-center gap-space-xs mt-2 text-emerald-400 font-label-md text-label-md font-semibold">
                       <span className="material-symbols-outlined text-[18px]">trending_up</span>
                       <span>+18.4% vs. previous 7-day average</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Real-Time Event Stream / Live Activity Log */}
-                <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col flex-1">
+                {/* Live Telemetry Stream */}
+                <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-lg shadow-sm flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-space-md">
                     <div>
-                      <span className="font-label-sm text-label-sm uppercase text-outline">Real-Time Event Stream</span>
-                      <h3 className="font-headline-sm text-headline-sm text-primary">Live Activity Log</h3>
+                      <span className="font-mono text-label-sm text-label-sm uppercase text-slate-400">Real-Time Event Stream</span>
+                      <h3 className="font-headline-sm text-headline-sm text-white font-bold">Live Activity Log</h3>
                     </div>
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400"></span>
                     </span>
                   </div>
-
-                  <div className="space-y-space-md overflow-y-auto max-h-[380px] pr-1" id="activity-log">
-                    {activityLogs.map((log) => (
-                      <div key={log.id} className="flex gap-space-sm items-start">
-                        <div className="w-8 h-8 rounded-full bg-secondary-fixed text-primary flex items-center justify-center shrink-0">
-                          <span className="material-symbols-outlined text-[16px]">{log.icon}</span>
+                  <div className="space-y-space-md overflow-y-auto max-h-[380px] pr-1 font-mono" id="activity-log">
+                    {activityLogs.map((item) => (
+                      <div key={item.id} className="flex gap-space-sm items-start">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 ${
+                          item.isNew
+                            ? 'bg-emerald-950 border-emerald-500/50 text-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+                            : item.icon === 'notifications_active'
+                            ? 'bg-cyan-950 border-cyan-500/40 text-cyan-300'
+                            : item.icon === 'sensors'
+                            ? 'bg-[#0A1B30] border-[#1A365D] text-amber-400'
+                            : item.icon === 'done_all'
+                            ? 'bg-[#0A1B30] border-[#1A365D] text-emerald-400'
+                            : 'bg-[#0A1B30] border-[#1A365D] text-cyan-400'
+                        }`}>
+                          <span className="material-symbols-outlined text-[16px]">{item.icon}</span>
                         </div>
                         <div>
-                          <p className="font-body-sm text-body-sm text-on-surface font-semibold">{log.title}</p>
-                          <span className="font-body-sm text-body-sm text-outline">{log.meta}</span>
+                          <p className={`font-body-sm text-body-sm font-semibold ${item.isNew ? 'text-emerald-300' : 'text-slate-100'}`}>
+                            {item.title}
+                          </p>
+                          <span className="font-body-sm text-body-sm text-slate-400">{item.meta}</span>
                         </div>
                       </div>
                     ))}
                   </div>
-
                   <div className="mt-space-md pt-space-sm">
                     <button
+                      className="w-full py-2.5 rounded-lg bg-[#0A1B30] hover:bg-[#1A365D] border border-[#1A365D] text-cyan-300 font-label-md text-label-md transition-colors flex items-center justify-center gap-space-xs font-mono cursor-pointer"
                       onClick={handleExportLedger}
-                      className="w-full py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md transition-colors flex items-center justify-center gap-space-xs cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[18px]">download</span>
                       Export Compliance Audit Ledger (.JSON)
                     </button>
                   </div>
                 </div>
+
               </div>
             </div>
 
-            {/* High Volume Verification Queue */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+            {/* Bottom Batches Card */}
+            <div className="bg-[#0A1B30] border border-[#1A365D] rounded-xl p-space-lg shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md mb-space-md">
                 <div>
-                  <span className="font-label-sm text-label-sm uppercase text-outline">High Volume Verification</span>
-                  <h3 className="font-headline-sm text-headline-sm text-primary">
-                    Nearby Active Batches Awaiting Orchestration
-                  </h3>
+                  <span className="font-mono text-label-sm text-label-sm uppercase text-slate-400">High Volume Verification</span>
+                  <h3 className="font-headline-sm text-headline-sm text-white font-bold">Nearby Active Batches Awaiting Orchestration</h3>
                 </div>
                 <div className="flex items-center gap-space-xs">
-                  <span className="font-body-sm text-body-sm text-outline">Live queue: 3 pending</span>
+                  <span className="font-body-sm text-body-sm text-cyan-400 font-mono">Live queue: 3 pending</span>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+                
                 {/* Batch 1 */}
-                <div className="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-colors">
+                <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md flex flex-col justify-between hover:border-cyan-500/50 transition-colors">
                   <div>
                     <div className="flex items-center justify-between mb-space-xs">
-                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-lowest text-primary font-bold">
-                        Bakery &amp; Breads
-                      </span>
-                      <span className="font-label-sm text-label-sm text-secondary font-bold">1h 15m remaining</span>
+                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#0A1B30] border border-[#1A365D] text-cyan-300 font-bold">Bakery &amp; Breads</span>
+                      <span className="font-label-sm text-label-sm text-amber-400 font-mono font-bold">1h 15m remaining</span>
                     </div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary">Whole Foods Market Tribeca</h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                      110 Artisanal Loaves &amp; Pastries (Dry shelf-stable ambient)
-                    </p>
+                    <h4 className="font-headline-sm text-headline-sm text-white font-bold">Whole Foods Market Tribeca</h4>
+                    <p className="font-body-sm text-body-sm text-slate-400 mt-1">110 Artisanal Loaves &amp; Pastries (Dry shelf-stable ambient)</p>
                   </div>
                   <div className="mt-space-md flex items-center justify-between pt-space-xs">
-                    <span className="font-label-md text-label-md font-bold text-primary">EST. 110 Portions</span>
+                    <span className="font-label-md text-label-md font-bold text-cyan-300 font-mono">EST. 110 Portions</span>
                     <button
-                      onClick={() => handleQueueMatch('Whole Foods Market Tribeca', '110 Portions')}
-                      className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg border font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
                         matchedQueues['Whole Foods Market Tribeca']
-                          ? 'bg-secondary text-on-secondary'
-                          : 'bg-surface-container-lowest text-secondary hover:bg-surface-container'
+                          ? 'bg-emerald-950 border-emerald-500/50 text-emerald-400'
+                          : 'bg-[#0A1B30] border-[#1A365D] text-cyan-300 hover:text-white hover:bg-cyan-950'
                       }`}
+                      onClick={() => handleQueueMatch('Whole Foods Market Tribeca', '110 Portions')}
                     >
-                      {matchedQueues['Whole Foods Market Tribeca'] ? 'Matched ✓' : 'Queue Match'}
+                      {matchedQueues['Whole Foods Market Tribeca'] ? 'Queued ✓' : 'Queue Match'}
                     </button>
                   </div>
                 </div>
 
                 {/* Batch 2 */}
-                <div className="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-colors">
+                <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md flex flex-col justify-between hover:border-cyan-500/50 transition-colors">
                   <div>
                     <div className="flex items-center justify-between mb-space-xs">
-                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-lowest text-primary font-bold">
-                        Organic Produce
-                      </span>
-                      <span className="font-label-sm text-label-sm text-secondary font-bold">2h 40m remaining</span>
+                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#0A1B30] border border-[#1A365D] text-cyan-300 font-bold">Organic Produce</span>
+                      <span className="font-label-sm text-label-sm text-amber-400 font-mono font-bold">2h 40m remaining</span>
                     </div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary">Sweetgreen Midtown East</h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                      65 lbs Fresh Greens, Roasted Root Vegetables &amp; Bowls
-                    </p>
+                    <h4 className="font-headline-sm text-headline-sm text-white font-bold">Sweetgreen Midtown East</h4>
+                    <p className="font-body-sm text-body-sm text-slate-400 mt-1">65 lbs Fresh Greens, Roasted Root Vegetables &amp; Bowls</p>
                   </div>
                   <div className="mt-space-md flex items-center justify-between pt-space-xs">
-                    <span className="font-label-md text-label-md font-bold text-primary">EST. 85 Portions</span>
+                    <span className="font-label-md text-label-md font-bold text-cyan-300 font-mono">EST. 85 Portions</span>
                     <button
-                      onClick={() => handleQueueMatch('Sweetgreen Midtown East', '85 Portions')}
-                      className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg border font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
                         matchedQueues['Sweetgreen Midtown East']
-                          ? 'bg-secondary text-on-secondary'
-                          : 'bg-surface-container-lowest text-secondary hover:bg-surface-container'
+                          ? 'bg-emerald-950 border-emerald-500/50 text-emerald-400'
+                          : 'bg-[#0A1B30] border-[#1A365D] text-cyan-300 hover:text-white hover:bg-cyan-950'
                       }`}
+                      onClick={() => handleQueueMatch('Sweetgreen Midtown East', '85 Portions')}
                     >
-                      {matchedQueues['Sweetgreen Midtown East'] ? 'Matched ✓' : 'Queue Match'}
+                      {matchedQueues['Sweetgreen Midtown East'] ? 'Queued ✓' : 'Queue Match'}
                     </button>
                   </div>
                 </div>
 
                 {/* Batch 3 */}
-                <div className="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between hover:bg-surface-container-high transition-colors">
+                <div className="bg-[#10233D] border border-[#1A365D] rounded-xl p-space-md flex flex-col justify-between hover:border-cyan-500/50 transition-colors">
                   <div>
                     <div className="flex items-center justify-between mb-space-xs">
-                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-lowest text-primary font-bold">
-                        Chilled Catering
-                      </span>
-                      <span className="font-label-sm text-label-sm text-secondary font-bold">3h 10m remaining</span>
+                      <span className="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#0A1B30] border border-[#1A365D] text-cyan-300 font-bold">Chilled Catering</span>
+                      <span className="font-label-sm text-label-sm text-amber-400 font-mono font-bold">3h 10m remaining</span>
                     </div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary">Google NYC 9th Ave Cafeteria</h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                      140 Gourmet Bento Wraps &amp; Mediterranean Bowls
-                    </p>
+                    <h4 className="font-headline-sm text-headline-sm text-white font-bold">Google NYC 9th Ave Cafeteria</h4>
+                    <p className="font-body-sm text-body-sm text-slate-400 mt-1">140 Gourmet Bento Wraps &amp; Mediterranean Bowls</p>
                   </div>
                   <div className="mt-space-md flex items-center justify-between pt-space-xs">
-                    <span className="font-label-md text-label-md font-bold text-primary">EST. 140 Portions</span>
+                    <span className="font-label-md text-label-md font-bold text-cyan-300 font-mono">EST. 140 Portions</span>
                     <button
-                      onClick={() => handleQueueMatch('Google NYC 9th Ave Cafeteria', '140 Portions')}
-                      className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg border font-label-sm text-label-sm font-bold shadow-sm transition-all cursor-pointer ${
                         matchedQueues['Google NYC 9th Ave Cafeteria']
-                          ? 'bg-secondary text-on-secondary'
-                          : 'bg-surface-container-lowest text-secondary hover:bg-surface-container'
+                          ? 'bg-emerald-950 border-emerald-500/50 text-emerald-400'
+                          : 'bg-[#0A1B30] border-[#1A365D] text-cyan-300 hover:text-white hover:bg-cyan-950'
                       }`}
+                      onClick={() => handleQueueMatch('Google NYC 9th Ave Cafeteria', '140 Portions')}
                     >
-                      {matchedQueues['Google NYC 9th Ave Cafeteria'] ? 'Matched ✓' : 'Queue Match'}
+                      {matchedQueues['Google NYC 9th Ave Cafeteria'] ? 'Queued ✓' : 'Queue Match'}
                     </button>
                   </div>
                 </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </main>
 
       {/* FOOTER */}
-      <footer className="w-full bg-surface-container-lowest shadow-[0_-1px_6px_rgba(0,48,135,0.03)] mt-space-xl py-space-xl">
+      <footer className="w-full bg-[#0A1B30] border-t border-[#1A365D] mt-space-xl py-space-xl">
         <div className="max-w-[1440px] mx-auto px-gutter">
           <div className="flex flex-col md:flex-row items-center justify-between gap-space-md">
             <div className="flex items-center gap-space-sm">
               <img
                 alt="FOODLOOP Brand Logo"
-                className="h-6 w-auto object-contain"
+                className="h-6 w-auto object-contain filter drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="font-headline-sm text-headline-sm text-primary tracking-tight">FOODLOOP</span>
-              <span className="font-body-sm text-body-sm text-on-surface-variant ml-space-sm hidden sm:inline">
-                Every Meal Deserves a Chance.
-              </span>
+              <span className="font-headline-sm text-headline-sm text-cyan-400 font-extrabold tracking-tight">FOODLOOP</span>
+              <span className="font-body-sm text-body-sm text-slate-400 ml-space-sm hidden sm:inline">Every Meal Deserves a Chance.</span>
             </div>
-            <div className="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant">
-              <a className="hover:text-primary transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Privacy Policy
-              </a>
-              <a className="hover:text-primary transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Fintech Ledger Terms
-              </a>
-              <a className="hover:text-primary transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                API Docs
-              </a>
-              <a className="hover:text-primary transition-colors cursor-pointer" href="#" onClick={(e) => e.preventDefault()}>
-                Support
-              </a>
+            <div className="flex items-center gap-space-lg font-label-md text-label-md text-slate-400">
+              <a className="hover:text-cyan-300 transition-colors" href="#">Privacy Policy</a>
+              <a className="hover:text-cyan-300 transition-colors" href="#">Fintech Ledger Terms</a>
+              <a className="hover:text-cyan-300 transition-colors" href="#">API Docs</a>
+              <a className="hover:text-cyan-300 transition-colors" href="#">Support</a>
             </div>
           </div>
-          <div className="mt-space-lg text-center md:text-left font-body-sm text-body-sm text-outline">
+          <div className="mt-space-lg text-center md:text-left font-body-sm text-body-sm text-slate-500 font-mono">
             © 2025 FOODLOOP Global Redistribution Technologies. Institutional Grade Logistics &amp; Settlement.
           </div>
         </div>
