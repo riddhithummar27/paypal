@@ -10,6 +10,7 @@ import { DonorPortal } from '@/components/DonorPortal';
 import { NgoLogisticsGrid } from '@/components/NgoLogisticsGrid';
 import { BryntumDispatchScheduler } from '@/components/BryntumDispatchScheduler';
 import { AutonomousAgentConsole } from '@/components/AutonomousAgentConsole';
+import { NgoHubPage } from '@/components/NgoHubPage';
 import { RewardsModal } from '@/components/RewardsModal';
 import { ApiDocsModal } from '@/components/ApiDocsModal';
 import { SponsorShowcaseModal } from '@/components/SponsorShowcaseModal';
@@ -239,6 +240,14 @@ export default function Home() {
           initialLogs={INITIAL_AGENT_LOGS}
           onTriggerRescueChallenge={handleTriggerRescueChallenge}
           onAgentAction={handleAgentAction}
+        />
+      ) : activeTab === 'ngo' ? (
+        <NgoHubPage
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+          onClaimBatch={handleClaimBatch}
         />
       ) : (
         <>
