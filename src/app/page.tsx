@@ -230,6 +230,16 @@ export default function Home() {
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onAddListing={handleAddListing}
         />
+      ) : activeTab === 'agent' ? (
+        <AutonomousAgentConsole
+          onNavigate={handlePageNavigation}
+          activeRole={activeRole}
+          setActiveRole={setActiveRole}
+          onOpenSponsors={() => setIsSponsorsOpen(true)}
+          initialLogs={INITIAL_AGENT_LOGS}
+          onTriggerRescueChallenge={handleTriggerRescueChallenge}
+          onAgentAction={handleAgentAction}
+        />
       ) : (
         <>
           {/* Subpage Header with Back to Home button */}
