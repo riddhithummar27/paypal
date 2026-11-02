@@ -78,6 +78,53 @@ export const ApiDocsModal: React.FC<ApiDocsModalProps> = ({ isOpen, onClose }) =
     "pickupDeadlineMinutes": 35
   }'`,
     },
+    {
+      id: 'paypal-payout',
+      method: 'POST',
+      path: '/api/paypal/payout',
+      summary: 'Donor Surplus Payout via PayPal',
+      sampleCurl: `curl -X POST http://localhost:3000/api/paypal/payout \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "amount": 148.20,
+    "currency": "USD",
+    "receiverEmail": "merchant-artisan@foodloop.org",
+    "note": "FOODLOOP Surplus Donor Settlement"
+  }'`,
+    },
+    {
+      id: 'agent-toolkit',
+      method: 'GET',
+      path: '/api/paypal/agent-toolkit',
+      summary: '@paypal/agent-toolkit State & Tools',
+      sampleCurl: `curl -X GET http://localhost:3000/api/paypal/agent-toolkit`,
+    },
+    {
+      id: 'listings',
+      method: 'GET',
+      path: '/api/listings',
+      summary: 'Query Active Food Surplus Listings',
+      sampleCurl: `curl -X GET "http://localhost:3000/api/listings?category=Meals&status=available"`,
+    },
+    {
+      id: 'custody-verify',
+      method: 'POST',
+      path: '/api/custody/verify',
+      summary: 'Validate QR Custody Handshake & Escrow',
+      sampleCurl: `curl -X POST http://localhost:3000/api/custody/verify \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "lotId": "FL-8841",
+    "verifier": "Campus Courier Elena K."
+  }'`,
+    },
+    {
+      id: 'dispatches',
+      method: 'GET',
+      path: '/api/dispatches',
+      summary: 'Bryntum Logistics Courier Slots',
+      sampleCurl: `curl -X GET http://localhost:3000/api/dispatches`,
+    },
   ];
 
   const current = endpoints.find((e) => e.id === selectedEndpoint) || endpoints[0];

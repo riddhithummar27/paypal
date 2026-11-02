@@ -82,7 +82,14 @@ export const SponsorShowcaseModal: React.FC<SponsorShowcaseModalProps> = ({
       bgGlow: 'bg-[#ffc439]/10',
       description:
         'Official @paypal/agent-toolkit v1.11.0 integration with PayPal Orders v2 REST API for dynamic checkout, payment capture, and natural language agent triage.',
-      files: ['src/lib/paypal.ts', 'src/app/api/ai/agent-chat/route.ts', 'src/components/AutonomousAgentConsole.tsx'],
+      files: [
+        'src/lib/paypal.ts',
+        'src/lib/paypalAgent.ts',
+        'src/app/api/paypal/agent-toolkit/route.ts',
+        'src/app/api/paypal/payout/route.ts',
+        'src/app/api/ai/agent-chat/route.ts',
+        'src/components/AutonomousAgentConsole.tsx',
+      ],
       keysRequired: 'Sandbox Client ID & Secret in .env.local (Live fallback active)',
     },
   ];

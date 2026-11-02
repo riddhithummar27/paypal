@@ -116,9 +116,34 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
     }
   };
 
-  const handleForceDispatch = () => {
+  const handleForceDispatch = async () => {
     if (isDispatched) return;
     setIsDispatched(true);
+    try {
+      const res = await fetch('/api/ai/rescue-agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          portions: 80,
+          foodTitle: '80 Ready-to-Eat Gourmet Hot Meals',
+          donorName: 'Marriott Regency Hotel',
+          category: 'Meals',
+          pickupDeadlineMinutes: 45,
+          donorType: 'Hotel & Buffet',
+        }),
+      });
+      const data = await res.json();
+      if (data.allocations) {
+        addLog(
+          `AI Engine Allocated: ${data.allocations.map((a: any) => `${a.portionsAllocated} -> ${a.shelterName}`).join(', ')}`,
+          `Just now • Offset: ${data.metrics?.co2OffsetKg || 200}kg CO2`,
+          'rocket_launch'
+        );
+      }
+    } catch {
+      // Local fallback
+    }
+
     addLog('Manual Force Dispatch executed by Operator', 'Just now • Dispatch tokens confirmed #FL-8842', 'check');
     showToast('Force dispatch executed! Van Unit #09 and Elena K. authorized.');
 
@@ -133,9 +158,26 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
     showToast('Allocation locked & digital custody vouchers minted.');
   };
 
-  const handleQueueMatch = (donorName: string, portions: string) => {
+  const handleQueueMatch = async (donorName: string, portionsStr: string) => {
     setMatchedQueues((prev) => ({ ...prev, [donorName]: true }));
-    addLog(`Batch matched & queued: ${donorName} (${portions})`, 'Just now • AI route optimizer assigned receiving shelter', 'auto_fix_high');
+    const count = parseInt(portionsStr, 10) || 100;
+    try {
+      await fetch('/api/dispatches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          batchId: `QUEUE-${Date.now().toString().slice(-4)}`,
+          foodTitle: `${donorName} Batch`,
+          donorName,
+          shelterName: 'Hope Mission Shelter',
+          portions: count,
+          urgency: 'Standard',
+        }),
+      });
+    } catch {
+      // Local fallback
+    }
+    addLog(`Batch matched & queued: ${donorName} (${portionsStr})`, 'Just now • AI route optimizer assigned receiving shelter', 'auto_fix_high');
     showToast(`${donorName} batch scheduled into next redistribution orbit.`);
   };
 
