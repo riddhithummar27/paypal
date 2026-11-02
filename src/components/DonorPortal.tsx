@@ -186,111 +186,103 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
         </div>
       )}
 
-      {/* FIXED LEFT SIDEBAR NAVIGATION */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-white shadow-[1px_0_8px_rgba(0,48,135,0.04)] z-50 flex flex-col pt-4 pb-6 border-r border-[#e6e8eb]">
-        <div className="px-6 mb-6 flex items-center gap-2">
-          <img
-            alt="FOODLOOP Brand Logo"
-            className="h-7 w-auto object-contain"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
-          />
-          <span className="font-extrabold text-[18px] text-[#001d59] tracking-tight">FOODLOOP</span>
-        </div>
+      {/* FIXED TOP HEADER */}
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-[#e6e8eb] shadow-[0_1px_8px_rgba(0,48,135,0.06)]">
+        <div className="h-16 max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6 shrink-0">
+            {/* Back to Home arrow */}
+            <button
+              onClick={() => onNavigate('home')}
+              className="flex items-center gap-1 text-[#001d59] hover:text-[#005ab6] font-medium mr-1 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              title="Home"
+            >
+              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+              <span className="hidden sm:inline text-xs font-semibold">Home</span>
+            </button>
 
-        <nav className="flex-1 px-4 space-y-1">
-          <button
-            onClick={() => onNavigate('home')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">home</span>
-            <span className="text-[14px] font-semibold">Home</span>
-          </button>
-          
-          <button
-            onClick={() => onNavigate('donor-portal')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all bg-[#003087] text-white font-bold cursor-pointer shadow-sm"
-          >
-            <span className="material-symbols-outlined text-[20px]">grid_view</span>
-            <span className="text-[14px] font-bold">Overview</span>
-          </button>
+            <a
+              className="flex items-center gap-2 cursor-pointer"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('home');
+              }}
+            >
+              <img
+                alt="FOODLOOP Brand Logo"
+                className="h-8 w-auto object-contain"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
+              />
+              <span className="font-extrabold text-[18px] text-[#001d59] tracking-tight">
+                FOODLOOP
+              </span>
+            </a>
 
-          <button
-            onClick={() => onNavigate('explore-food')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">local_shipping</span>
-            <span className="text-[14px] font-semibold">Rescue Ops</span>
-          </button>
-
-          <button
-            onClick={() => onNavigate('donor-portal')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">receipt_long</span>
-            <span className="text-[14px] font-semibold">Surplus Ledger</span>
-          </button>
-
-          <button
-            onClick={() => onNavigate('ai-rescue-agent')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
-            <span className="text-[14px] font-semibold">AI Match Engine</span>
-          </button>
-
-          <button
-            onClick={() => onNavigate('impact')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">account_balance_wallet</span>
-            <span className="text-[14px] font-semibold">Settlement &amp; Tax</span>
-          </button>
-
-          <button
-            onClick={() => onNavigate('ngo-hub')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#444652] hover:bg-[#eceef1] hover:text-[#001d59] transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">verified_user</span>
-            <span className="text-[14px] font-semibold">Safety &amp; Audit</span>
-          </button>
-        </nav>
-
-        <div className="px-4">
-          <div className="p-4 bg-[#f2f4f7] rounded-xl border border-[#e6e8eb]">
-            <div className="text-[10px] text-[#005ab6] font-bold uppercase tracking-wider">Active Network</div>
-            <div className="text-[13px] text-[#001d59] font-bold mt-1">99.8% Logistics SLA</div>
-          </div>
-        </div>
-      </aside>
-
-      {/* MAIN CONTAINER WITH 64px LEFT PADDING FOR SIDEBAR */}
-      <div className="pl-64 flex-1 flex flex-col min-w-0">
-        
-        {/* TOP HEADER */}
-        <header className="fixed top-0 left-64 right-0 h-16 bg-white/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,48,135,0.04)] z-40 flex items-center justify-between px-6 border-b border-[#e6e8eb]">
-          <div className="relative w-full max-w-sm">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#747683] text-[20px]">
-              search
-            </span>
-            <input
-              className="w-full h-10 pl-9 pr-4 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-[12px] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
-              placeholder="Search transactions, dispatch, lots..."
-              type="text"
-            />
+            {/* Navigation Links with explicit gap-6 */}
+            <nav className="hidden lg:flex items-center gap-6 ml-2">
+              <a
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                onClick={() => onNavigate('home')}
+              >
+                Home
+              </a>
+              <a
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                onClick={() => onNavigate('explore-food')}
+              >
+                Explore Food
+              </a>
+              <a
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                onClick={() => onNavigate('ai-rescue-agent')}
+              >
+                AI Rescue Agent
+              </a>
+              <a
+                aria-current="page"
+                className="transition-colors py-1 px-1 text-[#001d59] font-bold border-b-2 border-[#001d59] text-[14px] cursor-pointer"
+                onClick={() => onNavigate('donor-portal')}
+              >
+                Donor Portal
+              </a>
+              <a
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                onClick={() => onNavigate('ngo-hub')}
+              >
+                NGO Hub
+              </a>
+              <a
+                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                onClick={() => onNavigate('impact')}
+              >
+                Impact
+              </a>
+            </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 justify-end flex-1 max-w-2xl">
+            <div className="relative hidden md:block w-full max-w-xs">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#747683] text-[20px]">
+                search
+              </span>
+              <input
+                className="w-full h-10 pl-9 pr-4 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-xs focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
+                placeholder="Search transactions, dispatch, lots..."
+                type="text"
+              />
+            </div>
+
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
-                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-[12px] text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-transparent hover:bg-[#eceef1]"
+                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-xs text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
                 value={activeRole}
                 onChange={(e) => setActiveRole(e.target.value)}
               >
                 <option value="donor">Role: Donor</option>
                 <option value="recipient">Role: Recipient</option>
                 <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin Console</option>
+                <option value="admin">Role: Admin</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
@@ -327,7 +319,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
               <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
             </button>
 
-            <div className="flex items-center gap-1 pl-2 cursor-pointer">
+            <div className="flex items-center gap-1 pl-1 cursor-pointer">
               <img
                 alt="Profile"
                 className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
@@ -338,11 +330,12 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
               </span>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* MAIN BODY CONTENT */}
-        <main className="relative pt-20 w-full bg-[#f7f9fc] px-6 py-6">
-          <div className="flex flex-col gap-6 w-full max-w-[1440px] mx-auto pb-16">
+      {/* MAIN BODY CONTENT */}
+      <main className="w-full pt-16 bg-[#f7f9fc] flex-1">
+        <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 flex flex-col gap-6 pb-16">
             
             {/* Top Meta Context Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -1032,7 +1025,6 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
 
           </div>
         </main>
-      </div>
 
       {/* QR Verification Handshake Modal */}
       {isQrModalOpen && (
