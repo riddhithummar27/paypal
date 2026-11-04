@@ -414,38 +414,38 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
             {/* Navigation Links with explicit gap-6 */}
             <nav className="hidden lg:flex items-center gap-6 ml-2">
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('home')}
               >
                 Home
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('explore-food')}
               >
                 Explore Food
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('ai-rescue-agent')}
               >
                 AI Rescue Agent
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('donor-portal')}
               >
                 Donor Portal
               </a>
               <a
                 aria-current="page"
-                className="text-xs py-1 text-[#001d59] font-bold border-b-2 border-[#001d59] cursor-pointer"
+                className="text-sm py-1 text-[#001d59] font-bold border-b-2 border-[#001d59] cursor-pointer"
                 onClick={() => onNavigate('ngo-hub')}
               >
                 NGO Hub
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('impact')}
               >
                 Impact
@@ -459,7 +459,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 search
               </span>
               <input
-                className="w-full h-10 pl-9 pr-3 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-xs focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
+                className="w-full h-10 pl-9 pr-3 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-sm focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
                 placeholder="Search rescued batches, NGOs, donors..."
                 type="text"
                 value={searchQuery}
@@ -469,7 +469,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
-                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-xs text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
+                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-sm text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
@@ -513,41 +513,41 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
         <div className="flex flex-col w-full">
           
           {/* Hub Ambient Header & Context Ribbon */}
-          <section className="w-full bg-white px-6 py-4 shadow-xs border-b border-slate-200">
+          <section className="w-full bg-white px-6 py-5 shadow-xs border-b border-slate-200">
             <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               
               {/* Hub Identification */}
               <div className="flex items-start sm:items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-[#dbe1ff] flex items-center justify-center text-[#001d59] shrink-0 shadow-inner">
+                <div className="w-14 h-14 rounded-2xl bg-[#dbe1ff] flex items-center justify-center text-[#001d59] shrink-0 shadow-inner">
                   <span className="material-symbols-outlined text-[32px]">warehouse</span>
                 </div>
                 <div>
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="text-xl font-bold text-[#001d59] tracking-tight">
+                  <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-[#001d59] tracking-tight">
                       Greater Boston Food Alliance
                     </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#e6e8eb] text-[#001d59] text-[10px] font-bold uppercase tracking-wider">
-                      <span className="material-symbols-outlined text-[14px] text-[#005ab6]">verified</span>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#e6e8eb] text-[#001d59] text-xs font-bold uppercase tracking-wider">
+                      <span className="material-symbols-outlined text-[16px] text-[#005ab6]">verified</span>
                       Tier 1 • 501(c)(3)
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs font-bold">
                       <span className="w-2 h-2 rounded-full bg-[#005ab6] animate-pulse"></span>
                       Node Active: BOS-EAST-09
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#444652]">
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px] text-[#747683]">local_shipping</span>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#444652]">
+                    <span className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[18px] text-[#747683]">local_shipping</span>
                       6 Fleet Transit Units Live
                     </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px] text-[#747683]">inventory_2</span>
-                      Today's Intake Inflow: <strong className="text-[#001d59] font-semibold">3,420 Meals</strong>
+                    <span className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[18px] text-[#747683]">inventory_2</span>
+                      Today's Intake Inflow: <strong className="text-[#001d59] font-bold">3,420 Meals</strong>
                     </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1 text-[#747683]">
-                      <span className="material-symbols-outlined text-[16px]">sensors</span>
+                    <span className="flex items-center gap-1.5 text-[#747683]">
+                      <span className="material-symbols-outlined text-[18px]">sensors</span>
                       Mesh Latency: 24ms (Boston East Gateway)
                     </span>
                   </div>
@@ -555,10 +555,10 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               </div>
 
               {/* Command Actions */}
-              <div className="flex items-center gap-2 flex-wrap shrink-0">
+              <div className="flex items-center gap-2.5 flex-wrap shrink-0">
                 <button
                   onClick={handleSyncTelemetry}
-                  className="h-11 px-4 rounded-lg bg-[#f2f4f7] text-[#001d59] text-xs font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
+                  className="h-11 px-5 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
                   type="button"
                 >
                   <span className={`material-symbols-outlined text-[18px] ${isSyncingTelemetry ? 'animate-spin' : ''}`}>
@@ -568,7 +568,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => showToast('Dispatch Callout: Broadcast sent to 14 volunteer couriers in Boston.')}
-                  className="h-11 px-4 rounded-lg bg-[#f2f4f7] text-[#001d59] text-xs font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
+                  className="h-11 px-5 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">campaign</span>
@@ -576,7 +576,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('ai-rescue-agent')}
-                  className="h-11 px-5 rounded-lg bg-[#003087] text-white text-xs font-bold hover:bg-[#001d59] transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                  className="h-11 px-6 rounded-xl bg-[#003087] text-white text-sm font-bold hover:bg-[#001d59] transition-all shadow-md flex items-center gap-2 cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">add_box</span>
@@ -593,57 +593,57 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
               
               {/* Metric 1: Inbound Batches */}
-              <div className="bg-white p-6 rounded-xl shadow-xs border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-24 h-24 bg-[#d7e3ff]/30 rounded-bl-full pointer-events-none"></div>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-28 h-28 bg-[#d7e3ff]/30 rounded-bl-full pointer-events-none"></div>
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Active Inbound Batches</span>
-                    <span className="material-symbols-outlined text-[#005ab6] text-[22px]">forklift</span>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Active Inbound Batches</span>
+                    <span className="material-symbols-outlined text-[#005ab6] text-[24px]">forklift</span>
                   </div>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-3xl font-extrabold text-[#001d59]">8</span>
-                    <span className="text-sm text-[#191c1e] font-semibold">Batches En Route</span>
+                  <div className="flex items-baseline gap-2 mb-1.5">
+                    <span className="text-3xl sm:text-4xl font-black text-[#001d59]">8</span>
+                    <span className="text-sm sm:text-base text-[#191c1e] font-bold">Batches En Route</span>
                   </div>
-                  <p className="text-xs text-[#ba1a1a] font-semibold flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ba1a1a] animate-ping"></span>
+                  <p className="text-xs sm:text-sm text-[#ba1a1a] font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-ping"></span>
                     4 arriving in &lt; 35 mins
                   </p>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7]/70 rounded-lg p-2.5 flex items-center justify-between text-xs">
-                  <span className="text-[#444652]">Scheduled Tonnage</span>
+                <div className="mt-5 pt-2 bg-[#f2f4f7] rounded-xl p-3 flex items-center justify-between text-xs sm:text-sm border border-slate-100">
+                  <span className="text-[#444652] font-medium">Scheduled Tonnage</span>
                   <span className="font-bold text-[#001d59]">1,830 kg</span>
                 </div>
               </div>
 
               {/* Metric 2: Intake Capacity Matrix */}
-              <div className="bg-white p-6 rounded-xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Intake Capacity</span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#ffdad6] text-[#93000a] text-[10px] font-bold">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Intake Capacity</span>
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#ffdad6] text-[#93000a] text-xs font-bold">
                       84% Saturation
                     </span>
                   </div>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-3xl font-extrabold text-[#001d59]">84%</span>
-                    <span className="text-xs text-[#747683]">Bay Volume Filled</span>
+                    <span className="text-3xl sm:text-4xl font-black text-[#001d59]">84%</span>
+                    <span className="text-xs sm:text-sm text-[#747683] font-medium">Bay Volume Filled</span>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <div>
-                      <div className="flex justify-between text-xs mb-1 text-[#444652]">
+                      <div className="flex justify-between text-xs sm:text-sm mb-1 text-[#444652]">
                         <span>Cold / Freezer 2 (Full)</span>
                         <span className="font-bold text-[#ba1a1a]">91%</span>
                       </div>
-                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden">
+                      <div className="h-2.5 w-full bg-[#eceef1] rounded-full overflow-hidden">
                         <div className="h-full bg-[#ba1a1a] rounded-full" style={{ width: '91%' }}></div>
                       </div>
                     </div>
                     <div>
-                      <div className="flex justify-between text-xs mb-1 text-[#444652]">
+                      <div className="flex justify-between text-xs sm:text-sm mb-1 text-[#444652]">
                         <span>Ambient / Dry Storage</span>
                         <span className="font-bold text-[#005ab6]">68%</span>
                       </div>
-                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden">
+                      <div className="h-2.5 w-full bg-[#eceef1] rounded-full overflow-hidden">
                         <div className="h-full bg-[#0872e2] rounded-full" style={{ width: '68%' }}></div>
                       </div>
                     </div>
@@ -652,45 +652,45 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               </div>
 
               {/* Metric 3: Active Couriers */}
-              <div className="bg-white p-6 rounded-xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Active Telemetry Couriers</span>
-                    <span className="material-symbols-outlined text-[#005ab6] text-[22px]">directions_bike</span>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Active Couriers</span>
+                    <span className="material-symbols-outlined text-[#005ab6] text-[24px]">directions_bike</span>
                   </div>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-3xl font-extrabold text-[#001d59]">14</span>
-                    <span className="text-sm text-[#191c1e] font-semibold">Drivers &amp; Couriers</span>
+                  <div className="flex items-baseline gap-2 mb-1.5">
+                    <span className="text-3xl sm:text-4xl font-black text-[#001d59]">14</span>
+                    <span className="text-sm sm:text-base text-[#191c1e] font-bold">Drivers &amp; Couriers</span>
                   </div>
-                  <p className="text-xs text-[#444652]">
-                    10 Heavy Logistics Vans • 4 E-Cargo Bikes
+                  <p className="text-xs sm:text-sm text-[#444652]">
+                    10 Logistics Vans • 4 E-Cargo Bikes
                   </p>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7]/70 rounded-lg p-2.5 flex items-center justify-between text-xs">
-                  <span className="text-[#444652]">Next Dispatch Turnaround</span>
+                <div className="mt-5 pt-2 bg-[#f2f4f7] rounded-xl p-3 flex items-center justify-between text-xs sm:text-sm border border-slate-100">
+                  <span className="text-[#444652] font-medium">Next Turnaround</span>
                   <span className="font-bold text-[#001d59]">12 mins (Van #08)</span>
                 </div>
               </div>
 
               {/* Metric 4: Handover Efficiency */}
-              <div className="bg-white p-6 rounded-xl shadow-xs border border-slate-200/80 flex flex-col justify-between">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Handover Efficiency</span>
-                    <span className="material-symbols-outlined text-[#005ab6] text-[22px]">verified_user</span>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Handover Efficiency</span>
+                    <span className="material-symbols-outlined text-[#005ab6] text-[24px]">verified_user</span>
                   </div>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-3xl font-extrabold text-[#001d59]">98.2%</span>
-                    <span className="inline-flex items-center text-[#005ab6] text-xs font-bold">
+                  <div className="flex items-baseline gap-2 mb-1.5">
+                    <span className="text-3xl sm:text-4xl font-black text-[#001d59]">98.2%</span>
+                    <span className="inline-flex items-center text-[#005ab6] text-xs sm:text-sm font-bold">
                       <span className="material-symbols-outlined text-[16px]">trending_up</span> +1.4% WoW
                     </span>
                   </div>
-                  <p className="text-xs text-[#444652]">
+                  <p className="text-xs sm:text-sm text-[#444652]">
                     NFC verified chain-of-custody transfer
                   </p>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7]/70 rounded-lg p-2.5 flex items-center justify-between text-xs">
-                  <span className="text-[#444652]">Avg Handshake Dock Time</span>
+                <div className="mt-5 pt-2 bg-[#f2f4f7] rounded-xl p-3 flex items-center justify-between text-xs sm:text-sm border border-slate-100">
+                  <span className="text-[#444652] font-medium">Avg Handshake Dock</span>
                   <span className="font-bold text-[#001d59]">4.8 min / vehicle</span>
                 </div>
               </div>
@@ -703,16 +703,16 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#005ab6] animate-pulse"></span>
-                    <h2 className="text-lg font-bold text-[#001d59]">Live Fleet Telemetry &amp; Cargo Temperature Stream</h2>
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#001d59]">Live Fleet Telemetry &amp; Cargo Temperature Stream</h2>
                   </div>
-                  <p className="text-xs text-[#444652]">Continuous IoT probe readings &amp; GPS coordinate stream for incoming redistribution units</p>
+                  <p className="text-sm text-[#444652] mt-0.5">Continuous IoT probe readings &amp; GPS coordinate stream for incoming redistribution units</p>
                 </div>
-                <div className="flex items-center gap-2 text-xs">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#747683] shadow-xs border border-slate-200">
-                    <span className="w-2 h-2 rounded-full bg-[#005ab6]"></span> 3 Inbound
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#001d59] shadow-xs border border-slate-200">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#005ab6]"></span> 3 Inbound
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#747683] shadow-xs border border-slate-200">
-                    <span className="w-2 h-2 rounded-full bg-[#747683]"></span> 3 Dispatched
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#747683] shadow-xs border border-slate-200">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#747683]"></span> 3 Dispatched
                   </span>
                 </div>
               </div>
@@ -721,192 +721,192 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 
                 {/* Truck #01 Card */}
-                <div className="bg-white rounded-xl p-4 shadow-xs border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
                   <div>
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-lg bg-[#dbe1ff] flex items-center justify-center text-[#001d59]">
-                          <span className="material-symbols-outlined">local_shipping</span>
+                    <div className="flex items-start justify-between mb-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-xl bg-[#dbe1ff] flex items-center justify-center text-[#001d59]">
+                          <span className="material-symbols-outlined text-[24px]">local_shipping</span>
                         </div>
                         <div>
-                          <h3 className="text-sm font-bold text-[#001d59]">Truck #01 (Chilled Hauler)</h3>
-                          <p className="text-xs text-[#747683]">Driver: Marcus V. • ID: FL-BOS-TK1</p>
+                          <h3 className="text-base font-bold text-[#001d59]">Truck #01 (Chilled Hauler)</h3>
+                          <p className="text-xs sm:text-sm text-[#747683]">Driver: Marcus V. • ID: FL-BOS-TK1</p>
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs font-bold">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs sm:text-sm font-bold">
                         ETA 14:18 (12m)
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Core Temp Sensor</span>
-                        <span className="text-xs text-[#005ab6] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">thermostat</span> 4.2°C HACCP Chilled
+                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Core Temp Sensor</span>
+                        <span className="text-sm text-[#005ab6] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">thermostat</span> 4.2°C HACCP
                         </span>
                       </div>
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Payload Mass</span>
-                        <span className="text-xs text-[#001d59] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">scale</span> 640 kg (80% Cap)
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Payload Mass</span>
+                        <span className="text-sm text-[#001d59] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">scale</span> 640 kg (80%)
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-[#f2f4f7]/60 p-2.5 rounded-lg mb-3 text-xs">
-                      <div className="flex items-center justify-between text-[#747683] text-[10px] mb-1">
+                    <div className="bg-[#f2f4f7]/70 p-3 rounded-xl mb-3.5 text-xs sm:text-sm">
+                      <div className="flex items-center justify-between text-[#747683] text-xs mb-1.5">
                         <span>Route Progress</span>
                         <span className="text-[#001d59] font-bold">78% Complete</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
+                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
                         <div className="h-full bg-[#005ab6] rounded-full" style={{ width: '78%' }}></div>
                       </div>
-                      <div className="flex items-center gap-1 text-[#191c1e] truncate">
-                        <span className="font-semibold text-[#001d59]">South Station Hub</span>
-                        <span className="material-symbols-outlined text-[16px] text-[#747683]">arrow_forward</span>
-                        <span className="font-semibold text-[#005ab6]">Central Dock A</span>
+                      <div className="flex items-center gap-1.5 text-[#191c1e] truncate font-medium">
+                        <span className="font-bold text-[#001d59]">South Station Hub</span>
+                        <span className="material-symbols-outlined text-[18px] text-[#747683]">arrow_forward</span>
+                        <span className="font-bold text-[#005ab6]">Central Dock A</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between text-xs">
+                  <div className="pt-2 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100">
                     <span className="text-[#747683] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px] text-[#005ab6]">wifi_tethering</span> GPS Live Lock
+                      <span className="material-symbols-outlined text-[18px] text-[#005ab6]">wifi_tethering</span> GPS Live Lock
                     </span>
                     <button
                       onClick={() => setSelectedRoute('Truck #01 (Marcus V.)')}
-                      className="text-[#005ab6] font-semibold hover:underline flex items-center gap-0.5 cursor-pointer"
+                      className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
                       type="button"
                     >
-                      Live Route <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                      Live Route <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Cargo Bike #02 Card */}
-                <div className="bg-white rounded-xl p-4 shadow-xs border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
                   <div>
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-lg bg-[#e7deff] flex items-center justify-center text-[#270070]">
-                          <span className="material-symbols-outlined">electric_bike</span>
+                    <div className="flex items-start justify-between mb-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-xl bg-[#e7deff] flex items-center justify-center text-[#270070]">
+                          <span className="material-symbols-outlined text-[24px]">electric_bike</span>
                         </div>
                         <div>
-                          <h3 className="text-sm font-bold text-[#001d59]">Cargo Bike #02 (Rapid Express)</h3>
-                          <p className="text-xs text-[#747683]">Driver: Elena S. • ID: FL-BOS-BK2</p>
+                          <h3 className="text-base font-bold text-[#001d59]">Cargo Bike #02 (Express)</h3>
+                          <p className="text-xs sm:text-sm text-[#747683]">Driver: Elena S. • ID: FL-BOS-BK2</p>
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs font-bold">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs sm:text-sm font-bold">
                         ETA 14:32 (26m)
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Thermal Container</span>
-                        <span className="text-xs text-[#ba1a1a] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">local_fire_department</span> 66.5°C Hot Holding
+                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Thermal Container</span>
+                        <span className="text-sm text-[#ba1a1a] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">local_fire_department</span> 66.5°C Hot
                         </span>
                       </div>
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Payload Mass</span>
-                        <span className="text-xs text-[#001d59] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">scale</span> 45 kg (Entrees)
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Payload Mass</span>
+                        <span className="text-sm text-[#001d59] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">scale</span> 45 kg (Entrees)
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-[#f2f4f7]/60 p-2.5 rounded-lg mb-3 text-xs">
-                      <div className="flex items-center justify-between text-[#747683] text-[10px] mb-1">
+                    <div className="bg-[#f2f4f7]/70 p-3 rounded-xl mb-3.5 text-xs sm:text-sm">
+                      <div className="flex items-center justify-between text-[#747683] text-xs mb-1.5">
                         <span>Route Progress</span>
                         <span className="text-[#001d59] font-bold">45% Complete</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
+                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
                         <div className="h-full bg-[#005ab6] rounded-full" style={{ width: '45%' }}></div>
                       </div>
-                      <div className="flex items-center gap-1 text-[#191c1e] truncate">
-                        <span className="font-semibold text-[#001d59]">Back Bay Hotels</span>
-                        <span className="material-symbols-outlined text-[16px] text-[#747683]">arrow_forward</span>
-                        <span className="font-semibold text-[#005ab6]">Bay St Mobile Pantry</span>
+                      <div className="flex items-center gap-1.5 text-[#191c1e] truncate font-medium">
+                        <span className="font-bold text-[#001d59]">Back Bay Hotels</span>
+                        <span className="material-symbols-outlined text-[18px] text-[#747683]">arrow_forward</span>
+                        <span className="font-bold text-[#005ab6]">Bay St Mobile Pantry</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between text-xs">
+                  <div className="pt-2 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100">
                     <span className="text-[#747683] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px] text-[#005ab6]">battery_charging_full</span> E-Power: 82%
+                      <span className="material-symbols-outlined text-[18px] text-[#005ab6]">battery_charging_full</span> E-Power: 82%
                     </span>
                     <button
                       onClick={() => setSelectedRoute('Cargo Bike #02 (Elena S.)')}
-                      className="text-[#005ab6] font-semibold hover:underline flex items-center gap-0.5 cursor-pointer"
+                      className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
                       type="button"
                     >
-                      Live Route <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                      Live Route <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Transit Van #04 Card */}
-                <div className="bg-white rounded-xl p-4 shadow-xs border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
                   <div>
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-lg bg-[#eceef1] flex items-center justify-center text-[#001d59]">
-                          <span className="material-symbols-outlined">airport_shuttle</span>
+                    <div className="flex items-start justify-between mb-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-xl bg-[#eceef1] flex items-center justify-center text-[#001d59]">
+                          <span className="material-symbols-outlined text-[24px]">airport_shuttle</span>
                         </div>
                         <div>
-                          <h3 className="text-sm font-bold text-[#001d59]">Transit Van #04 (Sub-Zero)</h3>
-                          <p className="text-xs text-[#747683]">Driver: Devon K. • ID: FL-BOS-VN4</p>
+                          <h3 className="text-base font-bold text-[#001d59]">Transit Van #04 (Sub-Zero)</h3>
+                          <p className="text-xs sm:text-sm text-[#747683]">Driver: Devon K. • ID: FL-BOS-VN4</p>
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ffdad6] text-[#93000a] text-xs font-bold">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#ffdad6] text-[#93000a] text-xs sm:text-sm font-bold">
                         ETA 14:45 (39m • Slow)
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Freezer Pod Temp</span>
-                        <span className="text-xs text-[#005ab6] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">ac_unit</span> -18.4°C Deep Freeze
+                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Freezer Pod Temp</span>
+                        <span className="text-sm text-[#005ab6] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">ac_unit</span> -18.4°C Freeze
                         </span>
                       </div>
-                      <div className="bg-[#f2f4f7] p-2 rounded-lg">
-                        <span className="text-[10px] text-[#747683] block font-semibold">Payload Mass</span>
-                        <span className="text-xs text-[#001d59] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">scale</span> 290 kg (Stews)
+                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
+                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Payload Mass</span>
+                        <span className="text-sm text-[#001d59] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">scale</span> 290 kg (Stews)
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-[#f2f4f7]/60 p-2.5 rounded-lg mb-3 text-xs">
-                      <div className="flex items-center justify-between text-[#747683] text-[10px] mb-1">
-                        <span className="text-[#ba1a1a] flex items-center gap-1 font-semibold">
-                          <span className="material-symbols-outlined text-[14px]">traffic</span> I-93 Congestion (+11m)
+                    <div className="bg-[#f2f4f7]/70 p-3 rounded-xl mb-3.5 text-xs sm:text-sm">
+                      <div className="flex items-center justify-between text-[#747683] text-xs mb-1.5">
+                        <span className="text-[#ba1a1a] flex items-center gap-1 font-bold">
+                          <span className="material-symbols-outlined text-[16px]">traffic</span> I-93 Congestion (+11m)
                         </span>
                         <span className="text-[#001d59] font-bold">22% Complete</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
+                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
                         <div className="h-full bg-[#0872e2] rounded-full" style={{ width: '22%' }}></div>
                       </div>
-                      <div className="flex items-center gap-1 text-[#191c1e] truncate">
-                        <span className="font-semibold text-[#001d59]">North End Markets</span>
-                        <span className="material-symbols-outlined text-[16px] text-[#747683]">arrow_forward</span>
-                        <span className="font-semibold text-[#005ab6]">Central Dock B</span>
+                      <div className="flex items-center gap-1.5 text-[#191c1e] truncate font-medium">
+                        <span className="font-bold text-[#001d59]">North End Markets</span>
+                        <span className="material-symbols-outlined text-[18px] text-[#747683]">arrow_forward</span>
+                        <span className="font-bold text-[#005ab6]">Central Dock B</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between text-xs">
+                  <div className="pt-2 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100">
                     <span className="text-[#747683] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px] text-[#005ab6]">thermostat_auto</span> Compressor Active
+                      <span className="material-symbols-outlined text-[18px] text-[#005ab6]">thermostat_auto</span> Compressor Active
                     </span>
                     <button
                       onClick={() => setSelectedRoute('Transit Van #04 (Devon K.)')}
-                      className="text-[#005ab6] font-semibold hover:underline flex items-center gap-0.5 cursor-pointer"
+                      className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
                       type="button"
                     >
-                      Live Route <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                      Live Route <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                     </button>
                   </div>
                 </div>
@@ -920,21 +920,21 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               {/* Table Action Bar */}
               <div className="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h2 className="text-lg font-bold text-[#001d59]">Bulk Rescue Ledger &amp; Inventory Intake</h2>
-                    <span className="px-2 py-0.5 rounded-full bg-[#dbe1ff] text-[#001d59] text-xs font-bold">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#001d59]">Bulk Rescue Ledger &amp; Inventory Intake</h2>
+                    <span className="px-3 py-1 rounded-full bg-[#dbe1ff] text-[#001d59] text-xs sm:text-sm font-bold">
                       {filteredBatches.length} Total Batches
                     </span>
                   </div>
-                  <p className="text-xs text-[#444652]">Enterprise allocation queue, cold-chain verification records, and immediate dispatch claims</p>
+                  <p className="text-sm text-[#444652]">Enterprise allocation queue, cold-chain verification records, and immediate dispatch claims</p>
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <div className="relative w-full sm:w-64">
-                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#747683] text-[18px]">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <div className="relative w-full sm:w-72">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#747683] text-[20px]">
                       search
                     </span>
                     <input
-                      className="w-full h-10 pl-9 pr-3 bg-[#f2f4f7] rounded-lg text-[#001d59] text-xs focus:outline-none focus:bg-white focus:shadow-xs border border-slate-200"
+                      className="w-full h-11 pl-10 pr-3 bg-[#f2f4f7] rounded-xl text-[#001d59] text-sm focus:outline-none focus:bg-white focus:shadow-xs border border-slate-200"
                       placeholder="Filter batch, donor, SKU..."
                       type="text"
                       value={searchQuery}
@@ -943,26 +943,26 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                   </div>
                   <button
                     onClick={() => setActiveFilterPill('all')}
-                    className="h-10 px-3.5 bg-[#f2f4f7] rounded-lg text-xs text-[#444652] hover:text-[#001d59] flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-200 font-semibold"
+                    className="h-11 px-4 bg-[#f2f4f7] rounded-xl text-sm text-[#444652] hover:text-[#001d59] flex items-center gap-2 transition-colors cursor-pointer border border-slate-200 font-bold"
                     type="button"
                   >
-                    <span className="material-symbols-outlined text-[18px]">filter_list</span> Filters
+                    <span className="material-symbols-outlined text-[20px]">filter_list</span> Filters
                   </button>
                   <button
                     onClick={handleExportCsv}
-                    className="h-10 px-3.5 bg-[#f2f4f7] rounded-lg text-xs text-[#444652] hover:text-[#001d59] flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-200 font-semibold"
+                    className="h-11 px-4 bg-[#f2f4f7] rounded-xl text-sm text-[#444652] hover:text-[#001d59] flex items-center gap-2 transition-colors cursor-pointer border border-slate-200 font-bold"
                     type="button"
                   >
-                    <span className="material-symbols-outlined text-[18px]">file_download</span> Export CSV
+                    <span className="material-symbols-outlined text-[20px]">file_download</span> Export CSV
                   </button>
                 </div>
               </div>
 
               {/* Filter Pills Sub-bar */}
-              <div className="px-6 pb-3 flex items-center gap-2 overflow-x-auto">
+              <div className="px-6 pb-4 flex items-center gap-2.5 overflow-x-auto">
                 <button
                   onClick={() => setActiveFilterPill('all')}
-                  className={`h-7 px-3 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
+                  className={`h-8 px-4 rounded-full text-xs sm:text-sm font-bold shrink-0 cursor-pointer transition-colors ${
                     activeFilterPill === 'all'
                       ? 'bg-[#003087] text-white'
                       : 'bg-[#f2f4f7] text-[#444652] hover:bg-[#eceef1]'
@@ -973,7 +973,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => setActiveFilterPill('chilled')}
-                  className={`h-7 px-3 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
+                  className={`h-8 px-4 rounded-full text-xs sm:text-sm font-bold shrink-0 cursor-pointer transition-colors ${
                     activeFilterPill === 'chilled'
                       ? 'bg-[#003087] text-white'
                       : 'bg-[#f2f4f7] text-[#444652] hover:bg-[#eceef1]'
@@ -984,7 +984,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => setActiveFilterPill('critical')}
-                  className={`h-7 px-3 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
+                  className={`h-8 px-4 rounded-full text-xs sm:text-sm font-bold shrink-0 cursor-pointer transition-colors ${
                     activeFilterPill === 'critical'
                       ? 'bg-[#ba1a1a] text-white'
                       : 'bg-[#ffdad6] text-[#93000a]'
@@ -995,7 +995,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => setActiveFilterPill('unclaimed')}
-                  className={`h-7 px-3 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
+                  className={`h-8 px-4 rounded-full text-xs sm:text-sm font-bold shrink-0 cursor-pointer transition-colors ${
                     activeFilterPill === 'unclaimed'
                       ? 'bg-[#003087] text-white'
                       : 'bg-[#f2f4f7] text-[#444652] hover:bg-[#eceef1]'
@@ -1006,7 +1006,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => setActiveFilterPill('verified')}
-                  className={`h-7 px-3 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-colors ${
+                  className={`h-8 px-4 rounded-full text-xs sm:text-sm font-bold shrink-0 cursor-pointer transition-colors ${
                     activeFilterPill === 'verified'
                       ? 'bg-[#003087] text-white'
                       : 'bg-[#f2f4f7] text-[#444652] hover:bg-[#eceef1]'
@@ -1019,19 +1019,19 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
 
               {/* High-Density Data Grid */}
               <div className="w-full overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#f2f4f7] uppercase tracking-wider text-[#747683] font-bold text-[10px]">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-[#f2f4f7] uppercase tracking-wider text-[#747683] font-bold text-xs">
                     <tr>
-                      <th className="py-3 px-4 w-10">
+                      <th className="py-3.5 px-4 w-10">
                         <input className="w-4 h-4 rounded text-[#005ab6] cursor-pointer" type="checkbox" />
                       </th>
-                      <th className="py-3 px-4">Batch ID &amp; Venue</th>
-                      <th className="py-3 px-4">Food Category</th>
-                      <th className="py-3 px-4">Quantity / Units</th>
-                      <th className="py-3 px-4">Thermal Status</th>
-                      <th className="py-3 px-4">Perish Window</th>
-                      <th className="py-3 px-4">Logistics Status</th>
-                      <th className="py-3 px-4 text-right">Action</th>
+                      <th className="py-3.5 px-4">Batch ID &amp; Venue</th>
+                      <th className="py-3.5 px-4">Food Category</th>
+                      <th className="py-3.5 px-4">Quantity / Units</th>
+                      <th className="py-3.5 px-4">Thermal Status</th>
+                      <th className="py-3.5 px-4">Perish Window</th>
+                      <th className="py-3.5 px-4">Logistics Status</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -1044,14 +1044,14 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                             : 'hover:bg-[#f2f4f7]/70'
                         }`}
                       >
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <input className="w-4 h-4 rounded text-[#005ab6] cursor-pointer" type="checkbox" />
                         </td>
-                        <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-[#001d59]">{batch.id}</span>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="font-bold text-[#001d59] text-sm">{batch.id}</span>
                             <span
-                              className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                              className={`px-2 py-0.5 rounded text-xs font-bold ${
                                 batch.qrCode === 'URGENT'
                                   ? 'bg-[#ffdad6] text-[#93000a]'
                                   : 'bg-[#eceef1] text-[#747683]'
@@ -1060,18 +1060,18 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                               {batch.qrCode}
                             </span>
                           </div>
-                          <div className="text-[#191c1e] font-medium truncate max-w-[220px]">{batch.venue}</div>
+                          <div className="text-[#191c1e] font-semibold text-sm truncate max-w-[240px]">{batch.venue}</div>
                         </td>
-                        <td className="py-3.5 px-4">
-                          <span className="font-bold text-[#001d59]">{batch.category}</span>
-                          <span className="block text-[#747683] text-[11px]">{batch.description}</span>
+                        <td className="py-4 px-4">
+                          <span className="font-bold text-[#001d59] text-sm">{batch.category}</span>
+                          <span className="block text-[#747683] text-xs mt-0.5">{batch.description}</span>
                         </td>
-                        <td className="py-3.5 px-4 font-bold text-[#001d59]">
-                          {batch.weight} <span className="font-normal text-[#747683]">/ {batch.portions}</span>
+                        <td className="py-4 px-4 font-bold text-[#001d59] text-sm">
+                          {batch.weight} <span className="font-medium text-[#747683]">/ {batch.portions}</span>
                         </td>
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                               batch.thermalType === 'hot'
                                 ? 'bg-[#ffdad6] text-[#93000a]'
                                 : batch.thermalType === 'chilled'
@@ -1079,25 +1079,25 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                                 : 'bg-[#e6e8eb] text-[#444652]'
                             }`}
                           >
-                            <span className="material-symbols-outlined text-[14px]">{batch.thermalIcon}</span>
+                            <span className="material-symbols-outlined text-[16px]">{batch.thermalIcon}</span>
                             {batch.thermalStatus}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <span
-                            className={`inline-flex items-center gap-1 font-bold ${
+                            className={`inline-flex items-center gap-1 text-sm font-bold ${
                               batch.isUrgent ? 'text-[#ba1a1a]' : 'text-[#444652]'
                             }`}
                           >
                             {batch.isUrgent && (
-                              <span className="material-symbols-outlined text-[16px] animate-pulse">timer</span>
+                              <span className="material-symbols-outlined text-[18px] animate-pulse">timer</span>
                             )}
                             {batch.perishTime}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-4">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                               batch.claimed || batch.logisticsType === 'transit'
                                 ? 'bg-[#d7e3ff] text-[#001b3f]'
                                 : batch.logisticsType === 'unclaimed'
@@ -1108,26 +1108,26 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                             }`}
                           >
                             {batch.logisticsType === 'verified' && (
-                              <span className="material-symbols-outlined text-[14px] text-[#005ab6]">check_circle</span>
+                              <span className="material-symbols-outlined text-[16px] text-[#005ab6]">check_circle</span>
                             )}
                             {batch.logisticsStatus}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 text-right">
+                        <td className="py-4 px-4 text-right">
                           {batch.actionType === 'claim' && !batch.claimed ? (
                             <button
                               onClick={() => handleClaimBatchAction(batch.id)}
-                              className="h-8 px-3 rounded-lg bg-[#0872e2] hover:bg-[#005ab6] text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+                              className="h-9 px-4 rounded-xl bg-[#0872e2] hover:bg-[#005ab6] text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
                               type="button"
                             >
                               1-Click Claim
                             </button>
                           ) : batch.claimed ? (
-                            <span className="text-emerald-700 font-bold text-xs">Claimed ✓</span>
+                            <span className="text-emerald-700 font-bold text-sm">Claimed ✓</span>
                           ) : (
                             <button
                               onClick={() => setSelectedManifest(batch)}
-                              className="h-8 px-3 rounded-lg bg-[#f2f4f7] hover:bg-[#eceef1] text-xs text-[#001d59] font-semibold transition-all cursor-pointer border border-slate-200"
+                              className="h-9 px-4 rounded-xl bg-[#f2f4f7] hover:bg-[#eceef1] text-xs sm:text-sm text-[#001d59] font-bold transition-all cursor-pointer border border-slate-200"
                               type="button"
                             >
                               {batch.actionType === 'cert' ? 'Proof Cert' : 'Manifest'}
@@ -1141,10 +1141,10 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               </div>
 
               {/* Pagination & Ledger Summary Footer */}
-              <div className="p-4 bg-[#f2f4f7] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs border-t border-slate-200">
+              <div className="p-4 bg-[#f2f4f7] flex flex-col sm:flex-row items-center justify-between gap-3 text-sm border-t border-slate-200">
                 <span className="text-[#444652]">
                   Showing {filteredBatches.length} of 12 inbound transactions •{' '}
-                  <strong className="text-[#001d59] font-semibold">Total Mass: 860 kg</strong>
+                  <strong className="text-[#001d59] font-bold">Total Mass: 860 kg</strong>
                 </span>
                 <div className="flex items-center gap-1">
                   <button className="w-8 h-8 rounded bg-white text-[#747683] hover:text-[#001d59] flex items-center justify-center transition-colors cursor-pointer border border-slate-200" type="button">
@@ -1204,46 +1204,46 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
 
                     {/* Bay 1: Dock A Cold Storage Ramp */}
                     <div className="flex items-center gap-3">
-                      <div className="w-32 shrink-0">
-                        <span className="text-xs font-bold text-[#001d59] block truncate">Dock A (Cold Ramp)</span>
-                        <span className="text-[11px] text-[#005ab6]">Rapid Chill active</span>
+                      <div className="w-36 shrink-0">
+                        <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Dock A (Cold Ramp)</span>
+                        <span className="text-xs text-[#005ab6] font-medium">Rapid Chill active</span>
                       </div>
                       <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
                         <div className="absolute left-[18%] w-[28%] h-10 rounded-md bg-[#005ab6] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
-                          <span className="text-xs font-bold truncate">Truck #01 (Marcus V.)</span>
-                          <span className="text-[10px] text-white/80 truncate">640 kg Chilled • ETA 14:18</span>
+                          <span className="text-xs sm:text-sm font-bold truncate">Truck #01 (Marcus V.)</span>
+                          <span className="text-xs text-white/90 truncate">640 kg Chilled • ETA 14:18</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Bay 2: Dock B Dry & Ambient Bay */}
                     <div className="flex items-center gap-3">
-                      <div className="w-32 shrink-0">
-                        <span className="text-xs font-bold text-[#001d59] block truncate">Dock B (Ambient)</span>
-                        <span className="text-[11px] text-[#747683]">Pallet Jack Ready</span>
+                      <div className="w-36 shrink-0">
+                        <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Dock B (Ambient)</span>
+                        <span className="text-xs text-[#747683]">Pallet Jack Ready</span>
                       </div>
                       <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
                         <div className="absolute left-[26%] w-[32%] h-10 rounded-md bg-[#001d59] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
-                          <span className="text-xs font-bold truncate">Van #04 (Devon K.)</span>
-                          <span className="text-[10px] text-white/80 truncate">290 kg Sub-Zero • ETA 14:45</span>
+                          <span className="text-xs sm:text-sm font-bold truncate">Van #04 (Devon K.)</span>
+                          <span className="text-xs text-white/90 truncate">290 kg Sub-Zero • ETA 14:45</span>
                         </div>
                         <div className="absolute left-[62%] w-[24%] h-10 rounded-md bg-[#eceef1] text-[#444652] px-2.5 py-1 flex flex-col justify-center border border-dashed border-slate-300">
                           <span className="text-xs font-semibold truncate">Scheduled Alloc #92</span>
-                          <span className="text-[10px] text-[#747683] truncate">Whole Foods Delivery</span>
+                          <span className="text-xs text-[#747683] truncate">Whole Foods Delivery</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Bay 3: Mobile Receiving Bay C */}
                     <div className="flex items-center gap-3">
-                      <div className="w-32 shrink-0">
-                        <span className="text-xs font-bold text-[#001d59] block truncate">Bay C (Mobile/Bike)</span>
-                        <span className="text-[11px] text-[#005ab6]">Fast Handshake</span>
+                      <div className="w-36 shrink-0">
+                        <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Bay C (Mobile/Bike)</span>
+                        <span className="text-xs text-[#005ab6] font-semibold">Fast Handshake</span>
                       </div>
                       <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
                         <div className="absolute left-[22%] w-[18%] h-10 rounded-md bg-[#270070] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
-                          <span className="text-xs font-bold truncate">Bike #02 (Elena)</span>
-                          <span className="text-[10px] text-white/80 truncate">45 kg Hot • 14:32</span>
+                          <span className="text-xs sm:text-sm font-bold truncate">Bike #02 (Elena)</span>
+                          <span className="text-xs text-white/90 truncate">45 kg Hot • 14:32</span>
                         </div>
                       </div>
                     </div>
@@ -1252,15 +1252,15 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
 
                 {/* Bay Status Strip Summary */}
                 <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <div className="p-2.5 bg-[#f2f4f7] rounded-lg flex items-center justify-between text-xs border border-slate-100">
+                  <div className="p-3 bg-[#f2f4f7] rounded-xl flex items-center justify-between text-xs sm:text-sm border border-slate-100">
                     <span className="text-[#444652]">Dock Turnaround</span>
                     <span className="text-[#001d59] font-bold">11.4 min avg</span>
                   </div>
-                  <div className="p-2.5 bg-[#f2f4f7] rounded-lg flex items-center justify-between text-xs border border-slate-100">
+                  <div className="p-3 bg-[#f2f4f7] rounded-xl flex items-center justify-between text-xs sm:text-sm border border-slate-100">
                     <span className="text-[#444652]">Next Free Slot</span>
                     <span className="text-[#005ab6] font-bold">Dock A @ 15:05</span>
                   </div>
-                  <div className="p-2.5 bg-[#f2f4f7] rounded-lg flex items-center justify-between text-xs border border-slate-100">
+                  <div className="p-3 bg-[#f2f4f7] rounded-xl flex items-center justify-between text-xs sm:text-sm border border-slate-100">
                     <span className="text-[#444652]">Staging Capacity</span>
                     <span className="text-[#001d59] font-bold">3 Bays / 1 Inactive</span>
                   </div>
@@ -1268,47 +1268,47 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               </div>
 
               {/* Intake Verification Terminal Card (4 cols = 1/3) */}
-              <div className="lg:col-span-4 bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 flex flex-col gap-4">
+              <div className="lg:col-span-4 bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 flex flex-col gap-4">
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-[#005ab6]">contactless</span>
-                      <h2 className="text-lg font-bold text-[#001d59]">Verification Dock</h2>
+                      <span className="material-symbols-outlined text-[#005ab6] text-[22px]">contactless</span>
+                      <h2 className="text-xl font-bold text-[#001d59]">Verification Dock</h2>
                     </div>
                     <span className="w-2.5 h-2.5 rounded-full bg-[#005ab6] animate-pulse" title="Terminal Online"></span>
                   </div>
-                  <p className="text-xs text-[#444652]">NFC Handshake &amp; Physical Temperature Probe validation scanner</p>
+                  <p className="text-sm text-[#444652]">NFC Handshake &amp; Physical Temperature Probe validation scanner</p>
                 </div>
 
                 {/* Scanner Simulation Box */}
                 <div
                   onClick={handleNfcScan}
-                  className="relative bg-[#f2f4f7] rounded-xl p-6 flex flex-col items-center justify-center text-center overflow-hidden cursor-pointer hover:bg-[#eceef1] transition-all border border-slate-200 group"
+                  className="relative bg-[#f2f4f7] rounded-2xl p-6 flex flex-col items-center justify-center text-center overflow-hidden cursor-pointer hover:bg-[#eceef1] transition-all border border-slate-200 group"
                   title="Click to simulate NFC Scan"
                 >
                   <div className="w-20 h-20 rounded-full bg-[#d7e3ff]/50 group-hover:scale-105 transition-transform flex items-center justify-center text-[#005ab6] mb-3 shadow-inner">
                     <span className="material-symbols-outlined text-[36px] animate-pulse">qr_code_scanner</span>
                   </div>
-                  <span className="text-sm text-[#001d59] font-bold mb-1">Hold Handover QR / NFC Badge Here</span>
-                  <p className="text-xs text-[#747683] max-w-[200px]">Supports Apple Wallet, RFID Driver Cards, and Foodloop Ledger QR</p>
-                  <div className="mt-4 pt-3 w-full flex items-center justify-center gap-2 text-xs font-semibold text-[#005ab6]">
-                    <span className="material-symbols-outlined text-[16px]">sensors</span> Reader Active (BOS-DOCK-NFC-01)
+                  <span className="text-base text-[#001d59] font-bold mb-1">Hold Handover QR / NFC Badge Here</span>
+                  <p className="text-xs sm:text-sm text-[#747683] max-w-[240px]">Supports Apple Wallet, RFID Driver Cards, and Foodloop Ledger QR</p>
+                  <div className="mt-4 pt-3 w-full flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-[#005ab6]">
+                    <span className="material-symbols-outlined text-[18px]">sensors</span> Reader Active (BOS-DOCK-NFC-01)
                   </div>
                 </div>
 
                 {/* Manual Batch Verification Key */}
                 <form onSubmit={handleManualVerify}>
-                  <label className="text-xs text-[#001d59] font-bold block mb-1">Manual Verification Key</label>
+                  <label className="text-xs sm:text-sm text-[#001d59] font-bold block mb-1.5">Manual Verification Key</label>
                   <div className="flex gap-2">
                     <input
-                      className="flex-1 h-10 px-3 bg-[#f2f4f7] rounded-lg text-[#001d59] text-xs focus:outline-none focus:bg-white focus:shadow-xs border border-slate-200"
+                      className="flex-1 h-11 px-3.5 bg-[#f2f4f7] rounded-xl text-[#001d59] text-sm focus:outline-none focus:bg-white focus:shadow-xs border border-slate-200"
                       placeholder="e.g. FL-9021-SEC"
                       type="text"
                       value={manualKey}
                       onChange={(e) => setManualKey(e.target.value)}
                     />
                     <button
-                      className="h-10 px-4 rounded-lg bg-[#001d59] text-white text-xs hover:bg-[#003087] transition-all font-bold cursor-pointer"
+                      className="h-11 px-5 rounded-xl bg-[#001d59] text-white text-sm hover:bg-[#003087] transition-all font-bold cursor-pointer"
                       type="submit"
                     >
                       Verify
@@ -1318,37 +1318,37 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
 
                 {/* On-Duty Shift Supervisors */}
                 <div className="pt-1">
-                  <span className="text-[10px] uppercase tracking-wider text-[#747683] font-bold block mb-2">
+                  <span className="text-xs uppercase tracking-wider text-[#747683] font-bold block mb-2">
                     On-Duty Shift Supervisors
                   </span>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-[#f2f4f7]/70 border border-slate-100">
+                    <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#f2f4f7]/70 border border-slate-100">
                       <div className="flex items-center gap-2.5">
                         <img
-                          className="w-8 h-8 rounded-full object-cover"
+                          className="w-9 h-9 rounded-full object-cover"
                           alt="Tyler Chen, logistics dock lead"
                           src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3SdNo50G5t9fjWD1Q1zIob7skrced_h9v5qmCaznbAEY-NbmZJLzwzEEOsqMzBvZ-thQoidbFqTPMi1cEgdDQBfLhz8GG4XLKr5ZkQSM_ljg-KmEERINo60wHy5NAqla4T5kNX8M8e1zPeqwLO2LBprXxM7a9ow_sUE-vJRPTZq6Xaya0MS-GxVNMud91qZeZFlBhO1gqomfGy430DgcUR524yaQOqv5PYUAker8"
                         />
                         <div>
-                          <span className="text-xs font-bold text-[#001d59] block leading-tight">Tyler Chen</span>
-                          <span className="text-[11px] text-[#747683]">Dock Lead • Gate Master</span>
+                          <span className="text-sm font-bold text-[#001d59] block leading-tight">Tyler Chen</span>
+                          <span className="text-xs text-[#747683]">Dock Lead • Gate Master</span>
                         </div>
                       </div>
-                      <span className="px-2 py-0.5 rounded bg-[#eceef1] text-[#005ab6] text-xs font-bold">
+                      <span className="px-2.5 py-1 rounded bg-[#eceef1] text-[#005ab6] text-xs font-bold">
                         Bay A
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-[#f2f4f7]/70 border border-slate-100">
+                    <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#f2f4f7]/70 border border-slate-100">
                       <div className="flex items-center gap-2.5">
                         <img
-                          className="w-8 h-8 rounded-full object-cover"
+                          className="w-9 h-9 rounded-full object-cover"
                           alt="Sarah Miller, thermal compliance"
                           src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWub7b2BbPVpC-gFDUxQ1aM50h07n_zT1L6PH2x-ouFS_Ljfa0NZFqCDGEICAStkiuNS84bI5h2IlxkK7pGiHtCEJPCzZHDj0oygetsx_otahWtBXB7wkkfvLD5nIz9hzL-rj39Qd86Ca9HD7yCtHganl1vF0wvbFlVOZBnjGEO6Xbi2QHAIXAdQEs1Edj3KK0GONeb1o5ApY52_MXI2-qbL02hoSdHLFY0O6zoxE"
                         />
                         <div>
-                          <span className="text-xs font-bold text-[#001d59] block leading-tight">Sarah Miller</span>
-                          <span className="text-[11px] text-[#747683]">HACCP Inspector • Shift Lead</span>
+                          <span className="text-sm font-bold text-[#001d59] block leading-tight">Sarah Miller</span>
+                          <span className="text-xs text-[#747683]">HACCP Inspector • Shift Lead</span>
                         </div>
                       </div>
                       <span className="px-2 py-0.5 rounded bg-[#eceef1] text-[#005ab6] text-xs font-bold">
@@ -1374,10 +1374,10 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
                 <div className="lg:col-span-8 flex flex-col gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2.5 py-1 rounded-full bg-[#005ab6] text-white text-[10px] font-bold tracking-wide uppercase">
+                    <span className="px-3 py-1 rounded-full bg-[#005ab6] text-white text-xs font-bold tracking-wide uppercase">
                       REGIONAL LEDGER MILESTONE
                     </span>
-                    <span className="text-xs text-[#b4c5ff]">Q1 Certified Public Record</span>
+                    <span className="text-xs sm:text-sm text-[#b4c5ff] font-medium">Q1 Certified Public Record</span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                     318,400 lbs Rescued Across Greater Boston This Quarter
@@ -1408,9 +1408,9 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                       alt="Food pantry volunteers unloading cold-storage crates"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWHNrVf3QW1V8s8cUrc8-5wgN0SJhMeYiRaggRXSDi3thwBxsashvLsG5LM5dnpWTb-SEmhJB-Y6TbD4iCNKms0JL1-CFbWSUUaLM4_EzkgRQXNSJ9_a-OCBDAXNsyjoC3rZDIm8uO0pmqEPUeQnK3Ykb-bf8hhqaLdFwE2SiQjku06BxCw23VzMqcQBuGVyvUJtA6GHqMXy4bC6lVcRUGIiB7xWqxDkR2UCEd96c"
                     />
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#001d59]/95 via-[#001d59]/60 to-transparent p-3 text-white">
-                      <p className="text-xs font-bold">Central Boston Regional Receiving Facility</p>
-                      <p className="text-[10px] text-white/80">Dock verification automated by Foodloop Telemetry Node</p>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#001d59]/95 via-[#001d59]/60 to-transparent p-3.5 text-white">
+                      <p className="text-sm font-bold">Central Boston Regional Receiving Facility</p>
+                      <p className="text-xs text-white/90">Dock verification automated by Foodloop Telemetry Node</p>
                     </div>
                   </div>
                 </div>

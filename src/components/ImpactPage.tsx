@@ -291,38 +291,38 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             {/* Navigation Links with explicit gap-6 */}
             <nav className="hidden lg:flex items-center gap-6 ml-2">
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('home')}
               >
                 Home
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('explore-food')}
               >
                 Explore Food
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('ai-rescue-agent')}
               >
                 AI Rescue Agent
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('donor-portal')}
               >
                 Donor Portal
               </a>
               <a
-                className="text-xs font-medium text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
+                className="text-sm font-semibold text-[#444652] hover:text-[#001d59] transition-colors py-1 cursor-pointer"
                 onClick={() => onNavigate('ngo-hub')}
               >
                 NGO Hub
               </a>
               <a
                 aria-current="page"
-                className="text-xs py-1 text-[#001d59] font-bold border-b-2 border-[#001d59] cursor-pointer"
+                className="text-sm py-1 text-[#001d59] font-bold border-b-2 border-[#001d59] cursor-pointer"
                 onClick={() => onNavigate('impact')}
               >
                 Impact
@@ -336,7 +336,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 search
               </span>
               <input
-                className="w-full h-10 pl-9 pr-3 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-xs focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
+                className="w-full h-10 pl-9 pr-3 bg-[#f2f4f7] rounded-lg text-[#191c1e] placeholder:text-[#747683] text-sm focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/20 transition-all border border-transparent focus:border-[#005ab6]/30"
                 placeholder="Search rescued batches, NGOs, donors..."
                 type="text"
               />
@@ -344,7 +344,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
-                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-xs text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
+                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-sm text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
@@ -392,62 +392,62 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             <div className="max-w-[1440px] mx-auto px-6">
               
               {/* Ledger Status Strip */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-6 mb-4">
-                <div className="inline-flex items-center gap-2 bg-[#f2f4f7] px-3 py-1.5 rounded-full border border-slate-200">
-                  <span className="inline-block w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
-                  <span className="text-xs uppercase tracking-wider text-[#001d59] font-bold">
+              <div className="flex flex-wrap items-center justify-between gap-2.5 pb-6 mb-4">
+                <div className="inline-flex items-center gap-2.5 bg-[#f2f4f7] px-3.5 py-1.5 rounded-full border border-slate-200">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse"></span>
+                  <span className="text-xs sm:text-sm uppercase tracking-wider text-[#001d59] font-bold">
                     Real-Time Verified Circular Economy Ledger
                   </span>
                   <span className="text-[#c4c6d4]">•</span>
-                  <span className="text-xs text-[#444652] font-semibold">Node #418-L2 Sync: Active</span>
+                  <span className="text-xs sm:text-sm text-[#444652] font-semibold">Node #418-L2 Sync: Active</span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 text-[#444652]">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#f2f4f7] border border-slate-200">
-                    <span className="material-symbols-outlined text-[16px] text-[#005ab6]">verified</span>
-                    <span className="text-xs font-semibold text-[#001d59]">PayPal Giving Fund Certified</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f2f4f7] border border-slate-200">
+                    <span className="material-symbols-outlined text-[18px] text-[#005ab6]">verified</span>
+                    <span className="text-xs sm:text-sm font-bold text-[#001d59]">PayPal Giving Fund Certified</span>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#f2f4f7] border border-slate-200">
-                    <span className="material-symbols-outlined text-[16px] text-[#005ab6]">eco</span>
-                    <span className="text-xs font-semibold text-[#001d59]">EPA WARM Protocol V15</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f2f4f7] border border-slate-200">
+                    <span className="material-symbols-outlined text-[18px] text-[#005ab6]">eco</span>
+                    <span className="text-xs sm:text-sm font-bold text-[#001d59]">EPA WARM Protocol V15</span>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#f2f4f7] border border-slate-200">
-                    <span className="material-symbols-outlined text-[16px] text-[#005ab6]">receipt_long</span>
-                    <span className="text-xs font-semibold text-[#001d59]">Continuous Cryptographic Audit</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f2f4f7] border border-slate-200">
+                    <span className="material-symbols-outlined text-[18px] text-[#005ab6]">receipt_long</span>
+                    <span className="text-xs sm:text-sm font-bold text-[#001d59]">Cryptographic Audit</span>
                   </div>
                 </div>
               </div>
 
               {/* Hero Typography & Direct Impact Subtitle */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-8 flex flex-col gap-2">
-                  <span className="text-xs uppercase tracking-widest text-[#005ab6] font-bold">
+                <div className="lg:col-span-8 flex flex-col gap-3">
+                  <span className="text-xs sm:text-sm uppercase tracking-widest text-[#005ab6] font-bold">
                     Institutional Grade ESG Accounting
                   </span>
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#001d59] tracking-tight">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#001d59] tracking-tight">
                     Transparent Impact. <br className="hidden sm:inline" />Measurable Relief.
                   </h1>
-                  <p className="text-sm sm:text-base text-[#444652] max-w-3xl pt-1 leading-relaxed">
+                  <p className="text-base sm:text-lg text-[#444652] max-w-3xl pt-1 leading-relaxed">
                     Decentralized verification engine measuring Scope 3 emission diversion, water footprint conservation, and high-density nutritional recovery across institutional commercial kitchens and local food banks.
                   </p>
                 </div>
 
                 <div className="lg:col-span-4 flex flex-col justify-end items-start lg:items-end gap-4">
-                  <div className="bg-[#f2f4f7] p-5 rounded-xl w-full max-w-sm border border-slate-200">
+                  <div className="bg-[#f2f4f7] p-5 rounded-2xl w-full max-w-sm border border-slate-200 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#747683]">Consensus Protocol</span>
-                      <span className="text-[10px] bg-[#16A34A]/10 text-[#16A34A] px-2 py-0.5 rounded-full font-bold">
+                      <span className="text-xs sm:text-sm font-bold text-[#747683]">Consensus Protocol</span>
+                      <span className="text-xs bg-[#16A34A]/10 text-[#16A34A] px-2.5 py-0.5 rounded-full font-bold">
                         P-03 ACTIVE
                       </span>
                     </div>
                     <div className="mt-2 flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-[#001d59]">99.98%</span>
-                      <span className="text-xs text-[#444652]">Traceability Index</span>
+                      <span className="text-3xl font-black text-[#001d59]">99.98%</span>
+                      <span className="text-sm font-semibold text-[#444652]">Traceability Index</span>
                     </div>
-                    <div className="w-full bg-[#e0e3e6] h-1.5 rounded-full mt-3 overflow-hidden">
+                    <div className="w-full bg-[#e0e3e6] h-2 rounded-full mt-3 overflow-hidden">
                       <div className="bg-[#0872e2] h-full rounded-full" style={{ width: '98.4%' }}></div>
                     </div>
-                    <p className="text-[11px] text-[#747683] mt-2">Zero double-counting guaranteed via SHA-256 batch tokenization.</p>
+                    <p className="text-xs text-[#747683] mt-2 font-medium">Zero double-counting guaranteed via SHA-256 batch tokenization.</p>
                   </div>
                 </div>
               </div>
@@ -463,21 +463,21 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
               <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80">
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#d7e3ff]/40 flex items-center justify-center text-[#001d59]">
-                      <span className="material-symbols-outlined text-[24px]">restaurant_menu</span>
+                    <div className="w-12 h-12 rounded-xl bg-[#d7e3ff]/40 flex items-center justify-center text-[#001d59]">
+                      <span className="material-symbols-outlined text-[26px]">restaurant_menu</span>
                     </div>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-[#16A34A] bg-[#16A34A]/10 px-2 py-1 rounded-full">
-                      <span className="material-symbols-outlined text-[14px]">trending_up</span> +14.8%
+                    <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full">
+                      <span className="material-symbols-outlined text-[16px]">trending_up</span> +14.8%
                     </span>
                   </div>
                   <div className="mt-4">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Diverted Food Stock</span>
-                    <div className="text-3xl font-extrabold text-[#001d59] mt-1">142,890</div>
-                    <div className="text-sm font-semibold text-[#005ab6]">Verified Meals Rescued</div>
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Diverted Food Stock</span>
+                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">142,890</div>
+                    <div className="text-sm sm:text-base font-bold text-[#005ab6]">Verified Meals Rescued</div>
                   </div>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7] px-3 py-2 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs text-[#444652]">
+                <div className="mt-5 pt-2 bg-[#f2f4f7] px-3.5 py-2.5 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-[#444652]">
                     <span>30-Day Window:</span>
                     <span className="font-bold text-[#001d59]">18,420 Meals</span>
                   </div>
@@ -488,23 +488,23 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
               <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80">
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A]">
-                      <span className="material-symbols-outlined text-[24px]">cloud_off</span>
+                    <div className="w-12 h-12 rounded-xl bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A]">
+                      <span className="material-symbols-outlined text-[26px]">cloud_off</span>
                     </div>
-                    <span className="text-[10px] uppercase tracking-wide bg-[#f2f4f7] px-2 py-1 rounded-md text-[#001d59] font-bold border border-slate-200">
+                    <span className="text-xs uppercase tracking-wide bg-[#f2f4f7] px-2.5 py-1 rounded-lg text-[#001d59] font-bold border border-slate-200">
                       EPA WARM v15
                     </span>
                   </div>
                   <div className="mt-4">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">CO2e Emissions Averted</span>
-                    <div className="text-3xl font-extrabold text-[#001d59] mt-1">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">CO2e Emissions Averted</span>
+                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">
                       89.4 <span className="text-lg text-[#747683] font-normal">MT</span>
                     </div>
-                    <div className="text-sm font-semibold text-[#16A34A]">Methane Abated from Landfills</div>
+                    <div className="text-sm sm:text-base font-bold text-[#16A34A]">Methane Abated from Landfills</div>
                   </div>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7] px-3 py-2 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs text-[#444652]">
+                <div className="mt-5 pt-2 bg-[#f2f4f7] px-3.5 py-2.5 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-[#444652]">
                     <span>Equiv. sequestered:</span>
                     <span className="font-bold text-[#001d59]">1,480 Tree Seedlings</span>
                   </div>
@@ -515,23 +515,23 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
               <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80">
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#dbe1ff]/50 flex items-center justify-center text-[#003087]">
-                      <span className="material-symbols-outlined text-[24px]">water_drop</span>
+                    <div className="w-12 h-12 rounded-xl bg-[#dbe1ff]/50 flex items-center justify-center text-[#003087]">
+                      <span className="material-symbols-outlined text-[26px]">water_drop</span>
                     </div>
-                    <span className="text-[10px] uppercase tracking-wide bg-[#f2f4f7] px-2 py-1 rounded-md text-[#001d59] font-bold border border-slate-200">
+                    <span className="text-xs uppercase tracking-wide bg-[#f2f4f7] px-2.5 py-1 rounded-lg text-[#001d59] font-bold border border-slate-200">
                       Agricultural Yield
                     </span>
                   </div>
                   <div className="mt-4">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Embedded Water Saved</span>
-                    <div className="text-3xl font-extrabold text-[#001d59] mt-1">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Embedded Water Saved</span>
+                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">
                       18.2 <span className="text-lg text-[#747683] font-normal">MLiters</span>
                     </div>
-                    <div className="text-sm font-semibold text-[#001d59]">Conservation Index</div>
+                    <div className="text-sm sm:text-base font-bold text-[#001d59]">Conservation Index</div>
                   </div>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7] px-3 py-2 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs text-[#444652]">
+                <div className="mt-5 pt-2 bg-[#f2f4f7] px-3.5 py-2.5 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-[#444652]">
                     <span>Equivalent usage:</span>
                     <span className="font-bold text-[#001d59]">48k Household Days</span>
                   </div>
@@ -542,21 +542,21 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
               <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80">
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#D97706]/10 flex items-center justify-center text-[#D97706]">
-                      <span className="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+                    <div className="w-12 h-12 rounded-xl bg-[#D97706]/10 flex items-center justify-center text-[#D97706]">
+                      <span className="material-symbols-outlined text-[26px]">account_balance_wallet</span>
                     </div>
-                    <span className="text-[10px] uppercase tracking-wide bg-[#f2f4f7] px-2 py-1 rounded-md text-[#001d59] font-bold border border-slate-200">
+                    <span className="text-xs uppercase tracking-wide bg-[#f2f4f7] px-2.5 py-1 rounded-lg text-[#001d59] font-bold border border-slate-200">
                       Fair Value Yield
                     </span>
                   </div>
                   <div className="mt-4">
-                    <span className="text-xs uppercase tracking-wider text-[#747683] font-bold">Economic Yield Recovered</span>
-                    <div className="text-3xl font-extrabold text-[#001d59] mt-1">$342,500</div>
-                    <div className="text-sm font-semibold text-[#D97706]">Direct Relief Delivered</div>
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Economic Yield Recovered</span>
+                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">$342,500</div>
+                    <div className="text-sm sm:text-base font-bold text-[#D97706]">Direct Relief Delivered</div>
                   </div>
                 </div>
-                <div className="mt-4 pt-2 bg-[#f2f4f7] px-3 py-2 rounded-lg border border-slate-100">
-                  <div className="flex items-center justify-between text-xs text-[#444652]">
+                <div className="mt-5 pt-2 bg-[#f2f4f7] px-3.5 py-2.5 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-[#444652]">
                     <span>Cost / Meal Saved:</span>
                     <span className="font-bold text-[#001d59]">$0.34 Logistics</span>
                   </div>
@@ -571,32 +571,32 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/80">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6">
                 <div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#005ab6]"></span>
-                    <span className="text-xs uppercase tracking-wider text-[#005ab6] font-bold">
+                    <span className="text-xs sm:text-sm uppercase tracking-wider text-[#005ab6] font-bold">
                       Regulatory Compliance
                     </span>
                   </div>
-                  <h2 className="text-2xl font-bold text-[#001d59] mt-1">Institutional ESG &amp; Scope 3 Mitigation</h2>
-                  <p className="text-xs text-[#444652] max-w-2xl mt-1 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#001d59] mt-1.5">Institutional ESG &amp; Scope 3 Mitigation</h2>
+                  <p className="text-sm text-[#444652] max-w-2xl mt-1 leading-relaxed">
                     Compliant with US SEC ESG Disclosure frameworks, IFRS S2 Climate Disclosures, and verified against EPA Waste Reduction Model (WARM) parameters.
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                   <button
                     onClick={handleExportRawCsv}
-                    className="h-11 px-4 bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] text-xs font-bold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-200"
+                    className="h-11 px-5 bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] text-sm font-bold rounded-xl flex items-center gap-2 transition-colors cursor-pointer border border-slate-200"
                   >
-                    <span className="material-symbols-outlined text-[18px]">table_view</span>
+                    <span className="material-symbols-outlined text-[20px]">table_view</span>
                     Export Raw CSV
                   </button>
                   <button
                     onClick={handleDownloadEsgReport}
-                    className="h-11 px-4 bg-[#001d59] hover:bg-[#003087] text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                    className="h-11 px-5 bg-[#001d59] hover:bg-[#003087] text-white text-sm font-bold rounded-xl flex items-center gap-2 shadow-sm transition-all cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-[18px]">download</span>
-                    Download ESG Scope 3 Report (XBRL/PDF)
+                    <span className="material-symbols-outlined text-[20px]">download</span>
+                    Download ESG Scope 3 Report
                   </button>
                 </div>
               </div>
@@ -609,10 +609,10 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                   <div>
                     <div className="flex items-center justify-between pb-4">
                       <div>
-                        <h3 className="text-base font-bold text-[#001d59]">Avoided Footprint by Classification</h3>
-                        <span className="text-xs text-[#747683]">EPA WARM v15 Verified Conversion Factors</span>
+                        <h3 className="text-lg font-bold text-[#001d59]">Avoided Footprint by Classification</h3>
+                        <span className="text-xs sm:text-sm text-[#747683]">EPA WARM v15 Verified Conversion Factors</span>
                       </div>
-                      <span className="text-xs bg-white px-2.5 py-1 rounded-md text-[#001d59] font-bold border border-slate-200">
+                      <span className="text-xs sm:text-sm bg-white px-3 py-1 rounded-lg text-[#001d59] font-bold border border-slate-200">
                         89.4 MT TOTAL
                       </span>
                     </div>
@@ -620,7 +620,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                     {/* Breakdown Bars */}
                     <div className="flex flex-col gap-4 mt-2">
                       <div>
-                        <div className="flex items-center justify-between text-xs pb-1.5">
+                        <div className="flex items-center justify-between text-sm pb-1.5">
                           <span className="text-[#001d59] font-bold flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-xs bg-[#001d59]"></span> Animal Proteins &amp; Prepared Entrees
                           </span>
@@ -632,7 +632,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-xs pb-1.5">
+                        <div className="flex items-center justify-between text-sm pb-1.5">
                           <span className="text-[#001d59] font-bold flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-xs bg-[#005ab6]"></span> Dairy, Cheese &amp; Cold Storage
                           </span>
@@ -644,7 +644,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-xs pb-1.5">
+                        <div className="flex items-center justify-between text-sm pb-1.5">
                           <span className="text-[#001d59] font-bold flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-xs bg-[#16A34A]"></span> Fresh Produce &amp; Seasonal Fruit
                           </span>
@@ -656,7 +656,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-xs pb-1.5">
+                        <div className="flex items-center justify-between text-sm pb-1.5">
                           <span className="text-[#001d59] font-bold flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-xs bg-[#D97706]"></span> Bakery, Grains &amp; Dry Goods
                           </span>
@@ -670,42 +670,42 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                   </div>
 
                   {/* Equivalency Cards */}
-                  <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-slate-200/80">
-                    <div className="bg-white p-4 rounded-xl flex items-center gap-3 border border-slate-100 shadow-xs">
-                      <div className="w-10 h-10 rounded-lg bg-[#f2f4f7] flex items-center justify-center text-[#001d59] shrink-0">
-                        <span className="material-symbols-outlined text-[20px]">directions_car</span>
+                  <div className="grid grid-cols-2 gap-4 mt-6 pt-5 border-t border-slate-200/80">
+                    <div className="bg-white p-4.5 rounded-xl flex items-center gap-3.5 border border-slate-100 shadow-xs">
+                      <div className="w-12 h-12 rounded-xl bg-[#f2f4f7] flex items-center justify-center text-[#001d59] shrink-0">
+                        <span className="material-symbols-outlined text-[24px]">directions_car</span>
                       </div>
                       <div>
-                        <div className="text-lg font-bold text-[#001d59]">74 Cars</div>
-                        <div className="text-xs text-[#747683]">Removed from road (12 mos)</div>
+                        <div className="text-xl font-black text-[#001d59]">74 Cars</div>
+                        <div className="text-sm text-[#747683]">Removed from road (12 mos)</div>
                       </div>
                     </div>
-                    <div className="bg-white p-4 rounded-xl flex items-center gap-3 border border-slate-100 shadow-xs">
-                      <div className="w-10 h-10 rounded-lg bg-[#f2f4f7] flex items-center justify-center text-[#16A34A] shrink-0">
-                        <span className="material-symbols-outlined text-[20px]">park</span>
+                    <div className="bg-white p-4.5 rounded-xl flex items-center gap-3.5 border border-slate-100 shadow-xs">
+                      <div className="w-12 h-12 rounded-xl bg-[#f2f4f7] flex items-center justify-center text-[#16A34A] shrink-0">
+                        <span className="material-symbols-outlined text-[24px]">park</span>
                       </div>
                       <div>
-                        <div className="text-lg font-bold text-[#001d59]">1,480 Trees</div>
-                        <div className="text-xs text-[#747683]">Seedlings grown 10 yrs</div>
+                        <div className="text-xl font-black text-[#001d59]">1,480 Trees</div>
+                        <div className="text-sm text-[#747683]">Seedlings grown 10 yrs</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* GHG Reduction Velocity & Operational Dispatch (Right 6 Cols) */}
-                <div className="lg:col-span-6 flex flex-col justify-between bg-[#f2f4f7] rounded-2xl p-6 border border-slate-200">
+                <div className="lg:col-span-6 flex flex-col justify-between bg-[#f2f4f7] rounded-2xl p-6 sm:p-7 border border-slate-200">
                   <div>
-                    <div className="flex items-center justify-between pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-2">
                       <div>
-                        <h3 className="text-base font-bold text-[#001d59]">GHG Reduction Velocity</h3>
-                        <span className="text-xs text-[#747683]">Metric Tons of CO2e Prevented (YoY Growth)</span>
+                        <h3 className="text-xl font-extrabold text-[#001d59]">GHG Reduction Velocity</h3>
+                        <span className="text-sm text-[#747683]">Metric Tons of CO2e Prevented (YoY Growth)</span>
                       </div>
-                      <div className="flex items-center gap-3 text-xs">
+                      <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1.5 text-[#747683]">
-                          <span className="w-3 h-3 rounded bg-[#e0e3e6] inline-block"></span> 2024
+                          <span className="w-3.5 h-3.5 rounded bg-[#e0e3e6] inline-block"></span> 2024
                         </div>
                         <div className="flex items-center gap-1.5 text-[#001d59] font-bold">
-                          <span className="w-3 h-3 rounded bg-[#005ab6] inline-block"></span> 2025 Active
+                          <span className="w-3.5 h-3.5 rounded bg-[#005ab6] inline-block"></span> 2025 Active
                         </div>
                       </div>
                     </div>
@@ -721,57 +721,57 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                         {/* Jan */}
                         <rect fill="#e0e3e6" height="55" rx="4" width="22" x="25" y="105"></rect>
                         <rect fill="#005ab6" height="90" rx="4" width="22" x="52" y="70"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="50" y="176">JAN</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="50" y="176">JAN</text>
                         
                         {/* Feb */}
                         <rect fill="#e0e3e6" height="62" rx="4" width="22" x="110" y="98"></rect>
                         <rect fill="#005ab6" height="98" rx="4" width="22" x="137" y="62"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="135" y="176">FEB</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="135" y="176">FEB</text>
                         
                         {/* Mar */}
                         <rect fill="#e0e3e6" height="68" rx="4" width="22" x="195" y="92"></rect>
                         <rect fill="#005ab6" height="110" rx="4" width="22" x="222" y="50"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="220" y="176">MAR</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="220" y="176">MAR</text>
                         
                         {/* Apr */}
                         <rect fill="#e0e3e6" height="74" rx="4" width="22" x="280" y="86"></rect>
                         <rect fill="#005ab6" height="118" rx="4" width="22" x="307" y="42"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="305" y="176">APR</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="305" y="176">APR</text>
                         
                         {/* May */}
                         <rect fill="#e0e3e6" height="80" rx="4" width="22" x="365" y="80"></rect>
                         <rect fill="#005ab6" height="132" rx="4" width="22" x="392" y="28"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="390" y="176">MAY</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="390" y="176">MAY</text>
                         
                         {/* Jun */}
                         <rect fill="#e0e3e6" height="86" rx="4" width="22" x="450" y="74"></rect>
                         <rect fill="#003087" height="146" rx="4" width="22" x="477" y="14"></rect>
-                        <text fill="#747683" fontSize="11" fontWeight="600" textAnchor="middle" x="475" y="176">JUN*</text>
+                        <text fill="#747683" fontSize="12" fontWeight="700" textAnchor="middle" x="475" y="176">JUN*</text>
                       </svg>
                     </div>
                   </div>
 
                   {/* Bottom Operational SLA Row */}
-                  <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-slate-200/80">
-                    <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xs">
-                      <span className="text-xs text-[#747683]">Avg Dispatch Latency</span>
-                      <div className="flex items-baseline gap-1 mt-1">
-                        <span className="text-lg font-bold text-[#001d59]">32.4</span>
-                        <span className="text-xs text-[#444652] font-medium">Minutes</span>
+                  <div className="grid grid-cols-2 gap-4 mt-6 pt-5 border-t border-slate-200/80">
+                    <div className="bg-white p-4.5 rounded-xl border border-slate-100 shadow-xs">
+                      <span className="text-sm font-semibold text-[#747683]">Avg Dispatch Latency</span>
+                      <div className="flex items-baseline gap-1.5 mt-1.5">
+                        <span className="text-2xl sm:text-3xl font-black text-[#001d59]">32.4</span>
+                        <span className="text-sm text-[#444652] font-bold">Minutes</span>
                       </div>
-                      <div className="text-xs text-[#16A34A] mt-1 flex items-center gap-1 font-semibold">
-                        <span className="material-symbols-outlined text-[14px]">bolt</span> Cold-Chain Preserved
+                      <div className="text-xs sm:text-sm text-[#16A34A] mt-2 flex items-center gap-1.5 font-bold">
+                        <span className="material-symbols-outlined text-[16px]">bolt</span> Cold-Chain Preserved
                       </div>
                     </div>
 
-                    <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xs">
-                      <span className="text-xs text-[#747683]">Fulfillment Reliability</span>
-                      <div className="flex items-baseline gap-1 mt-1">
-                        <span className="text-lg font-bold text-[#001d59]">99.4%</span>
-                        <span className="text-xs text-[#444652] font-medium">Success</span>
+                    <div className="bg-white p-4.5 rounded-xl border border-slate-100 shadow-xs">
+                      <span className="text-sm font-semibold text-[#747683]">Fulfillment Reliability</span>
+                      <div className="flex items-baseline gap-1.5 mt-1.5">
+                        <span className="text-2xl sm:text-3xl font-black text-[#001d59]">99.4%</span>
+                        <span className="text-sm text-[#444652] font-bold">Success</span>
                       </div>
-                      <div className="text-xs text-[#005ab6] mt-1 flex items-center gap-1 font-semibold">
-                        <span className="material-symbols-outlined text-[14px]">task_alt</span> 1,280 Audited Logs
+                      <div className="text-xs sm:text-sm text-[#005ab6] mt-2 flex items-center gap-1.5 font-bold">
+                        <span className="material-symbols-outlined text-[16px]">task_alt</span> 1,280 Audited Logs
                       </div>
                     </div>
                   </div>
@@ -782,26 +782,26 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
           </section>
 
           {/* SECTION: DONOR HONOR ROLL */}
-          <section className="max-w-[1440px] mx-auto px-6 w-full mt-10">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+          <section className="max-w-[1440px] mx-auto px-6 w-full mt-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8">
               <div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#D97706]"></span>
-                  <span className="text-xs uppercase tracking-wider text-[#D97706] font-bold">
+                  <span className="text-xs sm:text-sm uppercase tracking-wider text-[#D97706] font-bold">
                     Audited Contributions
                   </span>
                 </div>
-                <h2 className="text-2xl font-bold text-[#001d59] mt-1">Donor Honor Roll</h2>
-                <p className="text-xs text-[#444652] mt-1">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001d59] mt-2">Donor Honor Roll</h2>
+                <p className="text-sm sm:text-base text-[#444652] mt-2 max-w-2xl leading-relaxed">
                   Institutional and regional partners actively diverting commercial surplus to certified community recipients.
                 </p>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 bg-white p-1.5 rounded-xl shadow-xs border border-slate-200">
+              <div className="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-xl shadow-xs border border-slate-200">
                 <button
                   onClick={() => setDonorFilter('all')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer ${
                     donorFilter === 'all'
                       ? 'bg-[#001d59] text-white shadow-xs'
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
@@ -811,7 +811,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 </button>
                 <button
                   onClick={() => setDonorFilter('hospitality')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                     donorFilter === 'hospitality'
                       ? 'bg-[#001d59] text-white shadow-xs'
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
@@ -821,7 +821,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 </button>
                 <button
                   onClick={() => setDonorFilter('supermarket')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                     donorFilter === 'supermarket'
                       ? 'bg-[#001d59] text-white shadow-xs'
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
@@ -831,7 +831,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 </button>
                 <button
                   onClick={() => setDonorFilter('corporate')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                     donorFilter === 'corporate'
                       ? 'bg-[#001d59] text-white shadow-xs'
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
@@ -841,7 +841,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 </button>
                 <button
                   onClick={() => setDonorFilter('culinary')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
                     donorFilter === 'culinary'
                       ? 'bg-[#001d59] text-white shadow-xs'
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
@@ -853,37 +853,37 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             </div>
 
             {/* Donors Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {filteredDonors.map((donor) => (
                 <div
                   key={donor.id}
-                  className="bg-white rounded-2xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80"
+                  className="bg-white rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between border border-slate-200/80"
                 >
                   <div>
                     <div className="flex items-start justify-between">
                       <img
-                        className="w-12 h-12 rounded-xl object-cover bg-slate-100 border border-slate-200"
+                        className="w-14 h-14 rounded-xl object-cover bg-slate-100 border border-slate-200"
                         alt={donor.name}
                         src={donor.image}
                       />
-                      <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold ${donor.tierColor}`}>
+                      <span className={`text-xs px-3 py-1 rounded-full font-bold ${donor.tierColor}`}>
                         {donor.tier}
                       </span>
                     </div>
                     <div className="mt-4">
-                      <h4 className="text-base font-bold text-[#001d59]">{donor.name}</h4>
-                      <span className="text-xs text-[#747683]">{donor.location}</span>
+                      <h4 className="text-lg font-bold text-[#001d59]">{donor.name}</h4>
+                      <span className="text-sm text-[#747683]">{donor.location}</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-2 bg-[#f2f4f7] p-3 rounded-xl border border-slate-100">
+                  <div className="mt-5 pt-3 bg-[#f2f4f7] p-4 rounded-xl border border-slate-100">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-xl font-bold text-[#001d59]">{donor.meals}</span>
-                      <span className="text-xs font-bold text-[#16A34A]">Meals Rescued</span>
+                      <span className="text-2xl font-black text-[#001d59]">{donor.meals}</span>
+                      <span className="text-sm font-bold text-[#16A34A]">Meals Rescued</span>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-[#747683] mt-1">
+                    <div className="flex items-center justify-between text-xs sm:text-sm text-[#747683] mt-1.5">
                       <span>Audit: Continuous</span>
-                      <span className="font-semibold text-[#001d59]">{donor.co2}</span>
+                      <span className="font-bold text-[#001d59]">{donor.co2}</span>
                     </div>
                   </div>
                 </div>
@@ -892,48 +892,48 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
           </section>
 
           {/* SECTION: PAYPAL DIRECT MEAL SPONSORSHIP PORTAL */}
-          <section className="max-w-[1440px] mx-auto px-6 w-full mt-10 mb-12">
-            <div className="bg-gradient-to-br from-[#001d59] via-[#003087] to-[#002266] rounded-3xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden">
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <section className="max-w-[1440px] mx-auto px-6 w-full mt-12 mb-14">
+            <div className="bg-gradient-to-br from-[#001d59] via-[#003087] to-[#002266] rounded-3xl p-7 md:p-12 text-white shadow-xl relative overflow-hidden">
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                 
                 {/* Left Column: Mission, Transparency & Real-Time Matching */}
-                <div className="lg:col-span-6 flex flex-col gap-4">
-                  <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full w-fit border border-white/10">
-                    <span className="material-symbols-outlined text-[18px] text-[#d7e3ff]">volunteer_activism</span>
-                    <span className="text-xs font-bold text-white">Sponsor a Community Table</span>
+                <div className="lg:col-span-6 flex flex-col gap-5">
+                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full w-fit border border-white/10">
+                    <span className="material-symbols-outlined text-[20px] text-[#d7e3ff]">volunteer_activism</span>
+                    <span className="text-sm font-bold text-white">Sponsor a Community Table</span>
                   </div>
 
-                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
                     Every $1 Rescues <br />Up to 4 Fresh Meals.
                   </h2>
 
-                  <p className="text-sm text-[#dbe1ff] max-w-xl leading-relaxed">
+                  <p className="text-base sm:text-lg text-[#dbe1ff] max-w-xl leading-relaxed">
                     100% of community sponsorship funds fuel last-mile refrigerated couriers and insulated packaging. Institutional commercial kitchens donate the food for free; your sponsorship powers the cold-chain bridge.
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 text-xs">
-                      <span className="material-symbols-outlined text-[18px] text-[#16A34A]">verified_user</span>
-                      <span className="text-white font-semibold">100% Tax-Deductible 501(c)(3)</span>
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <div className="flex items-center gap-2 bg-white/10 px-3.5 py-2 rounded-xl border border-white/10 text-sm">
+                      <span className="material-symbols-outlined text-[20px] text-[#16A34A]">verified_user</span>
+                      <span className="text-white font-bold">100% Tax-Deductible 501(c)(3)</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 text-xs">
-                      <span className="material-symbols-outlined text-[18px] text-[#d7e3ff]">alt_route</span>
-                      <span className="text-white font-semibold">Real-Time GPS Dispatch</span>
+                    <div className="flex items-center gap-2 bg-white/10 px-3.5 py-2 rounded-xl border border-white/10 text-sm">
+                      <span className="material-symbols-outlined text-[20px] text-[#d7e3ff]">alt_route</span>
+                      <span className="text-white font-bold">Real-Time GPS Dispatch</span>
                     </div>
                   </div>
 
                   {/* Live Donor Matching Ticker */}
-                  <div className="mt-4 bg-white/5 backdrop-blur-md p-4 rounded-2xl flex items-center gap-4 border border-white/10">
-                    <div className="w-10 h-10 rounded-full bg-[#16A34A]/20 flex items-center justify-center shrink-0 text-[#16A34A]">
-                      <span className="material-symbols-outlined text-[20px]">sync_alt</span>
+                  <div className="mt-4 bg-white/10 backdrop-blur-md p-5 rounded-2xl flex items-center gap-4 border border-white/15">
+                    <div className="w-12 h-12 rounded-full bg-[#16A34A]/25 flex items-center justify-center shrink-0 text-[#16A34A]">
+                      <span className="material-symbols-outlined text-[24px]">sync_alt</span>
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-white font-bold">2x Community Match Active</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]"></span>
-                        <span className="text-[11px] text-[#dbe1ff]">8 mins ago</span>
+                        <span className="text-sm text-white font-bold">2x Community Match Active</span>
+                        <span className="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+                        <span className="text-xs text-[#dbe1ff]">8 mins ago</span>
                       </div>
-                      <p className="text-xs text-[#dbe1ff] truncate mt-0.5">
+                      <p className="text-sm text-[#dbe1ff] truncate mt-1">
                         Apex Logistics Corp matched $500 to the Metro Shelter Pool. All donations currently doubled.
                       </p>
                     </div>
@@ -942,131 +942,131 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
 
                 {/* Right Column: Interactive Sponsorship Selection Card */}
                 <div className="lg:col-span-6">
-                  <div className="bg-white text-[#191c1e] rounded-2xl p-6 md:p-8 shadow-2xl border border-slate-100">
-                    <div className="flex items-center justify-between pb-4">
+                  <div className="bg-white text-[#191c1e] rounded-2xl p-6 sm:p-9 shadow-2xl border border-slate-100">
+                    <div className="flex items-center justify-between pb-5 border-b border-slate-100">
                       <div>
-                        <h3 className="text-base font-bold text-[#001d59]">Select Sponsorship Level</h3>
-                        <span className="text-xs text-[#747683]">Processed through PayPal Giving Fund (0% fees)</span>
+                        <h3 className="text-xl font-extrabold text-[#001d59]">Select Sponsorship Level</h3>
+                        <span className="text-sm text-[#747683]">Processed through PayPal Giving Fund (0% platform fees)</span>
                       </div>
-                      <div className="flex items-center gap-1 bg-[#16A34A]/10 text-[#16A34A] px-2.5 py-1 rounded-md text-xs font-bold">
-                        <span className="material-symbols-outlined text-[16px]">check_circle</span> Zero Platform Cut
+                      <div className="flex items-center gap-1.5 bg-[#16A34A]/10 text-[#16A34A] px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold">
+                        <span className="material-symbols-outlined text-[18px]">check_circle</span> Zero Fees
                       </div>
                     </div>
 
                     {/* Tier Selection Radio Cards */}
-                    <div className="flex flex-col gap-2 mt-2">
+                    <div className="flex flex-col gap-3 mt-5">
                       {/* Tier 1 ($5) */}
                       <label
                         onClick={() => handleSelectTier(5)}
-                        className={`cursor-pointer flex items-center justify-between p-4 rounded-xl border transition-all ${
+                        className={`cursor-pointer flex items-center justify-between p-4.5 rounded-xl border transition-all ${
                           selectedDonation === 5
-                            ? 'bg-[#f2f4f7] border-[#005ab6]'
+                            ? 'bg-[#f2f4f7] border-[#005ab6] ring-1 ring-[#005ab6]'
                             : 'bg-[#f2f4f7]/50 border-slate-200 hover:bg-[#f2f4f7]'
                         }`}
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3.5">
                           <input
                             checked={selectedDonation === 5}
                             onChange={() => handleSelectTier(5)}
-                            className="w-4 h-4 text-[#005ab6] cursor-pointer"
+                            className="w-5 h-5 text-[#005ab6] cursor-pointer"
                             name="sponsorship_tier"
                             type="radio"
                           />
                           <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-base font-bold text-[#001d59]">$5.00</span>
-                              <span className="text-[10px] bg-[#005ab6]/10 text-[#005ab6] px-2 py-0.5 rounded-md font-bold">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-lg font-black text-[#001d59]">$5.00</span>
+                              <span className="text-xs bg-[#005ab6]/10 text-[#005ab6] px-2.5 py-0.5 rounded-md font-bold">
                                 Starter Impact
                               </span>
                             </div>
-                            <span className="text-xs text-[#444652]">Rescues 4 Nutritious Prepared Meals</span>
+                            <span className="text-sm text-[#444652] mt-0.5 block">Rescues 4 Nutritious Prepared Meals</span>
                           </div>
                         </div>
-                        <span className="material-symbols-outlined text-[#005ab6]">verified</span>
+                        <span className="material-symbols-outlined text-[#005ab6] text-[24px]">verified</span>
                       </label>
 
                       {/* Tier 2 ($25) */}
                       <label
                         onClick={() => handleSelectTier(25)}
-                        className={`cursor-pointer flex items-center justify-between p-4 rounded-xl border transition-all ${
+                        className={`cursor-pointer flex items-center justify-between p-4.5 rounded-xl border transition-all ${
                           selectedDonation === 25
-                            ? 'bg-[#f2f4f7] border-[#005ab6]'
+                            ? 'bg-[#f2f4f7] border-[#005ab6] ring-1 ring-[#005ab6]'
                             : 'bg-[#f2f4f7]/50 border-slate-200 hover:bg-[#f2f4f7]'
                         }`}
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3.5">
                           <input
                             checked={selectedDonation === 25}
                             onChange={() => handleSelectTier(25)}
-                            className="w-4 h-4 text-[#005ab6] cursor-pointer"
+                            className="w-5 h-5 text-[#005ab6] cursor-pointer"
                             name="sponsorship_tier"
                             type="radio"
                           />
                           <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-base font-bold text-[#001d59]">$25.00</span>
-                              <span className="text-[10px] bg-[#001d59]/10 text-[#001d59] px-2 py-0.5 rounded-md font-bold">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-lg font-black text-[#001d59]">$25.00</span>
+                              <span className="text-xs bg-[#001d59]/10 text-[#001d59] px-2.5 py-0.5 rounded-md font-bold">
                                 Courier Route
                               </span>
                             </div>
-                            <span className="text-xs text-[#444652]">Funds Cold-Chain Route for 20 Meals</span>
+                            <span className="text-sm text-[#444652] mt-0.5 block">Funds Cold-Chain Route for 20 Meals</span>
                           </div>
                         </div>
-                        <span className="material-symbols-outlined text-[#747683]">local_shipping</span>
+                        <span className="material-symbols-outlined text-[#747683] text-[24px]">local_shipping</span>
                       </label>
 
                       {/* Tier 3 ($100) */}
                       <label
                         onClick={() => handleSelectTier(100)}
-                        className={`cursor-pointer flex items-center justify-between p-4 rounded-xl border transition-all ${
+                        className={`cursor-pointer flex items-center justify-between p-4.5 rounded-xl border transition-all ${
                           selectedDonation === 100
-                            ? 'bg-[#f2f4f7] border-[#005ab6]'
+                            ? 'bg-[#f2f4f7] border-[#005ab6] ring-1 ring-[#005ab6]'
                             : 'bg-[#f2f4f7]/50 border-slate-200 hover:bg-[#f2f4f7]'
                         }`}
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3.5">
                           <input
                             checked={selectedDonation === 100}
                             onChange={() => handleSelectTier(100)}
-                            className="w-4 h-4 text-[#005ab6] cursor-pointer"
+                            className="w-5 h-5 text-[#005ab6] cursor-pointer"
                             name="sponsorship_tier"
                             type="radio"
                           />
                           <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-base font-bold text-[#001d59]">$100.00</span>
-                              <span className="text-[10px] bg-[#D97706]/10 text-[#D97706] px-2 py-0.5 rounded-md font-bold">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-lg font-black text-[#001d59]">$100.00</span>
+                              <span className="text-xs bg-[#D97706]/10 text-[#D97706] px-2.5 py-0.5 rounded-md font-bold">
                                 Full Shelter
                               </span>
                             </div>
-                            <span className="text-xs text-[#444652]">Sponsors an Entire Shelter Dinner (80 Meals)</span>
+                            <span className="text-sm text-[#444652] mt-0.5 block">Sponsors an Entire Shelter Dinner (80 Meals)</span>
                           </div>
                         </div>
-                        <span className="material-symbols-outlined text-[#747683]">soup_kitchen</span>
+                        <span className="material-symbols-outlined text-[#747683] text-[24px]">soup_kitchen</span>
                       </label>
                     </div>
 
                     {/* Custom Amount Input */}
-                    <div className="mt-4">
-                      <label className="block text-xs text-[#001d59] font-bold mb-1.5">
+                    <div className="mt-5">
+                      <label className="block text-sm text-[#001d59] font-bold mb-2">
                         Or Enter Custom Amount ($ USD)
                       </label>
                       <div className="flex items-center gap-3">
                         <div className="relative flex-1">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#747683] text-base font-bold">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#747683] text-lg font-bold">
                             $
                           </span>
                           <input
-                            className="w-full h-11 pl-8 pr-4 bg-[#f2f4f7] rounded-lg text-base text-[#001d59] font-bold focus:outline-none focus:bg-white border border-slate-200"
+                            className="w-full h-12 pl-9 pr-4 bg-[#f2f4f7] rounded-xl text-lg text-[#001d59] font-bold focus:outline-none focus:bg-white border border-slate-200"
                             min="1"
                             type="number"
                             value={customInput}
                             onChange={(e) => handleCustomChange(e.target.value)}
                           />
                         </div>
-                        <div className="bg-[#f2f4f7] px-4 py-2 rounded-lg flex flex-col items-center justify-center shrink-0 border border-slate-200">
-                          <span className="text-[10px] text-[#747683]">Direct Relief</span>
-                          <span className="text-xs text-[#16A34A] font-bold">
+                        <div className="bg-[#f2f4f7] px-5 py-2.5 rounded-xl flex flex-col items-center justify-center shrink-0 border border-slate-200">
+                          <span className="text-xs text-[#747683]">Direct Relief</span>
+                          <span className="text-sm font-black text-[#16A34A]">
                             {calculateMeals(selectedDonation)} Verified Meals
                           </span>
                         </div>
@@ -1074,13 +1074,13 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                     </div>
 
                     {/* High-Visibility PayPal CTA */}
-                    <div className="mt-6 flex flex-col gap-2">
+                    <div className="mt-6 flex flex-col gap-2.5">
                       <button
                         onClick={handlePayPalDonation}
                         disabled={isProcessingPayPal}
-                        className="w-full h-12 bg-[#0070E0] hover:bg-[#005CBD] active:scale-[0.99] text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
+                        className="w-full h-14 bg-[#0070E0] hover:bg-[#005CBD] active:scale-[0.99] text-white rounded-xl text-base font-bold flex items-center justify-center gap-2.5 transition-all shadow-md cursor-pointer"
                       >
-                        <svg className="h-5 w-auto" fill="none" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="h-6 w-auto" fill="none" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
                           <path
                             d="M12.5 4.5H5.8C5.2 4.5 4.7 4.9 4.6 5.5L1.8 23.2C1.7 23.6 2.1 24 2.5 24H5.8L7.2 15.2C7.3 14.6 7.8 14.2 8.4 14.2H11.3C15.8 14.2 18.8 12.3 19.6 7.6C19.9 5.8 19.4 4.5 18 3.8C16.8 3.1 14.8 4.5 12.5 4.5Z"
                             fill="#FFFFFF"
@@ -1095,10 +1095,10 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
 
                       <div className="flex items-center justify-between text-[#747683] text-xs px-1 mt-1">
                         <span className="flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[14px]">lock</span> 256-Bit Encrypted
+                          <span className="material-symbols-outlined text-[15px]">lock</span> 256-Bit Encrypted
                         </span>
                         <span>Instant Tax Receipt Sent</span>
-                        <span className="font-mono text-[10px]">ID: LEDGER-TX-418</span>
+                        <span className="font-mono text-xs font-semibold">ID: LEDGER-TX-418</span>
                       </div>
                     </div>
                   </div>
@@ -1118,20 +1118,20 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
             <div className="flex items-center gap-2">
               <img
                 alt="FOODLOOP Brand Logo"
-                className="h-6 w-auto object-contain"
+                className="h-7 w-auto object-contain"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="text-lg font-bold text-[#001d59] tracking-tight">FOODLOOP</span>
-              <span className="text-xs text-[#444652] ml-2 hidden sm:inline">Every Meal Deserves a Chance.</span>
+              <span className="text-xl font-extrabold text-[#001d59] tracking-tight">FOODLOOP</span>
+              <span className="text-sm text-[#444652] ml-2 hidden sm:inline">Every Meal Deserves a Chance.</span>
             </div>
-            <div className="flex items-center gap-6 text-xs text-[#444652]">
+            <div className="flex items-center gap-6 text-sm text-[#444652] font-medium">
               <a className="hover:text-[#001d59] transition-colors" href="#">Privacy Policy</a>
               <a className="hover:text-[#001d59] transition-colors" href="#">Fintech Ledger Terms</a>
               <a className="hover:text-[#001d59] transition-colors" href="#">API Docs</a>
               <a className="hover:text-[#001d59] transition-colors" href="#">Support</a>
             </div>
           </div>
-          <div className="mt-6 text-center md:text-left text-xs text-[#747683]">
+          <div className="mt-6 text-center md:text-left text-xs sm:text-sm text-[#747683]">
             © 2025 FOODLOOP Global Redistribution Technologies. Institutional Grade Logistics &amp; Settlement.
           </div>
         </div>
