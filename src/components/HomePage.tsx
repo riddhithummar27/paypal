@@ -68,24 +68,6 @@ export const HomePage: React.FC<HomePageProps> = ({
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuBktJq3xeMWKCzRlhpKndMJZJif1-LJypzizXaHncBJILeEGl3F0UxwgvwufN94qBvpHIEut12qDUpVW8UN8kfQJYD3pHEX3gYw0T0610y4IANQ6SH1brV9LtjlnXusRNKRFDU8sn3AImqsjjgTymBhJ3395f0IIjOW8u2R7G8CLSdym8uId9846Z-N9-2Qibsw0NikEEhzfTLTemT3vdui9bFf9O4pFCitjY5hI6k',
     },
-    {
-      id: 2,
-      quote:
-        '"The automated PayPal micro-settlement makes operations painless. When community drivers deliver to our pantry, the system handles expense reimbursements transparently and immediately."',
-      name: 'Marcus Thorne',
-      role: 'Director, Hope Harbor Shelter',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDPkUfOMhLNHE6cOPieJXAPvMKZR7beIDQgXKcuBRyxnPK25Rg7p88CVFZRbeYyxWT3ZYKDPCSBLTQc6X3DOof_Psz4_CR2YyZ6s2kG1lWYSg-NcZZN0CY1rGrtYpraaZNwPx_jIwCFW5SfvC_XWxYV3-4suZHSgYjvhtXYUw0Ty8GAABPVi5usR_YRNQhtCDPruCD7rHCSfeaUB6MImN0Mdz6ca87wIZBZhX7jt70',
-    },
-    {
-      id: 3,
-      quote:
-        '"As a grad student living on a tight budget, the app connects me to great bakery boxes that would otherwise go to waste. It feels respectful, high-tech, and genuinely community-driven."',
-      name: 'Sarah Lin',
-      role: 'Community Recipient, Metro Area',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuC60G6syg22rZNiyrH-qZjrV8oQt2_8L_VGvZ0FFJAoQUxYyltpcOf8TvsT6NpmBuYJuAnh-PpgF_1TpRAQJkI-X2MIsef2GNyccnT56K7lCYUS-8VKv93DahLbb15XyNe6o8XH4sES2HIAVue1oezH_pGp-7tNU66rxsFK5gJNzRL_ujsR-tSyG6XFZxQvVNUMNtdKC10Wye_3Nb7jUSn-3EIViWjJXjGKqSIm3QQ',
-    },
   ];
 
   return (
@@ -472,7 +454,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 max-w-2xl mx-auto w-full gap-6">
                 
                 {/* Step 1 */}
                 <div className="p-6 rounded-[20px] bg-white shadow-sm border border-[#e6e8eb] flex flex-col justify-between hover:shadow-md transition-all duration-300">
@@ -825,7 +807,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 max-w-2xl mx-auto w-full gap-6">
                 {testimonials.map((t) => (
                   <div key={t.id} className="bg-white p-6 rounded-[20px] shadow-sm border border-[#e6e8eb] flex flex-col justify-between">
                     <div>

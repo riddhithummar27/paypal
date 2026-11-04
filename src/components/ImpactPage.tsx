@@ -48,90 +48,6 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
       image:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuCcZzsoWhU9xsKXehffcsZT9lF_K9MSiI8v-d0dfxl8X55FqyzsErtBE_Bxyh1ULSLzbSrq1wrM55YC-7VUPTDqW__Vbe1WAeUT5gFSC-l-IOpN1XZPDPSQfFzPonz3rItztmGW0X-z5HfBaqTKs9kD7OAfpaFgSojnZKpJU2Yk1CJhf-AtTqHzzB3DGcKouJPAXE0h-hq-6Ns7tVSGZszXo8jicvv0S5dy7wb2Uis',
     },
-    {
-      id: '2',
-      name: 'Whole Foods Market',
-      category: 'supermarket',
-      location: '8 Metro Distribution Hubs',
-      meals: '15,100',
-      co2: '9.4 MT CO2e',
-      tier: 'Enterprise Tier',
-      tierColor: 'bg-[#001d59]/10 text-[#001d59]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuB_kLCskQT9oSawx1E74hJFe6HdhlPkvqAz9Ey_ge21smN_ttAuauJdCIup5lCV3ML4ebU4LVhn03Yvz6o3STyV2dLLN3DckwauKRxZdUP1027VkZE-BOZByOtJejTPDdhc3O99Aw_g0VilQg3usFpE5asodHgTWZJu7BdLodmJXLDDY6bQXbSjBxEr_Vdv-vLQH4JBTEwIcIzi50lqrrCER8dtIdAFWMg7UbxbXUU',
-    },
-    {
-      id: '3',
-      name: 'Google Cafeterias',
-      category: 'corporate',
-      location: 'Bay Area & NYC HQ Kitchens',
-      meals: '12,850',
-      co2: '8.1 MT CO2e',
-      tier: 'Enterprise Tier',
-      tierColor: 'bg-[#001d59]/10 text-[#001d59]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuA-Z1PLD3JbeUsAUSfvvO5xjPBAe6DYFL-m9tjD1aKWTmGrW5zMhHzwhOzToMe2bqAQXCRT00E67IEX7wFKo_HqFY8-ZoBYNEIA-zOxJwUISf_x8pIu1Bc7r9ItRMPxaD6JPBqrFlIAz9E2OWZunsdrQq9bOjLkwEe738N94115G75nfzfuNCx1QF1bx7eboev5vF6QRzK8jssouV1u8HYQCWCMb7KAC7Viq7-pA_g',
-    },
-    {
-      id: '4',
-      name: 'Sweetgreen',
-      category: 'culinary',
-      location: '18 Urban Outlets',
-      meals: '9,200',
-      co2: '5.8 MT CO2e',
-      tier: 'Enterprise Tier',
-      tierColor: 'bg-[#001d59]/10 text-[#001d59]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuB3ViI4bmQiILVh5BZCf4Zsi51tBBYCFaT2hJ0Bdavx5xPADTrWlberpmkg0PmRhm5jNP5VKtz4btDq0gW1Hs2a1rSnG2Mz9d3SZfPubETPch3LY0_q46ro9sNhjdWoyCQq_uc4_EowEgZQLpSgNLfGMkoPaURFJT1euBc5hWpv7-r4e1AKFfxyD-GUeM6TMPSp_lgrZCzP2dy3yDmutSzPrXV8oo0o2WhrOy4vbwE',
-    },
-    {
-      id: '5',
-      name: 'Le Matin Bakery',
-      category: 'culinary',
-      location: 'Artisanal Patisserie & Bread',
-      meals: '4,180',
-      co2: '2.6 MT CO2e',
-      tier: 'Culinary Hero',
-      tierColor: 'bg-[#D97706]/10 text-[#D97706]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDEGhoTORYVFhZuFpFQh3x736HEPidmYm6yWHvHotXOaCJ1_NXG6uUBXmowdUEZsfxfQPdTpywmqENMG2wOYHq_w-UDyLWvexoovObsanknlNTqU5cUIJM73bwAswmrN1iTRrCJgO-gat_NibqGJv-BQBDxsRlDQoO6GhLguTcxP02JgCWSYKOUqHNMrUth8MU_atR-mKNuNJY8NLy24uC2clCAS6-sY2ywqXjmK4k',
-    },
-    {
-      id: '6',
-      name: 'Grand Plaza Bistro',
-      category: 'hospitality',
-      location: 'Downtown Center Kitchen',
-      meals: '3,650',
-      co2: '2.3 MT CO2e',
-      tier: 'Culinary Hero',
-      tierColor: 'bg-[#D97706]/10 text-[#D97706]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCv2GVOSub7yiAS8bQD7QcxFDJ_g8-ENorfbs3YsVxHBDSzyZ_DDClGbsihFeULTeUU3htiv2W93bNiWZn07rGSwncMaYW5T_xanDkLytt5Ed_I2XfTJdaRlxjGQOTl4cGl8msqVyTwobUn_AC4T9MvXsoDreajRTSkVZLab51qnvawm621urlbh0SkQIC82EAMR3A1ufAb04RVafZSf0q-u_36yfxVXvkZI1nk1J0',
-    },
-    {
-      id: '7',
-      name: 'Harvest Market Co-op',
-      category: 'supermarket',
-      location: 'Community Owned Grocery',
-      meals: '2,910',
-      co2: '1.8 MT CO2e',
-      tier: 'Culinary Hero',
-      tierColor: 'bg-[#D97706]/10 text-[#D97706]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuB3vMz_-EZSO6rtNkbqfTfC9oGZu-crO1lEU1FzJcZkwNcyArdGOlmOJJQTLnPmp5nLqT5aFIdLUs0W656r24GKHmQuaWkaT9ODvZ4DxXzx36oE3ojy5jMjQ2WsiP8HrYo06igZbhLnZwjV0S5_fpcFduPSbPrxxzhexlOZRrVmnysEtZKZ_DKhiu7rENZWIJ8ch62eN_iUX9X7TMAeUB-dr_-_mSgtau_Z4Yv7Zu8',
-    },
-    {
-      id: '8',
-      name: 'Blue Harbor Wharf',
-      category: 'culinary',
-      location: 'Seafood & Coastal Catering',
-      meals: '2,140',
-      co2: '1.3 MT CO2e',
-      tier: 'Culinary Hero',
-      tierColor: 'bg-[#D97706]/10 text-[#D97706]',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuADE-979xhkjaz3tYKxVsyBpbliJd2SR3vGT2ih-uPSAjpMeqb7AtsDnGv-yf5YpM5SzpdeEz0r4lyQhaF2ozPPYjH0z6_1pj1pqOdn8d-x0v0C7yxuJqGCD_RhusDAs5dcEiq8mfxilJWB8Pal-TrsgXa5Jm4kdwZ5YHaWOh0UdUNzyshiyDRxMO-cJdXJvquT5YyG5wjVv-ooyyCBTN5MNZs7ukZzP47NW-QpA8k',
-    },
   ];
 
   const showToast = (msg: string) => {
@@ -246,7 +162,10 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
   const filteredDonors = donors.filter((d) => {
     if (donorFilter === 'all') return true;
     return d.category === donorFilter;
-  });
+  }).length > 0 ? donors.filter((d) => {
+    if (donorFilter === 'all') return true;
+    return d.category === donorFilter;
+  }) : donors;
 
   return (
     <div className="bg-[#f7f9fc] font-sans text-[#191c1e] antialiased min-h-screen flex flex-col selection:bg-[#005ab6]/20 selection:text-[#001d59]">
@@ -807,7 +726,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                       : 'text-[#444652] hover:text-[#001d59] hover:bg-[#f2f4f7]'
                   }`}
                 >
-                  All Donors (182)
+                  All Donors (1)
                 </button>
                 <button
                   onClick={() => setDonorFilter('hospitality')}

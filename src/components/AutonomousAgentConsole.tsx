@@ -40,37 +40,13 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
   // High-volume batch queue matched state
   const [matchedQueues, setMatchedQueues] = useState<Record<string, boolean>>({});
 
-  // Activity Log State
+  // Activity Log State (Single active live log)
   const [activityLogs, setActivityLogs] = useState<ActivityItem[]>([
     {
       id: '1',
       title: 'Automated split allocation computed',
       meta: 'Just now • Algorithm convergence in 0.18s',
       icon: 'notifications_active',
-    },
-    {
-      id: '2',
-      title: 'Thermal core temperature telemetry received (142.8°F)',
-      meta: '2m ago • IoT Sensor Pack #827',
-      icon: 'sensors',
-    },
-    {
-      id: '3',
-      title: 'Volunteer Elena K. accepted dynamic routing prompt',
-      meta: '5m ago • Cargo E-Bike Fleet',
-      icon: 'person_check',
-    },
-    {
-      id: '4',
-      title: 'Smart ledger custody contract generated #0x892a...c3',
-      meta: '8m ago • Gasless verification',
-      icon: 'receipt_long',
-    },
-    {
-      id: '5',
-      title: 'Batch #FL-8839 closed: 45 meals delivered to Covenant House',
-      meta: '18m ago • 100% redemption rate',
-      icon: 'done_all',
     },
   ]);
 
@@ -629,40 +605,22 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
                       </span>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="mt-4 grid grid-cols-1 gap-4">
                       {/* Destination 1 */}
-                      <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-100">
+                      <div className="bg-white rounded-lg p-5 shadow-sm border border-slate-100">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#001d59] text-sm">Shelter Hope Downtown</span>
-                          <span className="px-2 py-0.5 rounded bg-[#d7e3ff] text-[#001d59] font-bold text-xs">
-                            50 Meals
+                          <span className="font-bold text-[#001d59] text-base">Shelter Hope Downtown</span>
+                          <span className="px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001d59] font-bold text-xs">
+                            80 Meals (100% Allocation)
                           </span>
                         </div>
-                        <p className="text-xs text-[#444652] mt-1">1.2 km away • Current occupancy 94%</p>
-                        <div className="mt-3 flex items-center justify-between text-xs">
+                        <p className="text-xs sm:text-sm text-[#444652] mt-1.5">1.2 km away • Cold-chain direct carrier assigned</p>
+                        <div className="mt-3.5 flex items-center justify-between text-xs sm:text-sm">
                           <span className="text-[#747683]">Assigned Carrier</span>
-                          <span className="font-semibold text-[#001d59]">Van Unit #09 (Carlos M.)</span>
+                          <span className="font-bold text-[#001d59]">Van Unit #09 (Carlos M.)</span>
                         </div>
-                        <div className="w-full bg-[#f2f4f7] h-2 rounded-full mt-2 overflow-hidden">
-                          <div className="bg-[#005ab6] h-full rounded-full" style={{ width: '62.5%' }}></div>
-                        </div>
-                      </div>
-
-                      {/* Destination 2 */}
-                      <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-100">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#001d59] text-sm">St. Jude Community Mission</span>
-                          <span className="px-2 py-0.5 rounded bg-[#d7e3ff] text-[#001d59] font-bold text-xs">
-                            30 Meals
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#444652] mt-1">2.4 km away • Dinner service starts in 50m</p>
-                        <div className="mt-3 flex items-center justify-between text-xs">
-                          <span className="text-[#747683]">Assigned Carrier</span>
-                          <span className="font-semibold text-[#001d59]">Cargo E-Bike (Elena K.)</span>
-                        </div>
-                        <div className="w-full bg-[#f2f4f7] h-2 rounded-full mt-2 overflow-hidden">
-                          <div className="bg-[#001d59] h-full rounded-full" style={{ width: '37.5%' }}></div>
+                        <div className="w-full bg-[#f2f4f7] h-2.5 rounded-full mt-2.5 overflow-hidden">
+                          <div className="bg-[#005ab6] h-full rounded-full" style={{ width: '100%' }}></div>
                         </div>
                       </div>
                     </div>

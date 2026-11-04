@@ -44,7 +44,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
   const [selectedManifest, setSelectedManifest] = useState<BatchItem | null>(null);
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
 
-  // Table batch rows
+  // Table batch rows (single active live batch)
   const [batches, setBatches] = useState<BatchItem[]>([
     {
       id: '#FL-9021',
@@ -59,58 +59,9 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
       thermalType: 'hot',
       perishTime: '01h 44m Left',
       isUrgent: true,
-      logisticsStatus: 'Fleet Assigned (Bike #02)',
+      logisticsStatus: 'Fleet Assigned (Truck #01)',
       logisticsType: 'assigned',
       actionType: 'manifest',
-    },
-    {
-      id: '#FL-8842',
-      qrCode: 'QR-08',
-      venue: 'Whole Foods Market River St',
-      category: 'Organic Produce',
-      description: 'Crisper greens, citrus, root veg',
-      weight: '320 kg',
-      portions: '8 Carts',
-      thermalStatus: '3.8°C HACCP A',
-      thermalIcon: 'ac_unit',
-      thermalType: 'chilled',
-      perishTime: '06h 15m Left',
-      logisticsStatus: 'In Transit (Truck #01)',
-      logisticsType: 'transit',
-      actionType: 'manifest',
-    },
-    {
-      id: '#FL-8819',
-      qrCode: 'URGENT',
-      venue: 'Seaport Convention Center',
-      category: 'Bakery & Pastry Trays',
-      description: 'Croissants, brioche & artisanal loaves',
-      weight: '140 kg',
-      portions: '600 Portions',
-      thermalStatus: 'Ambient (19°C)',
-      thermalIcon: 'eco',
-      thermalType: 'ambient',
-      perishTime: '00h 52m Critical',
-      isUrgent: true,
-      logisticsStatus: 'Unclaimed Open Pool',
-      logisticsType: 'unclaimed',
-      actionType: 'claim',
-    },
-    {
-      id: '#FL-8790',
-      qrCode: 'QR-06',
-      venue: 'Harvard Dining Services',
-      category: 'Chilled Protein Stews',
-      description: 'Blast-chilled poultry & lentils',
-      weight: '220 kg',
-      portions: '550 Portions',
-      thermalStatus: '2.4°C Validated',
-      thermalIcon: 'ac_unit',
-      thermalType: 'chilled',
-      perishTime: '04h 30m Left',
-      logisticsStatus: 'Handshake Verified',
-      logisticsType: 'verified',
-      actionType: 'cert',
     },
   ]);
 
@@ -717,8 +668,8 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </div>
               </div>
 
-              {/* Telemetry Cards Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {/* Telemetry Cards Grid (Single active live vehicle) */}
+              <div className="grid grid-cols-1 gap-4">
                 
                 {/* Truck #01 Card */}
                 <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
@@ -775,134 +726,6 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                     </span>
                     <button
                       onClick={() => setSelectedRoute('Truck #01 (Marcus V.)')}
-                      className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
-                      type="button"
-                    >
-                      Live Route <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Cargo Bike #02 Card */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-start justify-between mb-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-[#e7deff] flex items-center justify-center text-[#270070]">
-                          <span className="material-symbols-outlined text-[24px]">electric_bike</span>
-                        </div>
-                        <div>
-                          <h3 className="text-base font-bold text-[#001d59]">Cargo Bike #02 (Express)</h3>
-                          <p className="text-xs sm:text-sm text-[#747683]">Driver: Elena S. • ID: FL-BOS-BK2</p>
-                        </div>
-                      </div>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#d7e3ff] text-[#001b3f] text-xs sm:text-sm font-bold">
-                        ETA 14:32 (26m)
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
-                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
-                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Thermal Container</span>
-                        <span className="text-sm text-[#ba1a1a] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[18px]">local_fire_department</span> 66.5°C Hot
-                        </span>
-                      </div>
-                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
-                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Payload Mass</span>
-                        <span className="text-sm text-[#001d59] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[18px]">scale</span> 45 kg (Entrees)
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="bg-[#f2f4f7]/70 p-3 rounded-xl mb-3.5 text-xs sm:text-sm">
-                      <div className="flex items-center justify-between text-[#747683] text-xs mb-1.5">
-                        <span>Route Progress</span>
-                        <span className="text-[#001d59] font-bold">45% Complete</span>
-                      </div>
-                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
-                        <div className="h-full bg-[#005ab6] rounded-full" style={{ width: '45%' }}></div>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[#191c1e] truncate font-medium">
-                        <span className="font-bold text-[#001d59]">Back Bay Hotels</span>
-                        <span className="material-symbols-outlined text-[18px] text-[#747683]">arrow_forward</span>
-                        <span className="font-bold text-[#005ab6]">Bay St Mobile Pantry</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100">
-                    <span className="text-[#747683] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[18px] text-[#005ab6]">battery_charging_full</span> E-Power: 82%
-                    </span>
-                    <button
-                      onClick={() => setSelectedRoute('Cargo Bike #02 (Elena S.)')}
-                      className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
-                      type="button"
-                    >
-                      Live Route <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Transit Van #04 Card */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-start justify-between mb-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-[#eceef1] flex items-center justify-center text-[#001d59]">
-                          <span className="material-symbols-outlined text-[24px]">airport_shuttle</span>
-                        </div>
-                        <div>
-                          <h3 className="text-base font-bold text-[#001d59]">Transit Van #04 (Sub-Zero)</h3>
-                          <p className="text-xs sm:text-sm text-[#747683]">Driver: Devon K. • ID: FL-BOS-VN4</p>
-                        </div>
-                      </div>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#ffdad6] text-[#93000a] text-xs sm:text-sm font-bold">
-                        ETA 14:45 (39m • Slow)
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
-                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
-                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Freezer Pod Temp</span>
-                        <span className="text-sm text-[#005ab6] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[18px]">ac_unit</span> -18.4°C Freeze
-                        </span>
-                      </div>
-                      <div className="bg-[#f2f4f7] p-2.5 rounded-xl">
-                        <span className="text-xs text-[#747683] block font-semibold mb-0.5">Payload Mass</span>
-                        <span className="text-sm text-[#001d59] font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[18px]">scale</span> 290 kg (Stews)
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="bg-[#f2f4f7]/70 p-3 rounded-xl mb-3.5 text-xs sm:text-sm">
-                      <div className="flex items-center justify-between text-[#747683] text-xs mb-1.5">
-                        <span className="text-[#ba1a1a] flex items-center gap-1 font-bold">
-                          <span className="material-symbols-outlined text-[16px]">traffic</span> I-93 Congestion (+11m)
-                        </span>
-                        <span className="text-[#001d59] font-bold">22% Complete</span>
-                      </div>
-                      <div className="h-2 w-full bg-[#eceef1] rounded-full overflow-hidden mb-2">
-                        <div className="h-full bg-[#0872e2] rounded-full" style={{ width: '22%' }}></div>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[#191c1e] truncate font-medium">
-                        <span className="font-bold text-[#001d59]">North End Markets</span>
-                        <span className="material-symbols-outlined text-[18px] text-[#747683]">arrow_forward</span>
-                        <span className="font-bold text-[#005ab6]">Central Dock B</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between text-xs sm:text-sm border-t border-slate-100">
-                    <span className="text-[#747683] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[18px] text-[#005ab6]">thermostat_auto</span> Compressor Active
-                    </span>
-                    <button
-                      onClick={() => setSelectedRoute('Transit Van #04 (Devon K.)')}
                       className="text-[#005ab6] font-bold hover:underline flex items-center gap-1 cursor-pointer text-sm"
                       type="button"
                     >
@@ -1202,48 +1025,16 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                       <span>18:00</span>
                     </div>
 
-                    {/* Bay 1: Dock A Cold Storage Ramp */}
+                    {/* Bay 1: Dock A Cold Storage Ramp (Primary Active Dock) */}
                     <div className="flex items-center gap-3">
                       <div className="w-36 shrink-0">
                         <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Dock A (Cold Ramp)</span>
                         <span className="text-xs text-[#005ab6] font-medium">Rapid Chill active</span>
                       </div>
                       <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
-                        <div className="absolute left-[18%] w-[28%] h-10 rounded-md bg-[#005ab6] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
+                        <div className="absolute left-[18%] w-[45%] h-10 rounded-md bg-[#005ab6] text-white px-3 py-1 flex flex-col justify-center shadow-xs">
                           <span className="text-xs sm:text-sm font-bold truncate">Truck #01 (Marcus V.)</span>
-                          <span className="text-xs text-white/90 truncate">640 kg Chilled • ETA 14:18</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bay 2: Dock B Dry & Ambient Bay */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-36 shrink-0">
-                        <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Dock B (Ambient)</span>
-                        <span className="text-xs text-[#747683]">Pallet Jack Ready</span>
-                      </div>
-                      <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
-                        <div className="absolute left-[26%] w-[32%] h-10 rounded-md bg-[#001d59] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
-                          <span className="text-xs sm:text-sm font-bold truncate">Van #04 (Devon K.)</span>
-                          <span className="text-xs text-white/90 truncate">290 kg Sub-Zero • ETA 14:45</span>
-                        </div>
-                        <div className="absolute left-[62%] w-[24%] h-10 rounded-md bg-[#eceef1] text-[#444652] px-2.5 py-1 flex flex-col justify-center border border-dashed border-slate-300">
-                          <span className="text-xs font-semibold truncate">Scheduled Alloc #92</span>
-                          <span className="text-xs text-[#747683] truncate">Whole Foods Delivery</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bay 3: Mobile Receiving Bay C */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-36 shrink-0">
-                        <span className="text-xs sm:text-sm font-bold text-[#001d59] block truncate">Bay C (Mobile/Bike)</span>
-                        <span className="text-xs text-[#005ab6] font-semibold">Fast Handshake</span>
-                      </div>
-                      <div className="flex-1 h-12 bg-[#f2f4f7] rounded-lg relative overflow-hidden flex items-center p-1 border border-slate-100">
-                        <div className="absolute left-[22%] w-[18%] h-10 rounded-md bg-[#270070] text-white px-2.5 py-1 flex flex-col justify-center shadow-xs">
-                          <span className="text-xs sm:text-sm font-bold truncate">Bike #02 (Elena)</span>
-                          <span className="text-xs text-white/90 truncate">45 kg Hot • 14:32</span>
+                          <span className="text-xs text-white/90 truncate">640 kg Chilled • ETA 14:18 (Docked)</span>
                         </div>
                       </div>
                     </div>

@@ -628,15 +628,13 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 <div className="flex items-center gap-2">
                   <span className="text-base font-bold text-[#001d59]">Recent Food Listings</span>
                   <span className="bg-[#005ab6]/10 text-[#005ab6] text-xs px-2.5 py-0.5 rounded-full font-bold">
-                    3 Active
+                    1 Active
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   {[
                     { id: 'all', label: 'All' },
                     { id: 'en_route', label: 'En Route' },
-                    { id: 'pending', label: 'Ready' },
-                    { id: 'completed', label: 'Delivered' },
                   ].map((f) => (
                     <button
                       key={f.id}
@@ -653,30 +651,29 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 </div>
               </div>
 
-              {/* Listings Stream */}
+              {/* Listings Stream (Single clean active listing) */}
               <div className="flex flex-col gap-3">
-                {/* Item 1 */}
-                {(listingFilter === 'all' || listingFilter === 'en_route') && (
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        className="w-14 h-14 rounded-xl object-cover shrink-0"
-                        alt="Rustic Sourdough"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXgJxF8XlPe2SWtCGy5xpXxnq5zGyinFS-J5ZzHIUbffQGVU9i6OS8kxQGjnxe5nF6au6OoFlFdbGMlU9Q4ZNsZM95_3_NIuUE1ZOSDH3TZO_P55M0e9kXN4eN3m5z424z9TDa9ofFUcxoTbAb0-I369UP5K9YX1fYshCLK9Y7c6JDIQK1cbvCxqgE5h9Sv3LsOBcW03QkHcz5rf3IGjq4PoiAfk7Bha8KHqWKdPM"
-                      />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-[#001d59] text-sm">Rustic Artisan Sourdough</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-[#005ab6] font-bold">
-                            En Route
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#747683] mt-0.5">
-                          32 Portions • Matched to St. Jude Community Pantry
-                        </p>
+                <div className="bg-white p-4.5 rounded-2xl shadow-sm border border-[#e6e8eb] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <img
+                      className="w-14 h-14 rounded-xl object-cover shrink-0"
+                      alt="Rustic Sourdough"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXgJxF8XlPe2SWtCGy5xpXxnq5zGyinFS-J5ZzHIUbffQGVU9i6OS8kxQGjnxe5nF6au6OoFlFdbGMlU9Q4ZNsZM95_3_NIuUE1ZOSDH3TZO_P55M0e9kXN4eN3m5z424z9TDa9ofFUcxoTbAb0-I369UP5K9YX1fYshCLK9Y7c6JDIQK1cbvCxqgE5h9Sv3LsOBcW03QkHcz5rf3IGjq4PoiAfk7Bha8KHqWKdPM"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#001d59] text-sm">Rustic Artisan Sourdough</span>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#005ab6] font-bold">
+                          En Route
+                        </span>
                       </div>
+                      <p className="text-xs sm:text-sm text-[#747683] mt-1">
+                        32 Portions • Matched to St. Jude Community Pantry
+                      </p>
                     </div>
+                  </div>
 
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => openVerificationModal('LP-8842', 'Rustic Artisan Sourdough', 'St. Jude Community Pantry')}
                       className="h-10 px-4 rounded-xl bg-[#005ab6] hover:bg-[#004494] text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm shrink-0"
@@ -684,72 +681,15 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                       <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
                       <span>Verify Handshake</span>
                     </button>
-                  </div>
-                )}
-
-                {/* Item 2 */}
-                {(listingFilter === 'all' || listingFilter === 'pending') && (
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        className="w-14 h-14 rounded-xl object-cover shrink-0"
-                        alt="Warm Grain Bowls"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVi6qeBKFvFS0TrysT_kNA-OQh9YPiEei3_y0omi6TO5YCNWYo4movamY8ovJjb3MvN7dhZ7hfgCjRXmT4F5FhSctiBfA-U8DmEdQVB_gmD0GVEEuB5K9QE9fgMGpBWrYPhSSvBBeWAGf43b6faVqm5IwJrWniDIKvPrhXU5ioW16y2ojrt4rO7f0WJtaFgUjColz9IaPD-_3OZD-vLWE-ECWwxEjVxm3rdpZhip0"
-                      />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-[#001d59] text-sm">Warm Grain Bowls &amp; Salmon</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold">
-                            Ready for Pickup
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#747683] mt-0.5">
-                          18 Servings • Matched to Hope Outreach Shelter
-                        </p>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => openVerificationModal('LP-8843', 'Warm Grain Bowls', 'Hope Outreach Shelter')}
-                      className="h-10 px-4 rounded-xl bg-[#f2f4f7] hover:bg-[#e6e8eb] text-[#001d59] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-slate-200"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">qr_code_scanner</span>
-                      <span>Claim Token</span>
-                    </button>
-                  </div>
-                )}
-
-                {/* Item 3 */}
-                {(listingFilter === 'all' || listingFilter === 'completed') && (
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        className="w-14 h-14 rounded-xl object-cover shrink-0"
-                        alt="Dairy Cartons"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF6Q4TJr4KPt91aQ1-0Nt-Plba6QalmvlNUgnc0URXoFLtdWs-K2aOm8z-ibocsYlPCcqtPOyWpfXuLjF8mqjk3yIRuleQ-ewUn1qstW7xEz4ug5Pn4sS8ly8ISfw3Kbg9v5dz6XcoDIR1FHYN-FEtI3iHPQhQhaztEzktqbuswISLubmwCQoH2xqrG1qaTIwbYvcZNHxoMl6CipjQIxHVZJbvxsOxkI1uh9FkpQk"
-                      />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-[#001d59] text-sm">Pasteurized Dairy Cartons</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold">
-                            Delivered
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#747683] mt-0.5">
-                          40 Quarts • Delivered to Downtown Food Bank
-                        </p>
-                      </div>
-                    </div>
-
                     <button
                       onClick={handleTaxSlip}
-                      className="h-10 px-4 rounded-xl bg-[#f2f4f7] hover:bg-[#e6e8eb] text-[#747683] hover:text-[#001d59] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-slate-200"
+                      className="h-10 px-3.5 rounded-xl bg-[#f2f4f7] hover:bg-[#e6e8eb] text-[#747683] hover:text-[#001d59] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-slate-200"
                     >
                       <span className="material-symbols-outlined text-[18px]">receipt</span>
                       <span>Receipt</span>
                     </button>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
