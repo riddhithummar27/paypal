@@ -20,6 +20,8 @@ export interface FoodListing {
   pickupDeadlineMinutes: number;
   location: string;
   distanceKm: number;
+  lat?: number;
+  lng?: number;
   allergens: string[];
   storageTemp: 'Hot (>60°C)' | 'Chilled (<5°C)' | 'Room Temp (15-25°C)';
   safetyDeclaration: boolean;

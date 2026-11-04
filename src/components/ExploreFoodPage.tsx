@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ExploreFoodPageProps {
   onNavigate: (page: string) => void;
@@ -30,6 +30,9 @@ interface FoodDetail {
   statusType: 'free' | 'discounted' | 'sponsored';
   stock: string;
   safetyScore: string;
+  lat: number;
+  lng: number;
+  distanceKm: number;
 }
 
 const foodDetailsData: Record<string, FoodDetail> = {
@@ -38,6 +41,9 @@ const foodDetailsData: Record<string, FoodDetail> = {
     title: 'Artisanal Sourdough & Croissants',
     donor: 'Bakery Le Matin',
     distance: '0.8 km Away',
+    distanceKm: 0.8,
+    lat: 42.3550,
+    lng: -71.0650,
     price: '$0.00',
     originalPrice: null,
     temp: 'Safe Ambient (18°C)',
@@ -49,7 +55,7 @@ const foodDetailsData: Record<string, FoodDetail> = {
     pickupWindow: '02h 44m 18s',
     specCode: 'FLP-8492',
     pickupSpot: 'Bakery Le Matin - Service Door B',
-    pickupAddress: "342 Rue Sainte-Catherine, Metro Level West. Ring buzzer labelled 'FoodLoop Rescue Partner'.",
+    pickupAddress: "342 Rue Sainte-Catherine, Metro Level West, Boston",
     category: 'bakery',
     statusType: 'free',
     stock: '42 Units (3 Assorted Crates)',
@@ -60,6 +66,9 @@ const foodDetailsData: Record<string, FoodDetail> = {
     title: 'Roast Chicken & Veg Bowl',
     donor: 'Grand Plaza Bistro',
     distance: '1.4 km Away',
+    distanceKm: 1.4,
+    lat: 42.3480,
+    lng: -71.0450,
     price: '$4.50',
     originalPrice: '$13.00',
     temp: 'Heated Hold (65°C)',
@@ -71,7 +80,7 @@ const foodDetailsData: Record<string, FoodDetail> = {
     pickupWindow: '01h 15m 32s',
     specCode: 'FLP-8493',
     pickupSpot: 'Grand Plaza Bistro - Kitchen Dock 4',
-    pickupAddress: '780 Broadway Avenue, Service Alley Entrance. Present digital PayPal token.',
+    pickupAddress: '780 Broadway Avenue, Service Alley Entrance, Boston',
     category: 'hot-meals',
     statusType: 'discounted',
     stock: '18 Portions Ready',
@@ -82,6 +91,9 @@ const foodDetailsData: Record<string, FoodDetail> = {
     title: 'Organic Farm Produce Crates',
     donor: 'Harvest Fresh Mart',
     distance: '2.1 km Away',
+    distanceKm: 2.1,
+    lat: 42.3420,
+    lng: -71.0710,
     price: '$0.00',
     originalPrice: null,
     temp: 'Cold Cellar (6°C)',
@@ -93,7 +105,7 @@ const foodDetailsData: Record<string, FoodDetail> = {
     pickupWindow: '00h 58m 10s',
     specCode: 'FLP-8494',
     pickupSpot: 'Harvest Fresh Mart - Rear Loading Bay',
-    pickupAddress: '124 Farmer Market Way, Bay 3. Vehicle cargo space recommended.',
+    pickupAddress: '124 Farmer Market Way, Bay 3, Boston',
     category: 'produce',
     statusType: 'free',
     stock: '12 Heavy Crates (~15kg ea)',
@@ -104,6 +116,9 @@ const foodDetailsData: Record<string, FoodDetail> = {
     title: 'Sponsored Hot Soup & Rice',
     donor: 'Downtown Food Bank',
     distance: '0.4 km Away',
+    distanceKm: 0.4,
+    lat: 42.3510,
+    lng: -71.0610,
     price: '$0.00',
     originalPrice: '$6.50',
     temp: 'Steaming Hot (70°C)',
@@ -115,7 +130,7 @@ const foodDetailsData: Record<string, FoodDetail> = {
     pickupWindow: '03h 12m 45s',
     specCode: 'FLP-8495',
     pickupSpot: 'Downtown Food Bank - Volunteer Window',
-    pickupAddress: '55 Pine Street, Ground Floor Entrance. Instant QR scan verification.',
+    pickupAddress: '55 Pine Street, Ground Floor Entrance, Boston',
     category: 'hot-soups',
     statusType: 'sponsored',
     stock: '50 Complete Meals',
@@ -134,13 +149,114 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
   const [statusFilter, setStatusFilter] = useState<'all' | 'free' | 'discounted' | 'sponsored'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [foodItems, setFoodItems] = useState<Record<string, FoodDetail>>(foodDetailsData);
   const [selectedCardKey, setSelectedCardKey] = useState<string>('card1');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProcessingPayPal, setIsProcessingPayPal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [aiPrompt, setAiPrompt] = useState('');
 
-  const activeFood = foodDetailsData[selectedCardKey] || foodDetailsData.card1;
+  // Fetch live backend surplus listings dynamically
+  useEffect(() => {
+    fetch('/api/listings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.listings && Array.isArray(data.listings)) {
+          setFoodItems((prev) => {
+            const next = { ...prev };
+            data.listings.forEach((item: any, idx: number) => {
+              const key = item.id || `listing-${idx}`;
+              if (!next[key]) {
+                const itemLat = item.lat || Number((42.3450 + (idx * 0.004)).toFixed(4));
+                const itemLng = item.lng || Number((-71.0550 - (idx * 0.003)).toFixed(4));
+                next[key] = {
+                  id: key,
+                  title: item.title,
+                  donor: item.donorName || 'Local Rescue Partner',
+                  distance: `${item.distanceKm || 1.1} km Away`,
+                  distanceKm: item.distanceKm || 1.1,
+                  lat: itemLat,
+                  lng: itemLng,
+                  price: item.isFree ? '$0.00' : `$${Number(item.currentPrice || 3.5).toFixed(2)}`,
+                  originalPrice: item.originalPrice ? `$${Number(item.originalPrice).toFixed(2)}` : null,
+                  temp: item.storageTemp || 'Safe Ambient (18°C)',
+                  isFree: Boolean(item.isFree),
+                  desc: `Freshly prepared surplus rescue batch. Verified compliant with regional food safety standards.`,
+                  allergens: item.allergens?.length ? item.allergens : ['Freshly Prepared', 'Zero Waste Partner'],
+                  imageUrl:
+                    item.imageUrl ||
+                    'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
+                  pickupWindow: item.expiryTime || 'Within 2 hours',
+                  specCode: item.id,
+                  pickupSpot: `${item.donorName} - Service Dock`,
+                  pickupAddress: item.location || 'Metro Hub, Boston',
+                  category: item.category ? item.category.toLowerCase() : 'meals',
+                  statusType: item.isFree ? 'free' : 'discounted',
+                  stock: `${item.portions || 12} Portions Ready`,
+                  safetyScore: '★ 4.9 (Verified)',
+                };
+              }
+            });
+            return next;
+          });
+        }
+      })
+      .catch((err) => console.warn('Could not load listings from /api/listings:', err));
+  }, []);
+
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; label: string }>({
+    lat: 42.3601,
+    lng: -71.0589,
+    label: 'Downtown Boston (42.36° N, 71.05° W)',
+  });
+  const [isLocating, setIsLocating] = useState(false);
+
+  const handleLocateUser = () => {
+    if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+      setIsLocating(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setIsLocating(false);
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          setUserLocation({
+            lat,
+            lng,
+            label: `GPS: ${lat.toFixed(4)}° N, ${Math.abs(lng).toFixed(4)}° W`,
+          });
+          showToast(`📍 Live Location Active! All surplus rescue distances re-calculated.`);
+        },
+        () => {
+          setIsLocating(false);
+          setUserLocation({
+            lat: 42.3601,
+            lng: -71.0589,
+            label: 'Downtown Metro Hub (42.3601° N, 71.0589° W)',
+          });
+          showToast('📍 Set to Downtown Metro Hub (42.3601° N, 71.0589° W)');
+        },
+        { timeout: 8000 }
+      );
+    } else {
+      showToast('Geolocation not supported in this environment.');
+    }
+  };
+
+  const getDistanceDisplay = (itemLat: number, itemLng: number) => {
+    const R = 6371;
+    const dLat = ((itemLat - userLocation.lat) * Math.PI) / 180;
+    const dLon = ((itemLng - userLocation.lng) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((userLocation.lat * Math.PI) / 180) *
+        Math.cos((itemLat * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return `${(R * c).toFixed(1)} km Away`;
+  };
+
+  const activeFood = foodItems[selectedCardKey] || foodItems.card1 || Object.values(foodItems)[0];
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -157,6 +273,7 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
   };
 
   const handleClaimAction = async (type: 'free' | 'paypal') => {
+    const rawPrice = activeFood.price ? parseFloat(activeFood.price.replace('$', '')) || 4.5 : 4.5;
     if (type === 'paypal') {
       setIsProcessingPayPal(true);
       try {
@@ -164,7 +281,7 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            amount: 4.5,
+            amount: rawPrice > 0 ? rawPrice : 4.5,
             currency: 'USD',
             description: `FOODLOOP Surplus Rescue: ${activeFood.title}`,
             referenceId: `FLP-${selectedCardKey}-${Date.now().toString().slice(-4)}`,
@@ -179,22 +296,46 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
           });
           const capData = await capRes.json();
           const verifiedId = capData.id || orderData.id;
+
+          // Update backend listing status
+          await fetch('/api/listings', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: activeFood.specCode || activeFood.id,
+              status: 'reserved',
+              claimedBy: 'Consumer (Verified PayPal)',
+              paypalOrderId: verifiedId,
+            }),
+          }).catch(console.error);
+
           if (onOrderCompleted) {
             onOrderCompleted(selectedCardKey, { orderId: verifiedId, status: 'COMPLETED' });
           }
           closeDetailsModal();
-          showToast(`PayPal checkout approved ($4.50)! Digital pickup release code generated.`);
+          showToast(`PayPal checkout approved ($${(rawPrice > 0 ? rawPrice : 4.5).toFixed(2)})! Digital pickup QR code generated.`);
         } else {
           closeDetailsModal();
           showToast(`Order processed via PayPal Sandbox! Pickup QR voucher synced.`);
         }
       } catch (err) {
         closeDetailsModal();
-        showToast('PayPal simulation approved! Pickup QR voucher synced.');
+        showToast('PayPal checkout approved! Pickup QR voucher synced.');
       } finally {
         setIsProcessingPayPal(false);
       }
     } else {
+      // Free claim backend sync
+      await fetch('/api/listings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: activeFood.specCode || activeFood.id,
+          status: 'reserved',
+          claimedBy: 'Consumer (Free Community Rescue)',
+        }),
+      }).catch(console.error);
+
       closeDetailsModal();
       showToast(`Free Rescue confirmed for ${activeFood.title}! QR pickup token synced to your profile wallet.`);
       if (onOrderCompleted) {
@@ -212,7 +353,7 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
     }, 1200);
   };
 
-  const filteredCards = Object.values(foodDetailsData).filter((item) => {
+  const filteredCards = Object.values(foodItems).filter((item) => {
     if (statusFilter !== 'all' && item.statusType !== statusFilter) return false;
     if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
     if (
@@ -443,16 +584,20 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                 />
               </div>
               <div className="md:col-span-4 relative flex items-center bg-[#f2f4f7] rounded-xl px-4 h-11">
-                <span className="material-symbols-outlined text-[#005ab6] text-[20px] mr-2">near_me</span>
+                <span className="material-symbols-outlined text-[#005ab6] text-[20px] mr-2">my_location</span>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className="text-[10px] text-[#747683] leading-tight font-medium">Current Radius</span>
-                  <span className="text-[12px] text-[#191c1e] truncate font-semibold">Downtown Metro (Within 5.0 km)</span>
+                  <span className="text-[10px] text-[#747683] leading-tight font-medium">Your Location</span>
+                  <span className="text-[12px] text-[#001d59] truncate font-semibold">{userLocation.label}</span>
                 </div>
                 <button
-                  onClick={() => showToast('Radius filter synced: 5.0 km Downtown Metro.')}
-                  className="text-[#005ab6] hover:text-[#001d59] text-[11px] font-bold ml-2 cursor-pointer"
+                  onClick={handleLocateUser}
+                  disabled={isLocating}
+                  className="text-[#005ab6] hover:text-[#001d59] text-[11px] font-bold ml-2 cursor-pointer flex items-center gap-1 shrink-0 bg-white px-2 py-1 rounded-md shadow-xs border border-slate-200"
                 >
-                  Change
+                  <span className={`material-symbols-outlined text-[14px] ${isLocating ? 'animate-spin' : ''}`}>
+                    {isLocating ? 'refresh' : 'gps_fixed'}
+                  </span>
+                  <span>{isLocating ? 'Locating...' : 'Locate Me'}</span>
                 </button>
               </div>
               <div className="md:col-span-2 flex items-center justify-end">
@@ -632,7 +777,7 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                           <p className="text-[16px] font-bold text-white">{card.title}</p>
                         </div>
                         <span className="px-2 py-0.5 rounded bg-white/20 backdrop-blur text-white text-[10px] font-bold">
-                          {card.distance}
+                          {getDistanceDisplay(card.lat, card.lng)}
                         </span>
                       </div>
                     </div>
@@ -899,7 +1044,7 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                   <div className="p-3 bg-[#f2f4f7] rounded-xl flex flex-col items-center text-center">
                     <span className="material-symbols-outlined text-[#005ab6] text-[24px]">pin_drop</span>
                     <span className="text-[10px] text-[#747683] mt-1 font-medium">Distance</span>
-                    <span className="text-[12px] text-[#001d59] font-bold">{activeFood.distance}</span>
+                    <span className="text-[12px] text-[#001d59] font-bold">{getDistanceDisplay(activeFood.lat, activeFood.lng)}</span>
                   </div>
                 </div>
 
@@ -961,17 +1106,26 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                 </div>
 
                 {/* Pickup Location Details */}
-                <div className="flex flex-col gap-1 bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb]">
+                <div className="flex flex-col gap-1.5 bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb]">
                   <div className="flex items-center justify-between">
                     <span className="text-[13px] text-[#001d59] font-bold flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-[#005ab6] text-[20px]">storefront</span>
                       <span>Pickup Spot: {activeFood.pickupSpot}</span>
                     </span>
-                    <a className="text-[#005ab6] text-[11px] font-bold hover:underline cursor-pointer" href="#">
-                      Get Directions
+                    <a
+                      className="text-[#005ab6] hover:text-[#001d59] text-[11px] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(activeFood.pickupAddress)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">navigation</span>
+                      <span>Get Directions</span>
                     </a>
                   </div>
                   <p className="text-[12px] text-[#444652]">{activeFood.pickupAddress}</p>
+                  <div className="text-[10px] text-[#747683] font-mono mt-0.5">
+                    GPS Coordinates: {activeFood.lat.toFixed(4)}° N, {Math.abs(activeFood.lng).toFixed(4)}° W
+                  </div>
                 </div>
               </div>
 

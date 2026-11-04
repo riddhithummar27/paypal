@@ -23,6 +23,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
   const [foodTitle, setFoodTitle] = useState('');
   const [category, setCategory] = useState('Bakery & Pastries');
   const [expiryWindow, setExpiryWindow] = useState('Tonight, 8:30 PM');
+  const [locationAddress, setLocationAddress] = useState('742 Boylston St, Back Bay, Boston');
   const [tempProfile, setTempProfile] = useState('Ambient / Room Temp');
   const [allergens, setAllergens] = useState<string[]>(['Gluten', 'Nut Free', 'Vegetarian']);
 
@@ -70,8 +71,10 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       prepTime: 'Fresh',
       expiryTime: 'Within 2 hours',
       pickupDeadlineMinutes: 60,
-      location: 'Downtown Hub (Zone 4)',
+      location: locationAddress || '742 Boylston St, Back Bay, Boston',
       distanceKm: 0.5,
+      lat: 42.3498,
+      lng: -71.0805,
       allergens: allergens,
       storageTemp: 'Hot (>60°C)',
       safetyDeclaration: true,
@@ -515,6 +518,24 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                     required
                     type="text"
                   />
+                </div>
+
+                {/* Pickup Location Address */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-bold text-[#001d59]">Pickup Location / Address</label>
+                  <div className="relative">
+                    <input
+                      className="w-full h-11 pl-9 pr-3.5 bg-[#f2f4f7] rounded-xl text-sm text-[#191c1e] placeholder:text-[#747683] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200"
+                      placeholder="e.g., 742 Boylston St, Back Bay, Boston"
+                      value={locationAddress}
+                      onChange={(e) => setLocationAddress(e.target.value)}
+                      required
+                      type="text"
+                    />
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#005ab6] text-[18px]">
+                      pin_drop
+                    </span>
+                  </div>
                 </div>
 
                 {/* Category & Quantity */}

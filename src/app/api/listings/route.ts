@@ -65,6 +65,8 @@ export async function POST(req: NextRequest) {
       pickupDeadlineMinutes: Number(body.pickupDeadlineMinutes) || 60,
       location: body.location || 'Metro Hub (Zone 1)',
       distanceKm: Number(body.distanceKm) || 0.8,
+      lat: Number(body.lat) || Number((42.3500 + Math.random() * 0.015).toFixed(4)),
+      lng: Number(body.lng) || Number((-71.0600 - Math.random() * 0.015).toFixed(4)),
       allergens: body.allergens || [],
       storageTemp: body.storageTemp || 'Hot (>60°C)',
       safetyDeclaration: true,

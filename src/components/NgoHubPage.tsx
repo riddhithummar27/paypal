@@ -154,6 +154,15 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
           urgency: 'Critical (<60m)',
         }),
       });
+      await fetch('/api/listings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: batchId.replace('#', ''),
+          status: 'in_transit',
+          claimedBy: 'Greater Boston Food Alliance Hub',
+        }),
+      }).catch(console.error);
     } catch {
       // Local fallback
     }
@@ -316,21 +325,54 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
             <div className="bg-[#f2f4f7] p-4 rounded-xl space-y-3 text-xs mb-4">
               <div className="flex justify-between">
                 <span className="text-[#747683]">Current Coordinates:</span>
-                <span className="font-mono font-bold text-[#001d59]">42.3601° N, 71.0589° W</span>
+                <span className="font-mono font-bold text-[#001d59]">
+                  {selectedRoute.includes('Bike')
+                    ? '42.3550° N, 71.0650° W (Back Bay Corridor)'
+                    : selectedRoute.includes('Van')
+                    ? '42.3480° N, 71.0450° W (I-93 Seaport Expy)'
+                    : '42.3601° N, 71.0589° W (Downtown Boston Central)'}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#747683]">Vehicle Telemetry:</span>
-                <span className="font-bold text-emerald-600">IoT Probe Live • Speed: 24 km/h</span>
+                <span className="font-bold text-emerald-600">
+                  {selectedRoute.includes('Bike')
+                    ? 'E-Cargo Sensor Live • Speed: 19 km/h'
+                    : selectedRoute.includes('Van')
+                    ? 'Sub-Zero Pod Active (-18.4°C) • Speed: 28 km/h'
+                    : 'IoT Dock Probe Live • Speed: 38 km/h'}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#747683]">Destination ETA:</span>
-                <span className="font-bold text-[#005ab6]">12 Minutes to Central Dock</span>
+                <span className="font-bold text-[#005ab6]">
+                  {selectedRoute.includes('Bike')
+                    ? '14 Minutes to Bay St Mobile Pantry'
+                    : selectedRoute.includes('Van')
+                    ? '24 Minutes to Central Refrigerated Depot'
+                    : '12 Minutes to Central Dock'}
+                </span>
               </div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              <a
+                href={
+                  selectedRoute.includes('Bike')
+                    ? 'https://www.google.com/maps/dir/?api=1&destination=42.3550,-71.0650'
+                    : selectedRoute.includes('Van')
+                    ? 'https://www.google.com/maps/dir/?api=1&destination=42.3480,-71.0450'
+                    : 'https://www.google.com/maps/dir/?api=1&destination=42.3601,-71.0589'
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-lg bg-[#005ab6] text-white font-bold text-xs flex items-center gap-1.5 hover:bg-[#003087] transition-all cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">navigation</span>
+                <span>Open in Google Maps</span>
+              </a>
               <button
                 onClick={() => setSelectedRoute(null)}
-                className="px-4 py-2 rounded-lg bg-[#001d59] text-white font-bold text-xs"
+                className="px-4 py-2 rounded-lg bg-[#eceef1] hover:bg-[#e0e3e6] text-[#001d59] font-bold text-xs cursor-pointer"
               >
                 Close Map Track
               </button>

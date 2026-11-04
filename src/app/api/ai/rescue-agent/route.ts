@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SHELTER_NODES } from '@/lib/mockData';
+import { addDispatchSlot } from '@/lib/store';
 
 interface AllocationRequest {
   portions: number;
@@ -81,6 +82,23 @@ export async function POST(req: NextRequest) {
         urgency: 'STANDARD',
       });
     }
+
+    // Persist real dispatch slots to the global store so Bryntum and NGO Hub reflect them live
+    allocations.forEach((alloc, idx) => {
+      addDispatchSlot({
+        id: `DSP-AI-${Date.now().toString(36).toUpperCase()}-${idx}`,
+        batchId: `BATCH-${Date.now().toString().slice(-4)}-${idx}`,
+        foodTitle: foodTitle || 'Surplus Meals',
+        timeSlot: alloc.timeSlot,
+        donorName: donorName || 'Marriott Regency Hotel',
+        shelterName: alloc.shelterName,
+        portions: alloc.portionsAllocated,
+        volunteerName: `${alloc.volunteerType} Unit #${10 + idx}`,
+        vehicleType: alloc.volunteerType.includes('Bike') ? 'Cargo Bike' : 'Van',
+        status: 'In Transit',
+        urgency: alloc.urgency.includes('CRITICAL') ? 'Critical (<30m)' : 'Standard',
+      });
+    });
 
     const totalAllocated = portions;
     const co2OffsetKg = Number((portions * 2.5).toFixed(1)); // Average 2.5kg CO2 offset per meal rescued
