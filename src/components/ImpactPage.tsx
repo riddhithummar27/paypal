@@ -267,10 +267,10 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin</option>
+                <option value="donor">1. Food Seller / Donor</option>
+                <option value="recipient">2. Food Buyer / Consumer</option>
+                <option value="ngo">3. NGO Logistics Hub</option>
+                <option value="admin">4. Admin &amp; AI Agent</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more

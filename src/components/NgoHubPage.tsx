@@ -305,6 +305,22 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </span>
               </div>
             </div>
+            {/* Google Maps Real Embed for Live Route */}
+            <div className="relative w-full h-[180px] rounded-xl overflow-hidden border border-slate-200 mb-4 bg-slate-100 shadow-inner">
+              <iframe
+                title={`Google Maps ${selectedRoute}`}
+                src={`https://maps.google.com/maps?q=${
+                  selectedRoute.includes('Bike')
+                    ? '42.3550,-71.0650'
+                    : selectedRoute.includes('Van')
+                    ? '42.3480,-71.0450'
+                    : '42.3601,-71.0589'
+                }&hl=en&z=15&output=embed`}
+                className="w-full h-full border-0"
+                loading="lazy"
+              />
+            </div>
+
             <div className="flex justify-end gap-3">
               <a
                 href={
@@ -424,10 +440,10 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="admin">Role: Admin</option>
+                <option value="donor">1. Food Seller / Donor</option>
+                <option value="recipient">2. Food Buyer / Consumer</option>
+                <option value="ngo">3. NGO Logistics Hub</option>
+                <option value="admin">4. Admin &amp; AI Agent</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
@@ -463,6 +479,44 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
       <main className="w-full pt-16 bg-[#f7f9fc]">
         <div className="flex flex-col w-full">
           
+          {/* 4 Dedicated Dashboards Switcher Bar */}
+          <div className="w-full bg-[#f2f4f7] px-6 py-2.5 border-b border-slate-200">
+            <div className="max-w-[1440px] mx-auto flex items-center gap-2 overflow-x-auto">
+              <span className="text-[11px] font-bold text-[#747683] px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                <span className="material-symbols-outlined text-[15px] text-[#005ab6]">dashboard</span>
+                4 Dashboards:
+              </span>
+              <button
+                onClick={() => onNavigate('donor-portal')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-white text-[#444652] hover:bg-slate-200 cursor-pointer shadow-xs"
+              >
+                <span className="material-symbols-outlined text-[16px] text-amber-600">storefront</span>
+                <span>1. Food Seller / Donor</span>
+              </button>
+              <button
+                onClick={() => onNavigate('explore-food')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-white text-[#444652] hover:bg-slate-200 cursor-pointer shadow-xs"
+              >
+                <span className="material-symbols-outlined text-[16px] text-emerald-600">shopping_cart</span>
+                <span>2. Food Buyer / Consumer</span>
+              </button>
+              <button
+                onClick={() => onNavigate('ngo-hub')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#001d59] text-white shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px] text-blue-400">local_shipping</span>
+                <span>3. NGO Logistics Hub</span>
+              </button>
+              <button
+                onClick={() => onNavigate('ai-rescue-agent')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-white text-[#444652] hover:bg-slate-200 cursor-pointer shadow-xs"
+              >
+                <span className="material-symbols-outlined text-[16px] text-purple-600">psychology</span>
+                <span>4. Admin &amp; AI Console</span>
+              </button>
+            </div>
+          </div>
+
           {/* Hub Ambient Header & Context Ribbon */}
           <section className="w-full bg-white px-6 py-5 shadow-xs border-b border-slate-200">
             <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -473,6 +527,15 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                   <span className="material-symbols-outlined text-[32px]">warehouse</span>
                 </div>
                 <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#001d59] text-white text-[11px] font-bold tracking-wider uppercase">
+                      Dashboard 3
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-[11px] font-bold">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                      NGO &amp; Shelter Logistics Hub
+                    </span>
+                  </div>
                   <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
                     <span className="text-2xl sm:text-3xl font-extrabold text-[#001d59] tracking-tight">
                       Greater Boston Food Alliance

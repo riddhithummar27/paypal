@@ -196,14 +196,34 @@ export default function Home() {
     }
   };
 
+  // Role and route synchronization across all 4 dashboards
+  const handleRoleChange = (role: string) => {
+    setActiveRole(role);
+    if (role === 'donor') setActiveTab('donor');
+    else if (role === 'recipient') setActiveTab('marketplace');
+    else if (role === 'ngo') setActiveTab('ngo');
+    else if (role === 'admin') setActiveTab('agent');
+  };
+
   // Route switcher translation
   const handlePageNavigation = (page: string) => {
-    if (page === 'home') setActiveTab('home');
-    else if (page === 'explore-food') setActiveTab('marketplace');
-    else if (page === 'ai-rescue-agent') setActiveTab('agent');
-    else if (page === 'donor-portal') setActiveTab('donor');
-    else if (page === 'ngo-hub') setActiveTab('ngo');
-    else if (page === 'impact') setActiveTab('sponsorship');
+    if (page === 'home') {
+      setActiveTab('home');
+    } else if (page === 'explore-food' || page === 'marketplace') {
+      setActiveTab('marketplace');
+      setActiveRole('recipient');
+    } else if (page === 'ai-rescue-agent' || page === 'agent' || page === 'admin') {
+      setActiveTab('agent');
+      setActiveRole('admin');
+    } else if (page === 'donor-portal' || page === 'donor') {
+      setActiveTab('donor');
+      setActiveRole('donor');
+    } else if (page === 'ngo-hub' || page === 'ngo') {
+      setActiveTab('ngo');
+      setActiveRole('ngo');
+    } else if (page === 'impact' || page === 'sponsorship') {
+      setActiveTab('sponsorship');
+    }
   };
 
   return (
@@ -213,14 +233,14 @@ export default function Home() {
         <HomePage
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
         />
       ) : activeTab === 'marketplace' ? (
         <ExploreFoodPage
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onOrderCompleted={handleOrderCompleted}
         />
@@ -228,7 +248,7 @@ export default function Home() {
         <DonorPortal
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onAddListing={handleAddListing}
         />
@@ -236,7 +256,7 @@ export default function Home() {
         <AutonomousAgentConsole
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           initialLogs={INITIAL_AGENT_LOGS}
           onTriggerRescueChallenge={handleTriggerRescueChallenge}
@@ -246,7 +266,7 @@ export default function Home() {
         <NgoHubPage
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onClaimBatch={handleClaimBatch}
         />
@@ -254,7 +274,7 @@ export default function Home() {
         <ImpactPage
           onNavigate={handlePageNavigation}
           activeRole={activeRole}
-          setActiveRole={setActiveRole}
+          setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onSponsorshipCompleted={handleSponsorshipCompleted}
         />

@@ -307,10 +307,10 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin</option>
+                <option value="donor">1. Food Seller / Donor</option>
+                <option value="recipient">2. Food Buyer / Consumer</option>
+                <option value="ngo">3. NGO Logistics Hub</option>
+                <option value="admin">4. Admin &amp; AI Agent</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
@@ -347,6 +347,42 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
         <div className="flex flex-col w-full">
           <div className="w-full max-w-[1440px] mx-auto px-6 py-4 flex flex-col gap-6">
 
+            {/* 4 Dedicated Dashboards Switcher Bar */}
+            <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2 overflow-x-auto">
+              <span className="text-[11px] font-bold text-[#747683] px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                <span className="material-symbols-outlined text-[15px] text-[#005ab6]">dashboard</span>
+                4 Dashboards:
+              </span>
+              <button
+                onClick={() => onNavigate?.('donor-portal')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px] text-amber-600">storefront</span>
+                <span>1. Food Seller / Donor</span>
+              </button>
+              <button
+                onClick={() => onNavigate?.('explore-food')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px] text-emerald-600">shopping_cart</span>
+                <span>2. Food Buyer / Consumer</span>
+              </button>
+              <button
+                onClick={() => onNavigate?.('ngo-hub')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px] text-blue-600">local_shipping</span>
+                <span>3. NGO Logistics Hub</span>
+              </button>
+              <button
+                onClick={() => onNavigate?.('ai-rescue-agent')}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#001d59] text-white shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px] text-purple-400">psychology</span>
+                <span>4. Admin &amp; AI Console</span>
+              </button>
+            </div>
+
             {/* Command Bar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200/80">
               <div className="flex items-center gap-4">
@@ -359,6 +395,14 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-[#001d59]/30 to-transparent"></div>
                 </div>
                 <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#001d59] text-white text-[10px] font-bold tracking-wider uppercase">
+                      Dashboard 4
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-800 border border-purple-200 text-[10px] font-bold">
+                      Admin &amp; Autonomous AI Console
+                    </span>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xl font-bold text-[#001d59] tracking-tight">AI Autonomous Rescue Agent</span>
                     <span className="px-2 py-0.5 rounded-full bg-[#d7e3ff] text-[#001d59] text-xs font-bold uppercase tracking-wider">

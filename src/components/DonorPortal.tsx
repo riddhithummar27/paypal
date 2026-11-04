@@ -24,8 +24,34 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
   const [category, setCategory] = useState('Bakery & Pastries');
   const [expiryWindow, setExpiryWindow] = useState('Tonight, 8:30 PM');
   const [locationAddress, setLocationAddress] = useState('742 Boylston St, Back Bay, Boston');
+  const [isLocatingKitchen, setIsLocatingKitchen] = useState(false);
+  const [kitchenGpsVerified, setKitchenGpsVerified] = useState(false);
+  const [discountPrice, setDiscountPrice] = useState(4.5);
   const [tempProfile, setTempProfile] = useState('Ambient / Room Temp');
   const [allergens, setAllergens] = useState<string[]>(['Gluten', 'Nut Free', 'Vegetarian']);
+
+  const handleLocateKitchen = () => {
+    if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+      setIsLocatingKitchen(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setIsLocatingKitchen(false);
+          const lat = Number(pos.coords.latitude.toFixed(4));
+          const lng = Number(pos.coords.longitude.toFixed(4));
+          setLocationAddress(`${lat}, ${lng} (Detected Kitchen GPS)`);
+          setKitchenGpsVerified(true);
+          showToast('📍 Kitchen GPS Detected', `GPS coordinates (${lat}° N, ${Math.abs(lng)}° W) verified for courier pickup.`);
+        },
+        (err) => {
+          setIsLocatingKitchen(false);
+          showToast('Location Permission Denied', 'Using default address: 742 Boylston St, Boston.');
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+      );
+    } else {
+      showToast('Not Supported', 'Geolocation is not supported in this browser.');
+    }
+  };
 
   // QR Modal
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -63,9 +89,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       category: 'Meals',
       donorName: 'Artisan Kitchen (You)',
       donorType: 'Restaurant',
-      originalPrice: allocationMode === 'discount' ? 14.0 : 0,
-      currentPrice: allocationMode === 'discount' ? 4.5 : 0,
-      discountPercent: allocationMode === 'discount' ? 68 : 100,
+      originalPrice: allocationMode === 'discount' ? Math.round(discountPrice * 3) : 0,
+      currentPrice: allocationMode === 'discount' ? discountPrice : 0,
+      discountPercent: allocationMode === 'discount' ? 67 : 100,
       portions: quantity,
       isFree: allocationMode === 'free',
       prepTime: 'Fresh',
@@ -273,12 +299,12 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 aria-label="Active Role Switcher"
                 className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-xs text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
                 value={activeRole}
-                onChange={(e) => setActiveRole(e.target.value)}
+                onChange={(e) => setActiveRole?.(e.target.value)}
               >
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin</option>
+                <option value="donor">1. Food Seller / Donor</option>
+                <option value="recipient">2. Food Buyer / Consumer</option>
+                <option value="ngo">3. NGO Logistics Hub</option>
+                <option value="admin">4. Admin &amp; AI Agent</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
@@ -300,20 +326,65 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       <main className="w-full pt-16 bg-[#f7f9fc] flex-1">
         <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 flex flex-col gap-6 pb-16">
           
+          {/* 4 Dedicated Dashboards Switcher Bar */}
+          <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2 overflow-x-auto">
+            <span className="text-[11px] font-bold text-[#747683] px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
+              <span className="material-symbols-outlined text-[15px] text-[#005ab6]">dashboard</span>
+              4 Dashboards:
+            </span>
+            <button
+              onClick={() => onNavigate('donor-portal')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#001d59] text-white shadow-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-amber-400">storefront</span>
+              <span>1. Food Seller / Donor</span>
+            </button>
+            <button
+              onClick={() => onNavigate('explore-food')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-emerald-600">shopping_cart</span>
+              <span>2. Food Buyer / Consumer</span>
+            </button>
+            <button
+              onClick={() => onNavigate('ngo-hub')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-blue-600">local_shipping</span>
+              <span>3. NGO Logistics Hub</span>
+            </button>
+            <button
+              onClick={() => onNavigate('ai-rescue-agent')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-purple-600">psychology</span>
+              <span>4. Admin &amp; AI Console</span>
+            </button>
+          </div>
+
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#001d59] text-white text-[11px] font-bold tracking-wider uppercase">
+                  Dashboard 1
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                  Food Seller &amp; Donor Portal
+                </span>
+              </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#001d59] tracking-tight">
-                Donor Dashboard
+                Food Seller &amp; Donor Operations Dashboard
               </h1>
               <p className="text-sm text-[#747683] mt-1">
-                Manage your surplus food listings, instant PayPal payouts, and real-time community rescue tracking.
+                Sell surplus inventory at deep discount or donate free batches for shelter distribution. Track courier dispatches and withdraw earnings instantly via PayPal.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                Verified Donor
+                Verified Merchant &amp; Donor
               </span>
             </div>
           </div>
@@ -469,7 +540,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
               <form onSubmit={handlePublishListing} className="flex flex-col gap-4">
                 {/* Allocation Model */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#001d59]">Donation Type</label>
+                  <label className="text-xs font-bold text-[#001d59]">Listing Mode</label>
                   <div className="grid grid-cols-3 gap-1 bg-[#f2f4f7] p-1 rounded-xl">
                     <button
                       type="button"
@@ -480,7 +551,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                           : 'text-[#747683] hover:text-[#001d59]'
                       }`}
                     >
-                      Free Donation
+                      Donate Free
                     </button>
                     <button
                       type="button"
@@ -491,7 +562,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                           : 'text-[#747683] hover:text-[#001d59]'
                       }`}
                     >
-                      Discount (70% Off)
+                      Sell Discounted
                     </button>
                     <button
                       type="button"
@@ -502,10 +573,35 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                           : 'text-[#747683] hover:text-[#001d59]'
                       }`}
                     >
-                      Sponsor
+                      Sponsored
                     </button>
                   </div>
                 </div>
+
+                {/* Optional Pricing for Discount Sale */}
+                {allocationMode === 'discount' && (
+                  <div className="flex flex-col gap-1 p-3 bg-blue-50/70 border border-blue-100 rounded-xl">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-[#001d59]">Discount Sale Price ($)</label>
+                      <span className="text-[11px] font-extrabold text-[#005ab6]">Payout to You: ${discountPrice.toFixed(2)} USD</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-[#001d59]">$</span>
+                      <input
+                        type="number"
+                        step="0.5"
+                        min="1"
+                        max="50"
+                        value={discountPrice}
+                        onChange={(e) => setDiscountPrice(parseFloat(e.target.value) || 0)}
+                        className="w-full h-10 px-3 bg-white rounded-lg text-sm font-bold text-[#001d59] border border-blue-200 focus:outline-none"
+                      />
+                    </div>
+                    <p className="text-[10px] text-[#747683]">
+                      When buyers claim this surplus, proceeds settle directly into your PayPal merchant wallet.
+                    </p>
+                  </div>
+                )}
 
                 {/* Food Title */}
                 <div className="flex flex-col gap-1">
@@ -520,21 +616,57 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   />
                 </div>
 
-                {/* Pickup Location Address */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-[#001d59]">Pickup Location / Address</label>
+                {/* Pickup Location Address & Google Map */}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#001d59]">Kitchen Pickup Location &amp; Google Map</label>
+                    <button
+                      type="button"
+                      onClick={handleLocateKitchen}
+                      disabled={isLocatingKitchen}
+                      className="text-[11px] font-bold text-[#005ab6] hover:text-[#001d59] flex items-center gap-1 bg-[#f2f4f7] hover:bg-slate-200 px-2 py-1 rounded-md transition-all cursor-pointer"
+                    >
+                      <span className={`material-symbols-outlined text-[14px] ${isLocatingKitchen ? 'animate-spin' : ''}`}>
+                        {isLocatingKitchen ? 'refresh' : 'my_location'}
+                      </span>
+                      <span>{isLocatingKitchen ? 'Detecting GPS...' : kitchenGpsVerified ? 'GPS Verified ✓' : 'Detect Kitchen GPS'}</span>
+                    </button>
+                  </div>
                   <div className="relative">
                     <input
-                      className="w-full h-11 pl-9 pr-3.5 bg-[#f2f4f7] rounded-xl text-sm text-[#191c1e] placeholder:text-[#747683] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200"
+                      className="w-full h-11 pl-9 pr-3.5 bg-[#f2f4f7] rounded-xl text-sm text-[#191c1e] placeholder:text-[#747683] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200 font-medium"
                       placeholder="e.g., 742 Boylston St, Back Bay, Boston"
                       value={locationAddress}
-                      onChange={(e) => setLocationAddress(e.target.value)}
+                      onChange={(e) => {
+                        setLocationAddress(e.target.value);
+                        setKitchenGpsVerified(false);
+                      }}
                       required
                       type="text"
                     />
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#005ab6] text-[18px]">
                       pin_drop
                     </span>
+                  </div>
+
+                  {/* Real Google Maps Embed for Kitchen Location */}
+                  <div className="relative w-full h-[160px] rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner mt-1">
+                    <iframe
+                      title="Google Maps Kitchen Location"
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(locationAddress)}&hl=en&z=15&output=embed`}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-[#001d59] shadow flex items-center gap-1 border border-slate-200">
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationAddress)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#005ab6] hover:underline flex items-center gap-0.5"
+                      >
+                        Open Google Maps <span className="material-symbols-outlined text-[12px]">open_in_new</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
 

@@ -132,9 +132,11 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; label: string }>({
     lat: 42.3601,
     lng: -71.0589,
-    label: 'Downtown Boston (42.36° N, 71.05° W)',
+    label: 'Downtown Boston (42.3601° N, 71.0589° W)',
   });
   const [isLocating, setIsLocating] = useState(false);
+  const [mapType, setMapType] = useState<'google' | 'radar'>('google');
+  const [gpsPermissionState, setGpsPermissionState] = useState<'prompt' | 'granted' | 'denied'>('prompt');
 
   const handleLocateUser = () => {
     if (typeof window !== 'undefined' && 'geolocation' in navigator) {
@@ -142,28 +144,30 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setIsLocating(false);
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
+          const lat = Number(pos.coords.latitude.toFixed(4));
+          const lng = Number(pos.coords.longitude.toFixed(4));
+          setGpsPermissionState('granted');
           setUserLocation({
             lat,
             lng,
-            label: `GPS: ${lat.toFixed(4)}° N, ${Math.abs(lng).toFixed(4)}° W`,
+            label: `GPS: ${lat}° N, ${Math.abs(lng)}° W (Current Location)`,
           });
           showToast(`📍 Live Location Active! All surplus rescue distances re-calculated.`);
         },
-        () => {
+        (err) => {
           setIsLocating(false);
+          setGpsPermissionState('denied');
           setUserLocation({
             lat: 42.3601,
             lng: -71.0589,
             label: 'Downtown Metro Hub (42.3601° N, 71.0589° W)',
           });
-          showToast('📍 Set to Downtown Metro Hub (42.3601° N, 71.0589° W)');
+          showToast('📍 Location access denied or timed out. Defaulted to Downtown Metro Hub.');
         },
-        { timeout: 8000 }
+        { timeout: 8000, enableHighAccuracy: true }
       );
     } else {
-      showToast('Geolocation not supported in this environment.');
+      showToast('Geolocation is not supported in this environment.');
     }
   };
 
@@ -398,10 +402,10 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                 value={activeRole}
                 onChange={(e) => setActiveRole(e.target.value)}
               >
-                <option value="donor">Role: Donor</option>
-                <option value="recipient">Role: Recipient</option>
-                <option value="ngo">Role: NGO Hub</option>
-                <option value="admin">Role: Admin</option>
+                <option value="donor">1. Food Seller / Donor</option>
+                <option value="recipient">2. Food Buyer / Consumer</option>
+                <option value="ngo">3. NGO Logistics Hub</option>
+                <option value="admin">4. Admin &amp; AI Agent</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[#747683] text-[18px] pointer-events-none">
                 expand_more
@@ -438,23 +442,59 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
       <main className="w-full pt-16 bg-[#f7f9fc] flex-1">
         <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 flex flex-col gap-6">
           
+          {/* 4 Dedicated Dashboards Switcher Bar */}
+          <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2 overflow-x-auto">
+            <span className="text-[11px] font-bold text-[#747683] px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
+              <span className="material-symbols-outlined text-[15px] text-[#005ab6]">dashboard</span>
+              4 Dashboards:
+            </span>
+            <button
+              onClick={() => onNavigate('donor-portal')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-amber-600">storefront</span>
+              <span>1. Food Seller / Donor</span>
+            </button>
+            <button
+              onClick={() => onNavigate('explore-food')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#001d59] text-white shadow-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-emerald-400">shopping_cart</span>
+              <span>2. Food Buyer / Consumer</span>
+            </button>
+            <button
+              onClick={() => onNavigate('ngo-hub')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-blue-600">local_shipping</span>
+              <span>3. NGO Logistics Hub</span>
+            </button>
+            <button
+              onClick={() => onNavigate('ai-rescue-agent')}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px] text-purple-600">psychology</span>
+              <span>4. Admin &amp; AI Console</span>
+            </button>
+          </div>
+
           {/* Header / Context Bar */}
           <section className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#d7e3ff] text-[#001b3f] text-[11px] font-bold tracking-wider uppercase">
-                  Live Food Loop
+                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#001d59] text-white text-[11px] font-bold tracking-wider uppercase">
+                  Dashboard 2
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#eceef1] text-[#444652] text-[11px] font-medium">
-                  <span className="w-2 h-2 rounded-full bg-[#005ab6] animate-pulse"></span>
-                  184 active rescue batches
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Food Buyer &amp; Consumer Marketplace
                 </span>
               </div>
-              <h1 className="text-[28px] sm:text-[32px] font-bold text-[#001d59] tracking-tight mt-1">
-                Public Surplus &amp; Sponsored Directory
+              <h1 className="text-[28px] sm:text-[32px] font-extrabold text-[#001d59] tracking-tight mt-1">
+                Surplus Food Marketplace &amp; Community Directory
               </h1>
               <p className="text-[14px] text-[#444652]">
-                Real-time certified surplus food available for community direct-pickup, subsidized purchase, or sponsored collection.
+                Buy surplus restaurant and bakery meals at up to 70% discount via PayPal, or claim free verified community rescue portions.
               </p>
             </div>
 
@@ -488,6 +528,51 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
               >
                 <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
                 <span>Match via AI</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Current Location Permission Card */}
+          <section className="bg-gradient-to-r from-[#001d59] via-[#003087] to-[#005ab6] rounded-2xl p-4 sm:p-5 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white shrink-0 border border-white/20">
+                <span className="material-symbols-outlined text-[26px]">location_on</span>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="font-extrabold text-base tracking-tight">Location Permission &amp; GPS Proximity</h3>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    gpsPermissionState === 'granted'
+                      ? 'bg-emerald-400/25 text-emerald-200 border border-emerald-400/40'
+                      : gpsPermissionState === 'denied'
+                      ? 'bg-amber-400/25 text-amber-200 border border-amber-400/40'
+                      : 'bg-white/15 text-white border border-white/25'
+                  }`}>
+                    {gpsPermissionState === 'granted'
+                      ? '✓ Live GPS Connected'
+                      : gpsPermissionState === 'denied'
+                      ? '⚠ Permission Denied (Fallback Active)'
+                      : '● Permission Required'}
+                  </span>
+                </div>
+                <p className="text-xs text-white/80 mt-0.5 max-w-2xl">
+                  Grant browser location permissions so FOODLOOP can compute walking distances, sort closest surplus deals, and center your Google Map view.
+                </p>
+                <div className="mt-1 text-[11px] font-mono text-white/70">
+                  Current Coordinates: <span className="font-bold text-white">{userLocation.label}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleLocateUser}
+                disabled={isLocating}
+                className="px-4 py-2.5 rounded-xl bg-white text-[#001d59] hover:bg-[#dbe1ff] font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center gap-2"
+              >
+                <span className={`material-symbols-outlined text-[18px] text-[#005ab6] ${isLocating ? 'animate-spin' : ''}`}>
+                  {isLocating ? 'refresh' : 'my_location'}
+                </span>
+                <span>{isLocating ? 'Requesting Permission...' : gpsPermissionState === 'granted' ? 'Update Live GPS' : 'Allow Current Location'}</span>
               </button>
             </div>
           </section>
@@ -768,81 +853,141 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-[#005ab6] text-[22px]">map</span>
-                      <h2 className="text-[16px] font-bold text-[#001d59]">Live Geolocation Feed</h2>
+                      <h2 className="text-[16px] font-bold text-[#001d59]">Live Google Maps &amp; Radar</h2>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full bg-[#d7e3ff] text-[#001b3f] text-[10px] font-bold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#005ab6] animate-pulse"></span> GPS Active
-                    </span>
-                  </div>
-
-                  {/* SVG Vector City Map */}
-                  <div className="relative w-full h-[320px] rounded-xl overflow-hidden bg-[#040e1b] border border-[#1A365D]">
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <pattern height="40" id="map-grid-light" patternUnits="userSpaceOnUse" width="40">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#122744" strokeWidth="1" />
-                        </pattern>
-                      </defs>
-                      <rect fill="url(#map-grid-light)" height="100%" width="100%" />
-                      <path d="M -20,80 Q 200,70 420,120 T 900,100" fill="none" stroke="#1c3e6b" strokeWidth="3" />
-                      <path d="M 120,-10 L 140,350" fill="none" stroke="#1c3e6b" strokeWidth="2.5" />
-                      <path d="M 320,-10 L 360,350" fill="none" stroke="#1c3e6b" strokeWidth="2.5" />
-                      <path d="M -10,220 C 250,210 500,260 880,240" fill="none" stroke="#1c3e6b" strokeWidth="3" />
-                      
-                      <circle cx="160" cy="80" fill="none" opacity="0.35" r="45" stroke="#38bdf8" strokeDasharray="3 3" strokeWidth="1" />
-                      <circle cx="160" cy="80" fill="none" opacity="0.25" r="95" stroke="#38bdf8" strokeDasharray="4 4" strokeWidth="1" />
-                      <path d="M 160,80 C 260,110 440,150 560,170" fill="none" opacity="0.9" stroke="#38bdf8" strokeDasharray="8 5" strokeWidth="3" />
-                    </svg>
-
-                    {/* Marker 1 */}
-                    <div
-                      onClick={() => openDetailsModal('card1')}
-                      className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#001d59] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                        <span className="material-symbols-outlined text-[18px]">bakery_dining</span>
-                      </div>
-                      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#001d59] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
-                        Le Matin (0.8km)
-                      </div>
-                    </div>
-
-                    {/* Marker 2 */}
-                    <div
-                      onClick={() => openDetailsModal('card2')}
-                      className="absolute top-1/2 right-1/4 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#0872e2] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                        <span className="material-symbols-outlined text-[18px]">restaurant</span>
-                      </div>
-                      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white text-[#001d59] text-[10px] font-bold px-2 py-0.5 rounded shadow">
-                        $4.50 Bowl (1.4km)
-                      </div>
-                    </div>
-
-                    {/* Marker 3 */}
-                    <div
-                      onClick={() => openDetailsModal('card3')}
-                      className="absolute bottom-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#ba1a1a] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-bounce">
-                        <span className="material-symbols-outlined text-[18px]">timer</span>
-                      </div>
-                      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#ba1a1a] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
-                        1h Left: Produce
-                      </div>
-                    </div>
-
-                    <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md px-4 py-2 rounded-lg flex items-center justify-between text-[11px] border border-[#e6e8eb]">
-                      <span className="text-[#191c1e] font-semibold">Walking radius: 15 min</span>
+                    <div className="flex items-center gap-1 bg-[#f2f4f7] p-1 rounded-lg text-[11px] font-bold">
                       <button
-                        onClick={() => showToast('GPS recentered on Downtown Metro Core')}
-                        className="text-[#005ab6] font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
+                        type="button"
+                        onClick={() => setMapType('google')}
+                        className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                          mapType === 'google'
+                            ? 'bg-[#001d59] text-white shadow-xs'
+                            : 'text-[#444652] hover:text-[#001d59]'
+                        }`}
                       >
-                        Recenter <span className="material-symbols-outlined text-[14px]">my_location</span>
+                        Google Maps
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMapType('radar')}
+                        className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                          mapType === 'radar'
+                            ? 'bg-[#001d59] text-white shadow-xs'
+                            : 'text-[#444652] hover:text-[#001d59]'
+                        }`}
+                      >
+                        Tactical
                       </button>
                     </div>
                   </div>
+
+                  {mapType === 'google' ? (
+                    /* Real Live Interactive Google Maps Embed */
+                    <div className="relative w-full h-[320px] rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner">
+                      <iframe
+                        title="Google Maps Food Rescue Locator"
+                        src={`https://maps.google.com/maps?q=${userLocation.lat},${userLocation.lng}&hl=en&z=15&output=embed`}
+                        className="w-full h-full border-0"
+                        loading="lazy"
+                        allowFullScreen
+                      />
+                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-[#001d59] shadow flex items-center gap-1 border border-slate-200 pointer-events-none">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Live Google Maps Embed
+                      </div>
+                      <div className="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg flex items-center justify-between text-[11px] border border-[#e6e8eb] shadow">
+                        <span className="text-[#191c1e] font-semibold truncate max-w-[170px]">📍 {userLocation.label}</span>
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${userLocation.lat},${userLocation.lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#005ab6] font-bold hover:underline flex items-center gap-0.5 shrink-0"
+                        >
+                          Open App <span className="material-symbols-outlined text-[13px]">open_in_new</span>
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    /* SVG Vector Tactical City Map */
+                    <div className="relative w-full h-[320px] rounded-xl overflow-hidden bg-[#040e1b] border border-[#1A365D]">
+                      <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <pattern height="40" id="map-grid-light" patternUnits="userSpaceOnUse" width="40">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#122744" strokeWidth="1" />
+                          </pattern>
+                        </defs>
+                        <rect fill="url(#map-grid-light)" height="100%" width="100%" />
+                        <path d="M -20,80 Q 200,70 420,120 T 900,100" fill="none" stroke="#1c3e6b" strokeWidth="3" />
+                        <path d="M 120,-10 L 140,350" fill="none" stroke="#1c3e6b" strokeWidth="2.5" />
+                        <path d="M 320,-10 L 360,350" fill="none" stroke="#1c3e6b" strokeWidth="2.5" />
+                        <path d="M -10,220 C 250,210 500,260 880,240" fill="none" stroke="#1c3e6b" strokeWidth="3" />
+                        
+                        <circle cx="160" cy="80" fill="none" opacity="0.35" r="45" stroke="#38bdf8" strokeDasharray="3 3" strokeWidth="1" />
+                        <circle cx="160" cy="80" fill="none" opacity="0.25" r="95" stroke="#38bdf8" strokeDasharray="4 4" strokeWidth="1" />
+                        <path d="M 160,80 C 260,110 440,150 560,170" fill="none" opacity="0.9" stroke="#38bdf8" strokeDasharray="8 5" strokeWidth="3" />
+                      </svg>
+
+                      {/* Marker 1 */}
+                      <div
+                        onClick={() => openDetailsModal('card1')}
+                        className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#001d59] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <span className="material-symbols-outlined text-[18px]">bakery_dining</span>
+                        </div>
+                        <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#001d59] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                          Le Matin (0.8km)
+                        </div>
+                      </div>
+
+                      {/* Marker 2 */}
+                      <div
+                        onClick={() => openDetailsModal('card2')}
+                        className="absolute top-1/2 right-1/4 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#0872e2] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <span className="material-symbols-outlined text-[18px]">restaurant</span>
+                        </div>
+                        <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white text-[#001d59] text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                          $4.50 Bowl (1.4km)
+                        </div>
+                      </div>
+
+                      {/* Marker 3 */}
+                      <div
+                        onClick={() => openDetailsModal('card3')}
+                        className="absolute bottom-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#ba1a1a] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-bounce">
+                          <span className="material-symbols-outlined text-[18px]">timer</span>
+                        </div>
+                        <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#ba1a1a] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                          1h Left: Produce
+                        </div>
+                      </div>
+
+                      <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md px-4 py-2 rounded-lg flex items-center justify-between text-[11px] border border-[#e6e8eb]">
+                        <span className="text-[#191c1e] font-semibold">Walking radius: 15 min</span>
+                        <button
+                          onClick={() => showToast('GPS recentered on Downtown Metro Core')}
+                          className="text-[#005ab6] font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
+                        >
+                          Recenter <span className="material-symbols-outlined text-[14px]">my_location</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Directions Action */}
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${encodeURIComponent(activeFood.pickupAddress)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 rounded-xl bg-[#005ab6] hover:bg-[#003087] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">navigation</span>
+                    <span>Get Google Maps Directions ({getDistanceDisplay(activeFood.lat, activeFood.lng)})</span>
+                  </a>
 
                   <div className="flex flex-col gap-1.5 pt-2 border-t border-[#f2f4f7] text-[12px]">
                     <div className="flex items-center justify-between text-[#444652]">
@@ -1050,6 +1195,15 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
                   <p className="text-[12px] text-[#444652]">{activeFood.pickupAddress}</p>
                   <div className="text-[10px] text-[#747683] font-mono mt-0.5">
                     GPS Coordinates: {activeFood.lat.toFixed(4)}° N, {Math.abs(activeFood.lng).toFixed(4)}° W
+                  </div>
+                  {/* Google Maps Embed for this specific food venue */}
+                  <div className="relative w-full h-[150px] rounded-xl overflow-hidden border border-slate-200 mt-2 bg-slate-100 shadow-inner">
+                    <iframe
+                      title={`Google Maps ${activeFood.donor}`}
+                      src={`https://maps.google.com/maps?q=${activeFood.lat},${activeFood.lng}&hl=en&z=15&output=embed`}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
               </div>
