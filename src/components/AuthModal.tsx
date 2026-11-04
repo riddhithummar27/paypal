@@ -96,22 +96,6 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  const handleQuickLogin = (demoRole: 'donor' | 'recipient' | 'ngo' | 'admin') => {
-    if (demoRole === 'donor') {
-      setEmail('donor@artisanbakery.com');
-      setPassword('donor123');
-    } else if (demoRole === 'recipient') {
-      setEmail('buyer@gmail.com');
-      setPassword('buyer123');
-    } else if (demoRole === 'ngo') {
-      setEmail('logistics@bostonfoodalliance.org');
-      setPassword('ngo123');
-    } else if (demoRole === 'admin') {
-      setEmail('admin@foodloop.org');
-      setPassword('admin123');
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
       <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
@@ -238,47 +222,6 @@ export const AuthModal: React.FC = () => {
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </button>
             </form>
-
-            {/* Quick Demo Logins for Hackathon Evaluators */}
-            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
-              <span className="text-[11px] font-bold text-[#747683] uppercase tracking-wider">
-                Quick Role Autofill (1-Click Test):
-              </span>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('donor')}
-                  className="p-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-left text-xs font-semibold text-amber-900 cursor-pointer"
-                >
-                  <div className="font-bold">1. Food Seller / Donor</div>
-                  <div className="text-[10px] text-amber-700">Artisan Bakery</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('recipient')}
-                  className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-left text-xs font-semibold text-emerald-900 cursor-pointer"
-                >
-                  <div className="font-bold">2. Food Buyer</div>
-                  <div className="text-[10px] text-emerald-700">Sarah Jenkins</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('ngo')}
-                  className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-left text-xs font-semibold text-blue-900 cursor-pointer"
-                >
-                  <div className="font-bold">3. NGO Hub</div>
-                  <div className="text-[10px] text-blue-700">Boston Food Alliance</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('admin')}
-                  className="p-2 rounded-lg bg-purple-50 hover:bg-purple-100 border border-purple-200 text-left text-xs font-semibold text-purple-900 cursor-pointer"
-                >
-                  <div className="font-bold">4. Admin &amp; AI</div>
-                  <div className="text-[10px] text-purple-700">Platform Overseer</div>
-                </button>
-              </div>
-            </div>
           </div>
         )}
 

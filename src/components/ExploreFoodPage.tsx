@@ -91,44 +91,43 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
     fetch('/api/listings')
       .then((res) => res.json())
       .then((data) => {
-        if (data.listings && Array.isArray(data.listings)) {
-          setFoodItems((prev) => {
-            const next = { ...prev };
-            data.listings.forEach((item: any, idx: number) => {
-              const key = item.id || `listing-${idx}`;
-              if (!next[key]) {
-                const itemLat = item.lat || Number((42.3450 + (idx * 0.004)).toFixed(4));
-                const itemLng = item.lng || Number((-71.0550 - (idx * 0.003)).toFixed(4));
-                next[key] = {
-                  id: key,
-                  title: item.title,
-                  donor: item.donorName || 'Local Rescue Partner',
-                  distance: `${item.distanceKm || 1.1} km Away`,
-                  distanceKm: item.distanceKm || 1.1,
-                  lat: itemLat,
-                  lng: itemLng,
-                  price: item.isFree ? '$0.00' : `$${Number(item.currentPrice || 3.5).toFixed(2)}`,
-                  originalPrice: item.originalPrice ? `$${Number(item.originalPrice).toFixed(2)}` : null,
-                  temp: item.storageTemp || 'Safe Ambient (18°C)',
-                  isFree: Boolean(item.isFree),
-                  desc: `Freshly prepared surplus rescue batch. Verified compliant with regional food safety standards.`,
-                  allergens: item.allergens?.length ? item.allergens : ['Freshly Prepared', 'Zero Waste Partner'],
-                  imageUrl:
-                    item.imageUrl ||
-                    'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
-                  pickupWindow: item.expiryTime || 'Within 2 hours',
-                  specCode: item.id,
-                  pickupSpot: `${item.donorName} - Service Dock`,
-                  pickupAddress: item.location || 'Metro Hub, Boston',
-                  category: item.category ? item.category.toLowerCase() : 'meals',
-                  statusType: item.isFree ? 'free' : 'discounted',
-                  stock: `${item.portions || 12} Portions Ready`,
-                  safetyScore: '★ 4.9 (Verified)',
-                };
-              }
-            });
-            return next;
+        if (data.listings && Array.isArray(data.listings) && data.listings.length > 0) {
+          const loaded: Record<string, FoodDetail> = {};
+          data.listings.forEach((item: any, idx: number) => {
+            const key = item.id || `listing-${idx}`;
+            const itemLat = item.lat || Number((42.3450 + (idx * 0.004)).toFixed(4));
+            const itemLng = item.lng || Number((-71.0550 - (idx * 0.003)).toFixed(4));
+            loaded[key] = {
+              id: key,
+              title: item.title,
+              donor: item.donorName || item.donor_name || 'Local Rescue Partner',
+              distance: `${item.distanceKm || 1.1} km Away`,
+              distanceKm: item.distanceKm || 1.1,
+              lat: itemLat,
+              lng: itemLng,
+              price: item.isFree || item.listing_type === 'free' ? '$0.00' : `$${Number(item.currentPrice || item.discounted_price || 3.5).toFixed(2)}`,
+              originalPrice: item.originalPrice || item.original_price ? `$${Number(item.originalPrice || item.original_price).toFixed(2)}` : null,
+              temp: item.storageTemp || item.storage_temp || 'Safe Ambient (18°C)',
+              isFree: Boolean(item.isFree || item.listing_type === 'free'),
+              desc: item.description || `Freshly prepared surplus rescue batch. Verified compliant with regional food safety standards.`,
+              allergens: item.allergens?.length ? item.allergens : ['Freshly Prepared', 'Zero Waste Partner'],
+              imageUrl:
+                item.imageUrl || item.image_url ||
+                'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
+              pickupWindow: item.expiryTime || (item.pickup_deadline ? 'Within safe window' : 'Within 2 hours'),
+              specCode: item.id,
+              pickupSpot: `${item.donorName || item.donor_name || 'Kitchen'} - Service Dock`,
+              pickupAddress: item.location || item.pickup_location || 'Metro Hub, Boston',
+              category: item.category ? item.category.toLowerCase() : 'meals',
+              statusType: item.isFree || item.listing_type === 'free' ? 'free' : 'discounted',
+              stock: `${item.portions || 12} Portions Ready`,
+              safetyScore: '★ 4.9 (Verified)',
+            };
           });
+          setFoodItems(loaded);
+          if (data.listings[0]?.id) {
+            setSelectedCardKey(data.listings[0].id);
+          }
         }
       })
       .catch((err) => console.warn('Could not load listings from /api/listings:', err));

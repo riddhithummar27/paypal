@@ -861,7 +861,6 @@ export const AutonomousAgentConsole: React.FC<AutonomousAgentConsoleProps> = ({
                       <div className="flex flex-col gap-3">
                         {[
                           { name: 'State Campus Main Hostel Mess', portions: '120 portions', cat: 'Hot Curry & Rice', time: '1h 10m left' },
-                          { name: 'Whole Foods Market Back Bay', portions: '65 packs', cat: 'Fresh Produce & Dairy', time: '2h 15m left' },
                         ].map((q) => (
                           <div
                             key={q.name}
