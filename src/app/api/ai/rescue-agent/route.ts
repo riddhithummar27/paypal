@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SHELTER_NODES } from '@/lib/mockData';
 import { addDispatchSlot } from '@/lib/store';
+import { db } from '@/lib/db';
 
 interface AllocationRequest {
   portions: number;
@@ -83,14 +84,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Persist real dispatch slots to the global store so Bryntum and NGO Hub reflect them live
+    // Persist real dispatch slots to the global store and database
     allocations.forEach((alloc, idx) => {
       addDispatchSlot({
         id: `DSP-AI-${Date.now().toString(36).toUpperCase()}-${idx}`,
         batchId: `BATCH-${Date.now().toString().slice(-4)}-${idx}`,
         foodTitle: foodTitle || 'Surplus Meals',
         timeSlot: alloc.timeSlot,
-        donorName: donorName || 'Marriott Regency Hotel',
+        donorName: donorName || 'Campus Main Mess',
         shelterName: alloc.shelterName,
         portions: alloc.portionsAllocated,
         volunteerName: `${alloc.volunteerType} Unit #${10 + idx}`,
@@ -99,6 +100,41 @@ export async function POST(req: NextRequest) {
         urgency: alloc.urgency.includes('CRITICAL') ? 'Critical (<30m)' : 'Standard',
       });
     });
+
+    // Record into Database for persistent tracking
+    try {
+      const op = await db.rescue.createOperation({
+        listing_id: body.donorName || 'FL-URGENT-80',
+        title: `${foodTitle || 'Surplus Meals'} Urgent Rescue`,
+        total_portions: portions,
+        urgency_level: pickupDeadlineMinutes <= 45 ? 'Critical (<30m)' : 'Standard',
+        deadline: new Date(Date.now() + pickupDeadlineMinutes * 60000).toISOString(),
+        status: 'in_transit',
+        ai_confidence_score: 0.985,
+      });
+
+      for (const a of allocations) {
+        await db.rescue.addAllocation({
+          operation_id: op.id,
+          destination_name: a.shelterName,
+          destination_lat: 42.355,
+          destination_lng: -71.065,
+          portions: a.portionsAllocated,
+          vehicle_type: a.volunteerType,
+          courier_name: `${a.volunteerType} Unit`,
+          status: 'assigned',
+        });
+      }
+
+      await db.auditLogs.create({
+        action: 'AI_RESCUE_OPERATION_DISPATCHED',
+        entity_type: 'rescue_operation',
+        entity_id: op.id,
+        metadata: { portions, routes: allocations.length },
+      });
+    } catch {
+      // Non-blocking fallback
+    }
 
     const totalAllocated = portions;
     const co2OffsetKg = Number((portions * 2.5).toFixed(1)); // Average 2.5kg CO2 offset per meal rescued

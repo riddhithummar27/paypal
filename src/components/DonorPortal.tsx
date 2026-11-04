@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FoodListing } from '@/types/foodloop';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface DonorPortalProps {
   onNavigate: (page: string) => void;
@@ -9,6 +10,8 @@ interface DonorPortalProps {
   setActiveRole: (role: string) => void;
   onOpenSponsors?: () => void;
   onAddListing?: (listing: FoodListing) => void;
+  onOpenAuth?: (tab?: 'signin' | 'signup' | 'profile') => void;
+  onOpenNotifications?: () => void;
 }
 
 export const DonorPortal: React.FC<DonorPortalProps> = ({
@@ -17,6 +20,8 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
   setActiveRole,
   onOpenSponsors,
   onAddListing,
+  onOpenAuth,
+  onOpenNotifications,
 }) => {
   const [allocationMode, setAllocationMode] = useState<'free' | 'discount' | 'sponsored'>('free');
   const [quantity, setQuantity] = useState(24);
@@ -30,28 +35,10 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
   const [tempProfile, setTempProfile] = useState('Ambient / Room Temp');
   const [allergens, setAllergens] = useState<string[]>(['Gluten', 'Nut Free', 'Vegetarian']);
 
-  const handleLocateKitchen = () => {
-    if (typeof window !== 'undefined' && 'geolocation' in navigator) {
-      setIsLocatingKitchen(true);
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setIsLocatingKitchen(false);
-          const lat = Number(pos.coords.latitude.toFixed(4));
-          const lng = Number(pos.coords.longitude.toFixed(4));
-          setLocationAddress(`${lat}, ${lng} (Detected Kitchen GPS)`);
-          setKitchenGpsVerified(true);
-          showToast('📍 Kitchen GPS Detected', `GPS coordinates (${lat}° N, ${Math.abs(lng)}° W) verified for courier pickup.`);
-        },
-        (err) => {
-          setIsLocatingKitchen(false);
-          showToast('Location Permission Denied', 'Using default address: 742 Boylston St, Boston.');
-        },
-        { timeout: 8000, enableHighAccuracy: true }
-      );
-    } else {
-      showToast('Not Supported', 'Geolocation is not supported in this browser.');
-    }
-  };
+  // Active listings & reservations
+  const [listings, setListings] = useState<any[]>([]);
+  const [reservations, setReservations] = useState<any[]>([]);
+  const [isLoadingReservations, setIsLoadingReservations] = useState(false);
 
   // QR Modal
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -59,6 +46,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
     id: 'LP-8842',
     title: 'Rustic Artisan Sourdough & Brioche',
     agency: 'St. Jude Community Pantry',
+    token: 'FLP-8842-7721',
   });
 
   // Filter for active listings
@@ -71,13 +59,60 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
     message: '',
   });
 
+  const [ledgerBalance, setLedgerBalance] = useState('$148.20 USD');
+  const [isPayoutProcessing, setIsPayoutProcessing] = useState(false);
+
+  // Fetch listings and reservations from backend
+  const fetchDonorData = async () => {
+    try {
+      const [listRes, resvRes] = await Promise.all([
+        fetch('/api/listings'),
+        fetch('/api/reservations'),
+      ]);
+      const listData = await listRes.json();
+      const resvData = await resvRes.json();
+      if (listData.listings) {
+        setListings(listData.listings);
+      }
+      if (resvData.reservations) {
+        setReservations(resvData.reservations);
+      }
+    } catch (err) {
+      console.warn('Failed to load donor data:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchDonorData();
+  }, []);
+
   const showToast = (title: string, message: string) => {
     setToast({ show: true, title, message });
     setTimeout(() => setToast({ show: false, title: '', message: '' }), 4000);
   };
 
-  const [ledgerBalance, setLedgerBalance] = useState('$148.20 USD');
-  const [isPayoutProcessing, setIsPayoutProcessing] = useState(false);
+  const handleLocateKitchen = () => {
+    if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+      setIsLocatingKitchen(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setIsLocatingKitchen(false);
+          const lat = Number(pos.coords.latitude.toFixed(4));
+          const lng = Number(pos.coords.longitude.toFixed(4));
+          setLocationAddress(`${lat}, ${lng} (Detected Kitchen GPS)`);
+          setKitchenGpsVerified(true);
+          showToast('📍 Kitchen GPS Detected', `GPS coordinates (${lat}° N, ${Math.abs(lng)}° W) verified for courier pickup.`);
+        },
+        () => {
+          setIsLocatingKitchen(false);
+          showToast('Location Permission Denied', 'Using default address: 742 Boylston St, Boston.');
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+      );
+    } else {
+      showToast('Not Supported', 'Geolocation is not supported in this browser.');
+    }
+  };
 
   const handlePublishListing = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,13 +145,19 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
     };
 
     try {
-      await fetch('/api/listings', {
+      const res = await fetch('/api/listings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newListing),
       });
+      const data = await res.json();
+      if (data.listing) {
+        setListings((prev) => [data.listing, ...prev]);
+      } else {
+        setListings((prev) => [newListing, ...prev]);
+      }
     } catch {
-      // Backend sync fallback
+      setListings((prev) => [newListing, ...prev]);
     }
 
     if (onAddListing) {
@@ -125,6 +166,42 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
 
     showToast('Surplus Dispatched!', `${quantity} portions of "${foodTitle}" published to regional rescue network.`);
     setFoodTitle('');
+  };
+
+  const handleDeleteListing = async (listingId: string) => {
+    try {
+      await fetch(`/api/listings/${listingId}`, { method: 'DELETE' });
+      setListings((prev) => prev.filter((item) => item.id !== listingId));
+      showToast('Listing Removed', 'The food listing was cancelled and removed from regional index.');
+    } catch {
+      setListings((prev) => prev.filter((item) => item.id !== listingId));
+      showToast('Listing Removed', 'The listing has been deleted.');
+    }
+  };
+
+  const handleReservationStatus = async (resId: string, nextStatus: 'confirmed' | 'cancelled' | 'rejected') => {
+    try {
+      const res = await fetch(`/api/reservations/${resId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setReservations((prev) =>
+          prev.map((r) => (r.id === resId ? { ...r, status: nextStatus } : r))
+        );
+        showToast(
+          nextStatus === 'confirmed' ? 'Reservation Confirmed' : 'Reservation Rejected',
+          `Reservation #${resId} marked as ${nextStatus}.`
+        );
+      }
+    } catch {
+      setReservations((prev) =>
+        prev.map((r) => (r.id === resId ? { ...r, status: nextStatus } : r))
+      );
+      showToast('Status Updated', `Reservation set to ${nextStatus}.`);
+    }
   };
 
   const handlePayoutPayPal = async () => {
@@ -175,8 +252,8 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
     showToast('Tax Receipt Downloaded', 'Official 501(c)(3) charitable deduction slip exported.');
   };
 
-  const openVerificationModal = (lotId: string, title: string, agency: string) => {
-    setSelectedLot({ id: lotId, title, agency });
+  const openVerificationModal = (lotId: string, title: string, agency: string, token = 'FLP-8842-7721') => {
+    setSelectedLot({ id: lotId, title, agency, token });
     setIsQrModalOpen(true);
   };
 
@@ -185,7 +262,11 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       await fetch('/api/custody/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lotId: selectedLot.id, verifier: selectedLot.agency }),
+        body: JSON.stringify({
+          collectionToken: selectedLot.token,
+          verifierId: 'usr-donor-01',
+          notes: `Verified handover for ${selectedLot.title} to ${selectedLot.agency}.`,
+        }),
       });
     } catch {
       // Fallback
@@ -195,7 +276,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
   };
 
   return (
-    <div className="bg-[#f7f9fc] font-sans text-[#191c1e] antialiased min-h-screen flex flex-col selection:bg-[#005ab6]/20 selection:text-[#001d59]">
+    <div className="bg-[#f7f9fc] dark:bg-[#00174b] font-sans text-[#191c1e] dark:text-[#f7f9fc] antialiased min-h-screen flex flex-col selection:bg-[#005ab6]/20 selection:text-[#001d59] transition-colors">
       {/* Toast Notification */}
       {toast.show && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#001d59] text-white px-5 py-3.5 rounded-xl shadow-xl flex items-center gap-3 animate-bounce max-w-md border border-[#b4c5ff]/30">
@@ -208,13 +289,13 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       )}
 
       {/* FIXED TOP HEADER */}
-      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-[#e6e8eb] shadow-[0_1px_8px_rgba(0,48,135,0.06)]">
+      <header className="fixed top-0 w-full z-50 bg-white/95 dark:bg-[#001d59]/95 backdrop-blur-xl border-b border-[#e6e8eb] dark:border-slate-800 shadow-[0_1px_8px_rgba(0,48,135,0.06)]">
         <div className="h-16 max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 shrink-0">
             {/* Back to Home arrow */}
             <button
               onClick={() => onNavigate('home')}
-              className="flex items-center gap-1 text-[#001d59] hover:text-[#005ab6] font-medium mr-1 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              className="flex items-center gap-1 text-[#001d59] dark:text-[#dbe1ff] hover:text-[#005ab6] font-medium mr-1 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               title="Home"
             >
               <span className="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -234,46 +315,46 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 className="h-8 w-auto object-contain"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBEwSyS4A9z1_QrWAY3a_IiQ6V-zC1Nb6gUSPdCpfqDpeqcg0w64FyxyqTtZlTbmAv_VP40e7wH0evHrjr2G636nBHFFBEdECDYZWwPE90HtMHY1raCpjJRH8lr7YOH4K5nVI0K1goP9qyQuSWvmW6-PLruKxabyMeNkb3OjImlZQ22t01e5tWmrgx2srJW-2Zm7SN9H805jG7I3XC2zONOodklC6jC1J2325C3dU"
               />
-              <span className="font-extrabold text-[18px] text-[#001d59] tracking-tight">
+              <span className="font-extrabold text-[18px] text-[#001d59] dark:text-white tracking-tight">
                 FOODLOOP
               </span>
             </a>
 
-            {/* Navigation Links with standard gap-6 */}
+            {/* Navigation Links */}
             <nav className="hidden lg:flex items-center gap-6 ml-2">
               <a
-                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] dark:text-slate-300 hover:text-[#001d59] dark:hover:text-white transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('home')}
               >
                 Home
               </a>
               <a
-                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] dark:text-slate-300 hover:text-[#001d59] dark:hover:text-white transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('explore-food')}
               >
                 Explore Food
               </a>
               <a
-                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] dark:text-slate-300 hover:text-[#001d59] dark:hover:text-white transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('ai-rescue-agent')}
               >
-                AI Rescue Agent
+                Admin &amp; AI Agent
               </a>
               <a
                 aria-current="page"
-                className="transition-colors py-1 px-1 text-[#001d59] font-bold border-b-2 border-[#001d59] text-[14px] cursor-pointer"
+                className="transition-colors py-1 px-1 text-[#001d59] dark:text-[#abc7ff] font-bold border-b-2 border-[#001d59] dark:border-[#abc7ff] text-[14px] cursor-pointer"
                 onClick={() => onNavigate('donor-portal')}
               >
                 Donor Portal
               </a>
               <a
-                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] dark:text-slate-300 hover:text-[#001d59] dark:hover:text-white transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('ngo-hub')}
               >
                 NGO Hub
               </a>
               <a
-                className="font-semibold text-[14px] text-[#444652] hover:text-[#001d59] transition-colors py-1 px-1 cursor-pointer"
+                className="font-semibold text-[14px] text-[#444652] dark:text-slate-300 hover:text-[#001d59] dark:hover:text-white transition-colors py-1 px-1 cursor-pointer"
                 onClick={() => onNavigate('impact')}
               >
                 Impact
@@ -281,23 +362,12 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
             </nav>
           </div>
 
-          <div className="flex items-center gap-3 justify-end flex-1 max-w-2xl">
-            {/* Sponsors Showcase */}
-            {onOpenSponsors && (
-              <button
-                onClick={onOpenSponsors}
-                className="px-3 py-2 rounded-lg bg-[#ffc439] hover:bg-[#f2b72b] text-[#001d59] font-black text-xs cursor-pointer shadow-sm flex items-center gap-1.5 transition-all shrink-0"
-                title="View Hackathon Sponsor Tech Integrations"
-              >
-                <span className="material-symbols-outlined text-[18px]">award_star</span>
-                <span className="hidden sm:inline">Sponsors (5)</span>
-              </button>
-            )}
-
+          <div className="flex items-center gap-2.5 justify-end flex-1 max-w-2xl">
+            {/* Active Role Selector */}
             <div className="relative">
               <select
                 aria-label="Active Role Switcher"
-                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] text-xs text-[#001d59] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200"
+                className="appearance-none h-10 pl-3 pr-8 bg-[#f2f4f7] dark:bg-slate-800 text-xs text-[#001d59] dark:text-[#dbe1ff] font-bold rounded-lg cursor-pointer focus:outline-none border border-slate-200 dark:border-slate-700"
                 value={activeRole}
                 onChange={(e) => setActiveRole?.(e.target.value)}
               >
@@ -311,24 +381,56 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-1 pl-1 cursor-pointer">
-              <img
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
-              />
-            </div>
+            {/* Notification Drawer Trigger */}
+            {onOpenNotifications && (
+              <button
+                type="button"
+                onClick={onOpenNotifications}
+                className="relative p-2 rounded-lg bg-[#f2f4f7] dark:bg-slate-800 hover:bg-[#eceef1] text-[#001d59] dark:text-white transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
+                title="Notifications"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+              </button>
+            )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Sponsors Showcase */}
+            {onOpenSponsors && (
+              <button
+                onClick={onOpenSponsors}
+                className="px-3 py-2 rounded-lg bg-[#ffc439] hover:bg-[#f2b72b] text-[#001d59] font-black text-xs cursor-pointer shadow-sm flex items-center gap-1.5 transition-all shrink-0"
+                title="View Hackathon Sponsor Tech Integrations"
+              >
+                <span className="material-symbols-outlined text-[18px]">award_star</span>
+                <span className="hidden sm:inline">Sponsors (5)</span>
+              </button>
+            )}
+
+            {/* Account / Profile Button */}
+            {onOpenAuth && (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('profile')}
+                className="h-10 px-3 rounded-lg bg-[#001d59] dark:bg-[#005ab6] hover:bg-[#003087] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                <span className="hidden sm:inline">Donor Profile</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
 
       {/* MAIN BODY CONTENT */}
-      <main className="w-full pt-16 bg-[#f7f9fc] flex-1">
+      <main className="w-full pt-16 bg-[#f7f9fc] dark:bg-[#00174b] flex-1">
         <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 flex flex-col gap-6 pb-16">
           
           {/* 4 Dedicated Dashboards Switcher Bar */}
-          <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2 overflow-x-auto">
-            <span className="text-[11px] font-bold text-[#747683] px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
+          <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-2 overflow-x-auto">
+            <span className="text-[11px] font-bold text-[#747683] dark:text-slate-400 px-2 uppercase tracking-wider shrink-0 flex items-center gap-1">
               <span className="material-symbols-outlined text-[15px] text-[#005ab6]">dashboard</span>
               4 Dashboards:
             </span>
@@ -341,263 +443,161 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
             </button>
             <button
               onClick={() => onNavigate('explore-food')}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] dark:bg-slate-800 text-[#444652] dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] text-emerald-600">shopping_cart</span>
               <span>2. Food Buyer / Consumer</span>
             </button>
             <button
               onClick={() => onNavigate('ngo-hub')}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] dark:bg-slate-800 text-[#444652] dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] text-blue-600">local_shipping</span>
               <span>3. NGO Logistics Hub</span>
             </button>
             <button
               onClick={() => onNavigate('ai-rescue-agent')}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] text-[#444652] hover:bg-slate-200 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 bg-[#f2f4f7] dark:bg-slate-800 text-[#444652] dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] text-purple-600">psychology</span>
               <span>4. Admin &amp; AI Console</span>
             </button>
           </div>
 
-          {/* Header Section */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#001d59] text-white text-[11px] font-bold tracking-wider uppercase">
-                  Dashboard 1
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-bold">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                  Food Seller &amp; Donor Portal
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#001d59] tracking-tight">
-                Food Seller &amp; Donor Operations Dashboard
-              </h1>
-              <p className="text-sm text-[#747683] mt-1">
-                Sell surplus inventory at deep discount or donate free batches for shelter distribution. Track courier dispatches and withdraw earnings instantly via PayPal.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                Verified Merchant &amp; Donor
-              </span>
-            </div>
-          </div>
-
-          {/* 4 Clean Metric Cards */}
+          {/* KPI CARDS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#e6e8eb]">
-              <div className="flex items-center justify-between text-[#747683] text-xs font-semibold">
-                <span>Meals Rescued</span>
-                <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-bold text-[11px]">+18% this mo.</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xs border border-[#e6e8eb] dark:border-slate-800">
+              <div className="flex items-center justify-between text-[#747683] dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider">Total Surplus Rescued</span>
+                <span className="material-symbols-outlined text-amber-500 text-[20px]">inventory_2</span>
               </div>
-              <div className="text-3xl font-extrabold text-[#001d59] mt-2">1,420</div>
-              <div className="text-xs text-[#747683] mt-1">3.12 MT CO₂e avoided</div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#e6e8eb]">
-              <div className="flex items-center justify-between text-[#747683] text-xs font-semibold">
-                <span>Active Listings</span>
-                <span className="text-[#005ab6] bg-blue-50 px-2 py-0.5 rounded-full font-bold text-[11px]">4 Live</span>
-              </div>
-              <div className="text-3xl font-extrabold text-[#001d59] mt-2">28</div>
-              <div className="text-xs text-[#747683] mt-1">14.2 min avg. claim speed</div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#e6e8eb]">
-              <div className="flex items-center justify-between text-[#747683] text-xs font-semibold">
-                <span>Collection Success</span>
-                <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-bold text-[11px]">Zero Disputes</span>
-              </div>
-              <div className="text-3xl font-extrabold text-[#001d59] mt-2">99.4%</div>
-              <div className="text-xs text-[#747683] mt-1">100% cold-chain compliant</div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#e6e8eb]">
-              <div className="flex items-center justify-between text-[#747683] text-xs font-semibold">
-                <span>Reward Credit</span>
-                <span className="text-[#001d59] bg-[#dbe1ff] px-2 py-0.5 rounded-full font-bold text-[11px]">PayPal Direct</span>
-              </div>
-              <div className="text-3xl font-extrabold text-[#001d59] mt-2">$34.50</div>
-              <div className="text-xs text-[#747683] mt-1">3,450 FOODLOOP Points</div>
-            </div>
-          </div>
-
-          {/* Surplus Revenue Balance Banner */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e6e8eb] flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#001d59] text-white flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[24px]">account_balance_wallet</span>
-              </div>
-              <div>
-                <div className="text-xs text-[#747683] font-semibold uppercase tracking-wider">
-                  Surplus Revenue Balance
-                </div>
-                <div className="text-3xl font-black text-[#001d59] mt-0.5">
-                  {ledgerBalance}
-                </div>
-                <p className="text-xs text-[#747683] mt-1">
-                  Instant settlement via PayPal Payouts or download IRS 501(c)(3) tax deduction receipt.
-                </p>
+              <div className="mt-2 text-2xl font-black text-[#001d59] dark:text-white">1,420 Meals</div>
+              <div className="mt-1 text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                <span>↑ 18% this month</span>
+                <span className="text-[#747683] dark:text-slate-400 font-normal">• 100% Tax Deductible</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0 flex-wrap">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xs border border-[#e6e8eb] dark:border-slate-800">
+              <div className="flex items-center justify-between text-[#747683] dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider">Estimated Carbon Offset</span>
+                <span className="material-symbols-outlined text-emerald-500 text-[20px]">eco</span>
+              </div>
+              <div className="mt-2 text-2xl font-black text-[#001d59] dark:text-white">3.55 MT CO2e</div>
+              <div className="mt-1 text-[11px] text-[#747683] dark:text-slate-400">
+                Equivalent to 14,200 km driving prevented
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xs border border-[#e6e8eb] dark:border-slate-800">
+              <div className="flex items-center justify-between text-[#747683] dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider">Donor Reward Points</span>
+                <span className="material-symbols-outlined text-purple-500 text-[20px]">stars</span>
+              </div>
+              <div className="mt-2 text-2xl font-black text-[#001d59] dark:text-white">21,300 Pts</div>
+              <div className="mt-1 text-[11px] text-purple-600 dark:text-purple-400 font-bold">
+                Tier: Platinum Sustainable Partner
+              </div>
+            </div>
+
+            {/* PayPal Merchant Wallet Settlement */}
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xs border border-blue-100 dark:border-blue-900 relative overflow-hidden">
+              <div className="flex items-center justify-between text-[#747683] dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider">PayPal Merchant Balance</span>
+                <span className="material-symbols-outlined text-blue-600 text-[20px]">account_balance_wallet</span>
+              </div>
+              <div className="mt-2 text-2xl font-black text-[#001d59] dark:text-white">{ledgerBalance}</div>
               <button
                 onClick={handlePayoutPayPal}
-                disabled={isPayoutProcessing || ledgerBalance.includes('Paid')}
-                className={`h-11 px-5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer ${
-                  ledgerBalance.includes('Paid')
-                    ? 'bg-emerald-600 text-white cursor-default'
-                    : 'bg-[#005ab6] hover:bg-[#004494] text-white'
-                }`}
+                disabled={isPayoutProcessing || ledgerBalance.includes('0.00')}
+                className="mt-2 w-full py-1.5 px-3 rounded-lg bg-[#005ab6] hover:bg-[#004494] disabled:bg-slate-200 dark:disabled:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shadow-xs"
               >
-                <span className={`material-symbols-outlined text-[18px] ${isPayoutProcessing ? 'animate-spin' : ''}`}>
-                  {isPayoutProcessing ? 'refresh' : 'bolt'}
+                <span className="material-symbols-outlined text-[16px]">
+                  {isPayoutProcessing ? 'refresh' : 'payments'}
                 </span>
-                <span>
-                  {isPayoutProcessing
-                    ? 'Processing...'
-                    : ledgerBalance.includes('Paid')
-                    ? 'Paid via PayPal ✓'
-                    : 'Withdraw via PayPal ($148.20)'}
-                </span>
-              </button>
-              <button
-                onClick={handleTaxSlip}
-                className="h-11 px-4 rounded-xl bg-[#f2f4f7] hover:bg-[#e6e8eb] text-[#001d59] font-bold text-sm transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
-              >
-                <span className="material-symbols-outlined text-[18px]">download</span>
-                <span>Tax Receipt (PDF)</span>
+                <span>{isPayoutProcessing ? 'Processing Payout...' : 'Transfer to PayPal'}</span>
               </button>
             </div>
           </div>
 
-          {/* Active Delivery Pipeline Stepper */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-[#e6e8eb]">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#005ab6] text-[20px]">local_shipping</span>
-                <span className="text-sm font-bold text-[#001d59]">
-                  Active Delivery: Pretzel Bakery Surplus (Lot #LP-8842)
+          {/* TWO COLUMN WORKSPACE */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            {/* LEFT COLUMN: Create Listing Form */}
+            <div className="lg:col-span-5 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-[#e6e8eb] dark:border-slate-800 flex flex-col">
+              <div className="flex items-center justify-between pb-4 border-b border-[#e6e8eb] dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#005ab6]">add_box</span>
+                  <h3 className="text-base font-bold text-[#001d59] dark:text-white">Publish New Food Surplus</h3>
+                </div>
+                <span className="text-[11px] font-bold text-[#005ab6] bg-blue-50 dark:bg-slate-800 px-2.5 py-0.5 rounded-full">
+                  Step 1 of 1
                 </span>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#005ab6]">
-                ETA: 18 mins
-              </span>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-1">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
-                <span className="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span>
-                <div>
-                  <div className="text-xs font-bold text-[#001d59]">1. Listed</div>
-                  <div className="text-[11px] text-[#747683]">11:04 AM</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
-                <span className="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span>
-                <div>
-                  <div className="text-xs font-bold text-[#001d59]">2. Matched</div>
-                  <div className="text-[11px] text-[#747683]">Hope Harbor Kitchen</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 border border-blue-100">
-                <span className="material-symbols-outlined text-[#005ab6] text-[20px] animate-pulse">local_shipping</span>
-                <div>
-                  <div className="text-xs font-bold text-[#005ab6]">3. En Route</div>
-                  <div className="text-[11px] text-[#747683]">Courier #FL-914</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 opacity-60">
-                <span className="material-symbols-outlined text-slate-400 text-[20px]">qr_code_2</span>
-                <div>
-                  <div className="text-xs font-semibold text-slate-600">4. Handover</div>
-                  <div className="text-[11px] text-[#747683]">Awaiting QR Scan</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Operational 2-Column Split */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            {/* LEFT COLUMN: List Surplus Food Form */}
-            <div className="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-[#e6e8eb]">
-              <div className="flex items-center justify-between pb-4 border-b border-[#f2f4f7] mb-4">
-                <div>
-                  <h2 className="text-base font-bold text-[#001d59]">List Surplus Food</h2>
-                  <p className="text-xs text-[#747683] mt-0.5">Post excess food for immediate shelter pickup.</p>
-                </div>
-                <span className="material-symbols-outlined text-[#005ab6] text-[24px]">add_circle</span>
-              </div>
-
-              <form onSubmit={handlePublishListing} className="flex flex-col gap-4">
-                {/* Allocation Model */}
+              <form onSubmit={handlePublishListing} className="mt-5 flex flex-col gap-4">
+                {/* Allocation Type Switcher */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#001d59]">Listing Mode</label>
-                  <div className="grid grid-cols-3 gap-1 bg-[#f2f4f7] p-1 rounded-xl">
+                  <label className="text-xs font-bold text-[#001d59] dark:text-white">Surplus Listing Type</label>
+                  <div className="grid grid-cols-3 gap-2 p-1 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl">
                     <button
                       type="button"
                       onClick={() => setAllocationMode('free')}
-                      className={`py-2 text-center rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                         allocationMode === 'free'
-                          ? 'bg-white text-[#001d59] shadow-sm'
-                          : 'text-[#747683] hover:text-[#001d59]'
+                          ? 'bg-[#001d59] text-white shadow-xs'
+                          : 'text-[#444652] dark:text-slate-300 hover:text-[#001d59]'
                       }`}
                     >
-                      Donate Free
+                      <span className="material-symbols-outlined text-[15px]">volunteer_activism</span>
+                      <span>Free Rescue</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setAllocationMode('discount')}
-                      className={`py-2 text-center rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                         allocationMode === 'discount'
-                          ? 'bg-white text-[#001d59] shadow-sm'
-                          : 'text-[#747683] hover:text-[#001d59]'
+                          ? 'bg-[#001d59] text-white shadow-xs'
+                          : 'text-[#444652] dark:text-slate-300 hover:text-[#001d59]'
                       }`}
                     >
-                      Sell Discounted
+                      <span className="material-symbols-outlined text-[15px]">sell</span>
+                      <span>Discounted</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setAllocationMode('sponsored')}
-                      className={`py-2 text-center rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                         allocationMode === 'sponsored'
-                          ? 'bg-white text-[#001d59] shadow-sm'
-                          : 'text-[#747683] hover:text-[#001d59]'
+                          ? 'bg-[#001d59] text-white shadow-xs'
+                          : 'text-[#444652] dark:text-slate-300 hover:text-[#001d59]'
                       }`}
                     >
-                      Sponsored
+                      <span className="material-symbols-outlined text-[15px]">diversity_1</span>
+                      <span>Sponsored</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Optional Pricing for Discount Sale */}
+                {/* Discounted price input if Discount Mode */}
                 {allocationMode === 'discount' && (
-                  <div className="flex flex-col gap-1 p-3 bg-blue-50/70 border border-blue-100 rounded-xl">
+                  <div className="p-3 bg-blue-50 dark:bg-slate-800 rounded-xl border border-blue-200 dark:border-slate-700 flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-[#001d59]">Discount Sale Price ($)</label>
-                      <span className="text-[11px] font-extrabold text-[#005ab6]">Payout to You: ${discountPrice.toFixed(2)} USD</span>
+                      <label className="text-xs font-bold text-[#001d59] dark:text-white">Discounted Recovery Price ($ USD)</label>
+                      <span className="text-[11px] font-bold text-[#005ab6]">PayPal Direct Settle</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[#001d59]">$</span>
+                      <span className="font-bold text-[#001d59] dark:text-white text-base">$</span>
                       <input
                         type="number"
                         step="0.5"
                         min="1"
-                        max="50"
                         value={discountPrice}
-                        onChange={(e) => setDiscountPrice(parseFloat(e.target.value) || 0)}
-                        className="w-full h-10 px-3 bg-white rounded-lg text-sm font-bold text-[#001d59] border border-blue-200 focus:outline-none"
+                        onChange={(e) => setDiscountPrice(parseFloat(e.target.value) || 1)}
+                        className="w-full h-10 px-3 bg-white dark:bg-slate-900 rounded-lg text-sm font-bold text-[#001d59] dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none"
                       />
                     </div>
-                    <p className="text-[10px] text-[#747683]">
+                    <p className="text-[10px] text-[#747683] dark:text-slate-400">
                       When buyers claim this surplus, proceeds settle directly into your PayPal merchant wallet.
                     </p>
                   </div>
@@ -605,9 +605,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
 
                 {/* Food Title */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-[#001d59]">Food Description</label>
+                  <label className="text-xs font-bold text-[#001d59] dark:text-white">Food Description</label>
                   <input
-                    className="w-full h-11 px-3.5 bg-[#f2f4f7] rounded-xl text-sm text-[#191c1e] placeholder:text-[#747683] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200"
+                    className="w-full h-11 px-3.5 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl text-sm text-[#191c1e] dark:text-white placeholder:text-[#747683] focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200"
                     placeholder="e.g., Artisanal Sourdough & Fresh Baguettes"
                     value={foodTitle}
                     onChange={(e) => setFoodTitle(e.target.value)}
@@ -619,12 +619,12 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 {/* Pickup Location Address & Google Map */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-[#001d59]">Kitchen Pickup Location &amp; Google Map</label>
+                    <label className="text-xs font-bold text-[#001d59] dark:text-white">Kitchen Pickup Location &amp; Google Map</label>
                     <button
                       type="button"
                       onClick={handleLocateKitchen}
                       disabled={isLocatingKitchen}
-                      className="text-[11px] font-bold text-[#005ab6] hover:text-[#001d59] flex items-center gap-1 bg-[#f2f4f7] hover:bg-slate-200 px-2 py-1 rounded-md transition-all cursor-pointer"
+                      className="text-[11px] font-bold text-[#005ab6] hover:text-[#001d59] flex items-center gap-1 bg-[#f2f4f7] dark:bg-slate-800 hover:bg-slate-200 px-2 py-1 rounded-md transition-all cursor-pointer"
                     >
                       <span className={`material-symbols-outlined text-[14px] ${isLocatingKitchen ? 'animate-spin' : ''}`}>
                         {isLocatingKitchen ? 'refresh' : 'my_location'}
@@ -634,7 +634,7 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   </div>
                   <div className="relative">
                     <input
-                      className="w-full h-11 pl-9 pr-3.5 bg-[#f2f4f7] rounded-xl text-sm text-[#191c1e] placeholder:text-[#747683] focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200 font-medium"
+                      className="w-full h-11 pl-9 pr-3.5 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl text-sm text-[#191c1e] dark:text-white placeholder:text-[#747683] focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-[#005ab6]/30 border border-transparent focus:border-blue-200 font-medium"
                       placeholder="e.g., 742 Boylston St, Back Bay, Boston"
                       value={locationAddress}
                       onChange={(e) => {
@@ -650,14 +650,14 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   </div>
 
                   {/* Real Google Maps Embed for Kitchen Location */}
-                  <div className="relative w-full h-[160px] rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner mt-1">
+                  <div className="relative w-full h-[160px] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 shadow-inner mt-1">
                     <iframe
                       title="Google Maps Kitchen Location"
                       src={`https://maps.google.com/maps?q=${encodeURIComponent(locationAddress)}&hl=en&z=15&output=embed`}
                       className="w-full h-full border-0"
                       loading="lazy"
                     />
-                    <div className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-[#001d59] shadow flex items-center gap-1 border border-slate-200">
+                    <div className="absolute bottom-2 right-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-[#001d59] dark:text-white shadow flex items-center gap-1 border border-slate-200 dark:border-slate-700">
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationAddress)}`}
                         target="_blank"
@@ -673,9 +673,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 {/* Category & Quantity */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-[#001d59]">Category</label>
+                    <label className="text-xs font-bold text-[#001d59] dark:text-white">Category</label>
                     <select
-                      className="w-full h-11 px-3 bg-[#f2f4f7] rounded-xl text-xs text-[#001d59] font-semibold focus:outline-none border border-transparent"
+                      className="w-full h-11 px-3 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl text-xs text-[#001d59] dark:text-white font-semibold focus:outline-none border border-transparent"
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     >
@@ -687,20 +687,20 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-[#001d59]">Quantity (Meals)</label>
-                    <div className="flex items-center h-11 bg-[#f2f4f7] rounded-xl px-2 justify-between">
+                    <label className="text-xs font-bold text-[#001d59] dark:text-white">Quantity (Meals)</label>
+                    <div className="flex items-center h-11 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl px-2 justify-between">
                       <button
                         type="button"
                         onClick={() => setQuantity((q) => (q > 1 ? q - 1 : 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white text-[#001d59] hover:bg-slate-100 font-bold cursor-pointer"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 text-[#001d59] dark:text-white font-bold cursor-pointer"
                       >
                         -
                       </button>
-                      <span className="text-sm font-black text-[#001d59]">{quantity}</span>
+                      <span className="text-sm font-black text-[#001d59] dark:text-white">{quantity}</span>
                       <button
                         type="button"
                         onClick={() => setQuantity((q) => q + 1)}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white text-[#001d59] hover:bg-slate-100 font-bold cursor-pointer"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 text-[#001d59] dark:text-white font-bold cursor-pointer"
                       >
                         +
                       </button>
@@ -711,9 +711,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 {/* Pickup Deadline & Storage */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-[#001d59]">Pickup Deadline</label>
+                    <label className="text-xs font-bold text-[#001d59] dark:text-white">Pickup Deadline</label>
                     <select
-                      className="w-full h-11 px-3 bg-[#f2f4f7] rounded-xl text-xs text-[#001d59] font-semibold focus:outline-none border border-transparent"
+                      className="w-full h-11 px-3 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl text-xs text-[#001d59] dark:text-white font-semibold focus:outline-none border border-transparent"
                       value={expiryWindow}
                       onChange={(e) => setExpiryWindow(e.target.value)}
                     >
@@ -724,9 +724,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-[#001d59]">Storage</label>
+                    <label className="text-xs font-bold text-[#001d59] dark:text-white">Storage</label>
                     <select
-                      className="w-full h-11 px-3 bg-[#f2f4f7] rounded-xl text-xs text-[#001d59] font-semibold focus:outline-none border border-transparent"
+                      className="w-full h-11 px-3 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl text-xs text-[#001d59] dark:text-white font-semibold focus:outline-none border border-transparent"
                       value={tempProfile}
                       onChange={(e) => setTempProfile(e.target.value)}
                     >
@@ -740,87 +740,161 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="mt-2 h-12 w-full rounded-xl bg-[#001d59] hover:bg-[#003087] text-white text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                  className="mt-2 h-12 w-full rounded-xl bg-[#001d59] dark:bg-[#005ab6] hover:bg-[#003087] text-white text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[20px]">send</span>
                   <span>Publish Surplus Listing</span>
                 </button>
               </form>
 
-              <p className="mt-4 text-[11px] text-[#747683] text-center">
+              <p className="mt-4 text-[11px] text-[#747683] dark:text-slate-400 text-center">
                 Protected by the Federal Bill Emerson Good Samaritan Food Donation Act.
               </p>
             </div>
 
-            {/* RIGHT COLUMN: Recent Food Listings */}
-            <div className="lg:col-span-7 flex flex-col gap-4">
-              
-              {/* Section Header with Filters */}
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#e6e8eb] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-base font-bold text-[#001d59]">Recent Food Listings</span>
-                  <span className="bg-[#005ab6]/10 text-[#005ab6] text-xs px-2.5 py-0.5 rounded-full font-bold">
-                    1 Active
+            {/* RIGHT COLUMN: Active Listings & Incoming Requests */}
+            <div className="lg:col-span-7 flex flex-col gap-6">
+
+              {/* INCOMING RESERVATIONS & REQUESTS */}
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-[#e6e8eb] dark:border-slate-800 flex flex-col gap-3">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#005ab6]">notifications_active</span>
+                    <h3 className="text-base font-bold text-[#001d59] dark:text-white">Incoming Claims &amp; Reservations</h3>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-slate-800 text-[#005ab6] text-xs font-bold">
+                    {reservations.length} Active
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  {[
-                    { id: 'all', label: 'All' },
-                    { id: 'en_route', label: 'En Route' },
-                  ].map((f) => (
-                    <button
-                      key={f.id}
-                      onClick={() => setListingFilter(f.id as any)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        listingFilter === f.id
-                          ? 'bg-[#001d59] text-white'
-                          : 'bg-[#f2f4f7] hover:bg-[#eceef1] text-[#747683]'
-                      }`}
-                    >
-                      {f.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              {/* Listings Stream (Single clean active listing) */}
-              <div className="flex flex-col gap-3">
-                <div className="bg-white p-4.5 rounded-2xl shadow-sm border border-[#e6e8eb] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <img
-                      className="w-14 h-14 rounded-xl object-cover shrink-0"
-                      alt="Rustic Sourdough"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXgJxF8XlPe2SWtCGy5xpXxnq5zGyinFS-J5ZzHIUbffQGVU9i6OS8kxQGjnxe5nF6au6OoFlFdbGMlU9Q4ZNsZM95_3_NIuUE1ZOSDH3TZO_P55M0e9kXN4eN3m5z424z9TDa9ofFUcxoTbAb0-I369UP5K9YX1fYshCLK9Y7c6JDIQK1cbvCxqgE5h9Sv3LsOBcW03QkHcz5rf3IGjq4PoiAfk7Bha8KHqWKdPM"
-                    />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[#001d59] text-sm">Rustic Artisan Sourdough</span>
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#005ab6] font-bold">
-                          En Route
-                        </span>
+                {reservations.length === 0 ? (
+                  <p className="text-xs text-[#747683] dark:text-slate-400 py-3 text-center">
+                    No pending claims yet. Newly published listings will appear here when reserved.
+                  </p>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {reservations.map((res) => (
+                      <div
+                        key={res.id}
+                        className="p-3.5 rounded-xl bg-[#f2f4f7] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm text-[#001d59] dark:text-white">
+                              {res.recipient_name || 'Consumer Recipient'}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                              {res.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#747683] dark:text-slate-400 mt-1">
+                            {res.portions || 1} Portions • Token: <span className="font-mono font-bold text-[#005ab6]">{res.collection_token}</span>
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {res.status !== 'confirmed' && (
+                            <button
+                              onClick={() => handleReservationStatus(res.id, 'confirmed')}
+                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all cursor-pointer"
+                            >
+                              Accept
+                            </button>
+                          )}
+                          {res.status !== 'cancelled' && (
+                            <button
+                              onClick={() => handleReservationStatus(res.id, 'cancelled')}
+                              className="px-3 py-1.5 rounded-lg bg-[#ba1a1a] hover:bg-red-700 text-white text-xs font-bold transition-all cursor-pointer"
+                            >
+                              Reject
+                            </button>
+                          )}
+                          <button
+                            onClick={() => openVerificationModal(res.id, `Claim #${res.id}`, res.recipient_name, res.collection_token)}
+                            className="px-3 py-1.5 rounded-lg bg-[#001d59] dark:bg-[#005ab6] text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                          >
+                            <span className="material-symbols-outlined text-[15px]">qr_code_2</span>
+                            <span>Verify</span>
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-xs sm:text-sm text-[#747683] mt-1">
-                        32 Portions • Matched to St. Jude Community Pantry
-                      </p>
-                    </div>
+                    ))}
                   </div>
-
+                )}
+              </div>
+              
+              {/* SECTION: Active Food Listings */}
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-[#e6e8eb] dark:border-slate-800 flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => openVerificationModal('LP-8842', 'Rustic Artisan Sourdough', 'St. Jude Community Pantry')}
-                      className="h-10 px-4 rounded-xl bg-[#005ab6] hover:bg-[#004494] text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm shrink-0"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
-                      <span>Verify Handshake</span>
-                    </button>
-                    <button
-                      onClick={handleTaxSlip}
-                      className="h-10 px-3.5 rounded-xl bg-[#f2f4f7] hover:bg-[#e6e8eb] text-[#747683] hover:text-[#001d59] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 border border-slate-200"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">receipt</span>
-                      <span>Receipt</span>
-                    </button>
+                    <span className="material-symbols-outlined text-[#005ab6]">storefront</span>
+                    <span className="text-base font-bold text-[#001d59] dark:text-white">Your Published Listings</span>
+                    <span className="bg-[#005ab6]/10 text-[#005ab6] text-xs px-2.5 py-0.5 rounded-full font-bold">
+                      {listings.length} Active
+                    </span>
                   </div>
+                  <button
+                    onClick={fetchDonorData}
+                    className="text-xs font-bold text-[#005ab6] hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Refresh Data</span>
+                  </button>
+                </div>
+
+                {/* Listings Stream */}
+                <div className="flex flex-col gap-3">
+                  {listings.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-[#f2f4f7] dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <img
+                          className="w-14 h-14 rounded-xl object-cover shrink-0"
+                          alt={item.title}
+                          src={
+                            item.imageUrl ||
+                            'https://lh3.googleusercontent.com/aida-public/AB6AXuCXgJxF8XlPe2SWtCGy5xpXxnq5zGyinFS-J5ZzHIUbffQGVU9i6OS8kxQGjnxe5nF6au6OoFlFdbGMlU9Q4ZNsZM95_3_NIuUE1ZOSDH3TZO_P55M0e9kXN4eN3m5z424z9TDa9ofFUcxoTbAb0-I369UP5K9YX1fYshCLK9Y7c6JDIQK1cbvCxqgE5h9Sv3LsOBcW03QkHcz5rf3IGjq4PoiAfk7Bha8KHqWKdPM'
+                          }
+                        />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-[#001d59] dark:text-white text-sm">{item.title}</span>
+                            <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-slate-700 text-[#005ab6] font-bold">
+                              {item.status || 'available'}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-[#747683] dark:text-slate-400 mt-1">
+                            {item.portions} Portions • {item.location || '742 Boylston St'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openVerificationModal(item.id, item.title, 'Regional Hub Courier', item.collectionToken)}
+                          className="h-9 px-3 rounded-lg bg-[#005ab6] hover:bg-[#004494] text-white text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm shrink-0"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">qr_code_2</span>
+                          <span>Handshake</span>
+                        </button>
+                        <button
+                          onClick={handleTaxSlip}
+                          className="h-9 px-3 rounded-lg bg-white dark:bg-slate-700 text-[#001d59] dark:text-white text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shrink-0 border border-slate-200 dark:border-slate-600"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">receipt</span>
+                          <span>Receipt</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteListing(item.id)}
+                          className="h-9 px-2 rounded-lg bg-[#ffdad6] text-[#ba1a1a] text-xs font-bold transition-all flex items-center justify-center cursor-pointer shrink-0"
+                          title="Delete Listing"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -831,9 +905,9 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
       {/* QR Verification Handshake Modal */}
       {isQrModalOpen && (
         <div className="fixed inset-0 z-50 bg-[#001d59]/50 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in duration-200 border border-[#e6e8eb]">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in duration-200 border border-[#e6e8eb] dark:border-slate-800">
             <button
-              className="absolute top-4 right-4 text-[#747683] hover:text-[#001d59] p-1 rounded-lg cursor-pointer"
+              className="absolute top-4 right-4 text-[#747683] hover:text-[#001d59] dark:hover:text-white p-1 rounded-lg cursor-pointer"
               onClick={() => setIsQrModalOpen(false)}
             >
               <span className="material-symbols-outlined text-[20px]">close</span>
@@ -842,10 +916,10 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
               <div className="w-12 h-12 rounded-full bg-[#005ab6]/10 flex items-center justify-center text-[#005ab6] mb-3">
                 <span className="material-symbols-outlined text-[26px]">qr_code_2</span>
               </div>
-              <span className="text-lg font-bold text-[#001d59]">Rescue Handshake Verification</span>
-              <p className="text-xs text-[#747683] mt-1">Scan this QR token when the courier arrives for handover.</p>
+              <span className="text-lg font-bold text-[#001d59] dark:text-white">Rescue Handshake Verification</span>
+              <p className="text-xs text-[#747683] dark:text-slate-400 mt-1">Scan this QR token when the courier arrives for handover.</p>
 
-              <div className="mt-5 p-4 bg-[#f2f4f7] rounded-xl flex flex-col items-center shadow-inner border border-[#e6e8eb]">
+              <div className="mt-5 p-4 bg-[#f2f4f7] dark:bg-slate-800 rounded-xl flex flex-col items-center shadow-inner border border-[#e6e8eb] dark:border-slate-700">
                 <div className="w-44 h-44 bg-white p-3 rounded-lg flex flex-col justify-between shadow-sm border border-[#e0e3e6]">
                   <svg className="w-full h-full text-[#001d59]" fill="currentColor" viewBox="0 0 100 100">
                     <rect fill="currentColor" height="30" rx="3" width="30" x="0" y="0"></rect>
@@ -878,11 +952,11 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                     <rect height="6" width="6" x="88" y="70"></rect>
                   </svg>
                 </div>
-                <div className="mt-3 font-mono text-xs font-bold text-[#001d59] tracking-widest uppercase">
-                  LOT #{selectedLot.id}-SECURE
+                <div className="mt-3 font-mono text-xs font-bold text-[#001d59] dark:text-[#dbe1ff] tracking-widest uppercase">
+                  TOKEN: {selectedLot.token || 'FLP-8842-7721'}
                 </div>
-                <div className="text-[11px] text-[#747683] mt-0.5">
-                  Assigned to: {selectedLot.agency}
+                <div className="text-[11px] text-[#747683] dark:text-slate-400 mt-0.5">
+                  Assigned: {selectedLot.agency}
                 </div>
               </div>
 
@@ -892,11 +966,11 @@ export const DonorPortal: React.FC<DonorPortalProps> = ({
                   className="h-11 w-full bg-[#005ab6] hover:bg-[#004494] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[18px]">verified</span>
-                  <span>Confirm Courier Handover</span>
+                  <span>Confirm Custody Handover</span>
                 </button>
                 <button
                   onClick={() => setIsQrModalOpen(false)}
-                  className="h-9 w-full bg-transparent hover:bg-[#f2f4f7] text-[#747683] text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  className="h-9 w-full bg-transparent hover:bg-[#f2f4f7] dark:hover:bg-slate-800 text-[#747683] text-xs font-semibold rounded-xl transition-colors cursor-pointer"
                 >
                   Close
                 </button>

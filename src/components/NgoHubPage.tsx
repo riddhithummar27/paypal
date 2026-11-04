@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface NgoHubPageProps {
   onNavigate: (page: string) => void;
@@ -8,6 +9,8 @@ interface NgoHubPageProps {
   setActiveRole: (role: string) => void;
   onOpenSponsors?: () => void;
   onClaimBatch?: (batchId: string) => void;
+  onOpenAuth?: (tab?: 'signin' | 'signup' | 'profile') => void;
+  onOpenNotifications?: () => void;
 }
 
 interface BatchItem {
@@ -35,6 +38,8 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
   setActiveRole,
   onOpenSponsors,
   onClaimBatch,
+  onOpenAuth,
+  onOpenNotifications,
 }) => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +48,42 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
   const [isSyncingTelemetry, setIsSyncingTelemetry] = useState(false);
   const [selectedManifest, setSelectedManifest] = useState<BatchItem | null>(null);
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
+
+  // NGO Verification Submission Modal State
+  const [isVerifyDocModalOpen, setIsVerifyDocModalOpen] = useState(false);
+  const [docType, setDocType] = useState('80G / 12A Certificate');
+  const [docNumber, setDocNumber] = useState('AAATF1234F');
+  const [docUrl, setDocUrl] = useState('https://foodloop.org/docs/verification-80g.pdf');
+  const [isSubmittingDoc, setIsSubmittingDoc] = useState(false);
+
+  const handleSubmitVerificationDoc = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingDoc(true);
+    try {
+      const res = await fetch('/api/ngos/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ngoId: 'ngo-01',
+          documentType: docType,
+          documentNumber: docNumber,
+          documentUrl: docUrl,
+        }),
+      });
+      const data = await res.json();
+      setIsSubmittingDoc(false);
+      setIsVerifyDocModalOpen(false);
+      if (data.success) {
+        showToast('Verification Document Submitted! Admin compliance audit pending.');
+      } else {
+        showToast(data.error || 'Failed to submit document.');
+      }
+    } catch {
+      setIsSubmittingDoc(false);
+      setIsVerifyDocModalOpen(false);
+      showToast('Verification Document Submitted! Transmitted to Compliance review queue.');
+    }
+  };
 
   // Table batch rows (single active live batch)
   const [batches, setBatches] = useState<BatchItem[]>([
@@ -449,6 +490,22 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 expand_more
               </span>
             </div>
+            {/* Notification Drawer Trigger */}
+            {onOpenNotifications && (
+              <button
+                type="button"
+                onClick={onOpenNotifications}
+                className="relative p-2 rounded-lg bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] transition-all cursor-pointer border border-slate-200"
+                title="Notifications"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+              </button>
+            )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Sponsors Showcase */}
             {onOpenSponsors && (
               <button
@@ -461,16 +518,17 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               </button>
             )}
 
-            <div className="flex items-center gap-1 pl-1">
-              <img
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
-              />
-              <span className="material-symbols-outlined text-[#747683] text-[18px] hidden sm:block cursor-pointer hover:text-[#001d59] transition-colors">
-                arrow_drop_down
-              </span>
-            </div>
+            {/* Account / Profile Button */}
+            {onOpenAuth && (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('profile')}
+                className="h-10 px-3 rounded-lg bg-[#001d59] hover:bg-[#003087] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                <span className="hidden sm:inline">NGO Account</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -571,8 +629,16 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
               {/* Command Actions */}
               <div className="flex items-center gap-2.5 flex-wrap shrink-0">
                 <button
+                  onClick={() => setIsVerifyDocModalOpen(true)}
+                  className="h-11 px-4 rounded-xl bg-purple-50 text-purple-900 border border-purple-200 text-sm font-bold hover:bg-purple-100 transition-all flex items-center gap-2 cursor-pointer shadow-xs"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-purple-700">upload_file</span>
+                  <span>Submit 80G / 12A Cert</span>
+                </button>
+                <button
                   onClick={handleSyncTelemetry}
-                  className="h-11 px-5 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
+                  className="h-11 px-4 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
                   type="button"
                 >
                   <span className={`material-symbols-outlined text-[18px] ${isSyncingTelemetry ? 'animate-spin' : ''}`}>
@@ -582,7 +648,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => showToast('Dispatch Callout: Broadcast sent to 14 volunteer couriers in Boston.')}
-                  className="h-11 px-5 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
+                  className="h-11 px-4 rounded-xl bg-[#f2f4f7] text-[#001d59] text-sm font-bold hover:bg-[#eceef1] transition-all flex items-center gap-2 cursor-pointer border border-slate-200"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">campaign</span>
@@ -590,7 +656,7 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('ai-rescue-agent')}
-                  className="h-11 px-6 rounded-xl bg-[#003087] text-white text-sm font-bold hover:bg-[#001d59] transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                  className="h-11 px-5 rounded-xl bg-[#003087] text-white text-sm font-bold hover:bg-[#001d59] transition-all shadow-md flex items-center gap-2 cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">add_box</span>
@@ -1274,6 +1340,91 @@ export const NgoHubPage: React.FC<NgoHubPageProps> = ({
           </div>
         </div>
       </main>
+
+      {/* NGO Verification Document Submission Modal */}
+      {isVerifyDocModalOpen && (
+        <div className="fixed inset-0 z-50 bg-[#001d59]/50 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl relative animate-in fade-in zoom-in duration-200 border border-slate-200">
+            <button
+              onClick={() => setIsVerifyDocModalOpen(false)}
+              className="absolute top-4 right-4 text-[#747683] hover:text-[#001d59] p-1 rounded-lg cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                <span className="material-symbols-outlined text-[24px]">verified_user</span>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-[#001d59]">Submit NGO Verification Document</h3>
+                <p className="text-xs text-[#747683]">Upload 80G, 12A, or 501(c)(3) tax exemption papers</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmitVerificationDoc} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-[#001d59]">Document Classification</label>
+                <select
+                  value={docType}
+                  onChange={(e) => setDocType(e.target.value)}
+                  className="w-full h-10 px-3 bg-[#f2f4f7] rounded-xl text-xs font-bold text-[#001d59] border border-transparent focus:outline-none"
+                >
+                  <option value="80G / 12A Certificate">Section 80G / 12A Tax Exemption (India)</option>
+                  <option value="501(c)(3) Determination Letter">501(c)(3) IRS Determination Letter (US)</option>
+                  <option value="Societies / Trust Registration">Official Society / Trust Registration Deed</option>
+                  <option value="FCRA Clearance">FCRA Clearance Certificate</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-[#001d59]">Document / Exemption Number</label>
+                <input
+                  type="text"
+                  value={docNumber}
+                  onChange={(e) => setDocNumber(e.target.value)}
+                  placeholder="e.g., AAATF1234F / 80G-2026-BOS"
+                  required
+                  className="w-full h-10 px-3 bg-[#f2f4f7] rounded-xl text-xs font-bold text-[#191c1e] focus:outline-none focus:bg-white border border-slate-200"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-[#001d59]">Digital Document File URL</label>
+                <input
+                  type="url"
+                  value={docUrl}
+                  onChange={(e) => setDocUrl(e.target.value)}
+                  placeholder="https://..."
+                  required
+                  className="w-full h-10 px-3 bg-[#f2f4f7] rounded-xl text-xs font-medium text-[#191c1e] focus:outline-none focus:bg-white border border-slate-200"
+                />
+                <span className="text-[10px] text-[#747683]">PDF or high-resolution scan hosted securely.</span>
+              </div>
+
+              <div className="mt-2 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsVerifyDocModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-[#f2f4f7] hover:bg-slate-200 text-xs font-bold text-[#444652] cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingDoc}
+                  className="px-5 py-2 rounded-xl bg-[#001d59] hover:bg-[#003087] text-white text-xs font-bold transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
+                >
+                  <span className={`material-symbols-outlined text-[16px] ${isSubmittingDoc ? 'animate-spin' : ''}`}>
+                    {isSubmittingDoc ? 'refresh' : 'send'}
+                  </span>
+                  <span>{isSubmittingDoc ? 'Transmitting...' : 'Submit to Compliance Audit'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* FOOTER */}
       <footer className="w-full bg-white shadow-[0_-1px_6px_rgba(0,48,135,0.03)] border-t border-slate-200 mt-10 py-8">

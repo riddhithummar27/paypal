@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface ExploreFoodPageProps {
   onNavigate: (page: string) => void;
@@ -8,6 +9,8 @@ interface ExploreFoodPageProps {
   setActiveRole: (role: string) => void;
   onOpenSponsors?: () => void;
   onOrderCompleted?: (listingId: string, orderDetails: any) => void;
+  onOpenAuth?: (tab?: 'signin' | 'signup' | 'profile') => void;
+  onOpenNotifications?: () => void;
 }
 
 interface FoodDetail {
@@ -69,6 +72,8 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
   setActiveRole,
   onOpenSponsors,
   onOrderCompleted,
+  onOpenAuth,
+  onOpenNotifications,
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'split'>('split');
   const [statusFilter, setStatusFilter] = useState<'all' | 'free' | 'discounted' | 'sponsored'>('all');
@@ -226,23 +231,32 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
           const capData = await capRes.json();
           const verifiedId = capData.id || orderData.id;
 
-          // Update backend listing status
-          await fetch('/api/listings', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: activeFood.specCode || activeFood.id,
-              status: 'reserved',
-              claimedBy: 'Consumer (Verified PayPal)',
-              paypalOrderId: verifiedId,
-            }),
-          }).catch(console.error);
+          // Create official atomic reservation in backend database
+          let collectionToken = `FLP-${selectedCardKey}-${Date.now().toString().slice(-4)}`;
+          try {
+            const resvRes = await fetch('/api/reservations', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                listing_id: activeFood.specCode || activeFood.id,
+                recipient_name: 'Verified Consumer',
+                portions: 1,
+                paypal_order_id: verifiedId,
+              }),
+            });
+            const resvData = await resvRes.json();
+            if (resvData.reservation?.collection_token) {
+              collectionToken = resvData.reservation.collection_token;
+            }
+          } catch {
+            // Local fallback
+          }
 
           if (onOrderCompleted) {
             onOrderCompleted(selectedCardKey, { orderId: verifiedId, status: 'COMPLETED' });
           }
           closeDetailsModal();
-          showToast(`PayPal checkout approved ($${(rawPrice > 0 ? rawPrice : 4.5).toFixed(2)})! Digital pickup QR code generated.`);
+          showToast(`PayPal checkout approved ($${(rawPrice > 0 ? rawPrice : 4.5).toFixed(2)})! Token: ${collectionToken}`);
         } else {
           closeDetailsModal();
           showToast(`Order processed via PayPal Sandbox! Pickup QR voucher synced.`);
@@ -254,19 +268,28 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
         setIsProcessingPayPal(false);
       }
     } else {
-      // Free claim backend sync
-      await fetch('/api/listings', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: activeFood.specCode || activeFood.id,
-          status: 'reserved',
-          claimedBy: 'Consumer (Free Community Rescue)',
-        }),
-      }).catch(console.error);
+      // Free claim backend sync & reservation creation
+      let collectionToken = `FLP-${selectedCardKey}-${Date.now().toString().slice(-4)}`;
+      try {
+        const resvRes = await fetch('/api/reservations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            listing_id: activeFood.specCode || activeFood.id,
+            recipient_name: 'Verified Consumer',
+            portions: 1,
+          }),
+        });
+        const resvData = await resvRes.json();
+        if (resvData.reservation?.collection_token) {
+          collectionToken = resvData.reservation.collection_token;
+        }
+      } catch {
+        // Local fallback
+      }
 
       closeDetailsModal();
-      showToast(`Free Rescue confirmed for ${activeFood.title}! QR pickup token synced to your profile wallet.`);
+      showToast(`Free Rescue confirmed for ${activeFood.title}! Token: ${collectionToken}`);
       if (onOrderCompleted) {
         onOrderCompleted(selectedCardKey, { orderId: `FREE-${Date.now().toString().slice(-4)}`, status: 'FREE_CLAIM' });
       }
@@ -412,6 +435,22 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
               </span>
             </div>
 
+            {/* Notification Drawer Trigger */}
+            {onOpenNotifications && (
+              <button
+                type="button"
+                onClick={onOpenNotifications}
+                className="relative p-2 rounded-lg bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] transition-all cursor-pointer border border-slate-200"
+                title="Notifications"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+              </button>
+            )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Sponsors Showcase */}
             {onOpenSponsors && (
               <button
@@ -424,16 +463,17 @@ export const ExploreFoodPage: React.FC<ExploreFoodPageProps> = ({
               </button>
             )}
 
-            <div className="flex items-center gap-1 pl-1 cursor-pointer">
-              <img
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
-              />
-              <span className="material-symbols-outlined text-[#747683] text-[18px] hidden sm:block">
-                arrow_drop_down
-              </span>
-            </div>
+            {/* Account / Profile Button */}
+            {onOpenAuth && (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('profile')}
+                className="h-10 px-3 rounded-lg bg-[#001d59] hover:bg-[#003087] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                <span className="hidden sm:inline">My Profile</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

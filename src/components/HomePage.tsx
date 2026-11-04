@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
   activeRole: string;
   setActiveRole: (role: string) => void;
   onOpenSponsors?: () => void;
+  onOpenAuth?: (tab?: 'signin' | 'signup' | 'profile') => void;
+  onOpenNotifications?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -14,6 +17,8 @@ export const HomePage: React.FC<HomePageProps> = ({
   activeRole,
   setActiveRole,
   onOpenSponsors,
+  onOpenAuth,
+  onOpenNotifications,
 }) => {
   const [selectedRoleTab, setSelectedRoleTab] = useState<'donor' | 'recipient' | 'ngo'>('donor');
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -187,6 +192,22 @@ export const HomePage: React.FC<HomePageProps> = ({
               </span>
             </div>
 
+            {/* Notification Drawer Trigger */}
+            {onOpenNotifications && (
+              <button
+                type="button"
+                onClick={onOpenNotifications}
+                className="relative p-2 rounded-lg bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] transition-all cursor-pointer border border-slate-200"
+                title="Notifications"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+              </button>
+            )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Sponsors Showcase */}
             {onOpenSponsors && (
               <button
@@ -199,17 +220,17 @@ export const HomePage: React.FC<HomePageProps> = ({
               </button>
             )}
 
-            {/* Profile Avatar */}
-            <div className="flex items-center gap-1 pl-1 cursor-pointer">
-              <img
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
-              />
-              <span className="material-symbols-outlined text-[#747683] text-[18px] hidden sm:block">
-                arrow_drop_down
-              </span>
-            </div>
+            {/* Account / Profile Button */}
+            {onOpenAuth && (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('profile')}
+                className="h-10 px-3 rounded-lg bg-[#001d59] hover:bg-[#003087] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                <span className="hidden sm:inline">Account</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

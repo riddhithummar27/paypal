@@ -1,17 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RewardProfile } from '@/types/foodloop';
-import {
-  Award,
-  X,
-  Sparkles,
-  ShieldCheck,
-  Tag,
-  Copy,
-  Check,
-  CheckCircle2,
-} from 'lucide-react';
+import { Award, X, Sparkles, Tag, Copy, Check, CheckCircle2 } from 'lucide-react';
 
 interface RewardsModalProps {
   profile: RewardProfile;
@@ -19,19 +10,62 @@ interface RewardsModalProps {
   onClose: () => void;
 }
 
-export const RewardsModal: React.FC<RewardsModalProps> = ({
-  profile,
-  isOpen,
-  onClose,
-}) => {
-  const [copiedCode, setCopiedCode] = React.useState<string | null>(null);
+export const RewardsModal: React.FC<RewardsModalProps> = ({ profile, isOpen, onClose }) => {
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [pointsBalance, setPointsBalance] = useState<number>(profile.points || 380);
+  const [coupons, setCoupons] = useState<any[]>([]);
+  const [redeemingCode, setRedeemingCode] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetch('/api/rewards')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.balance) {
+            setPointsBalance(data.balance.total_points);
+          }
+          if (data.coupons) {
+            setCoupons(data.coupons);
+          }
+        })
+        .catch((err) => console.warn('Could not fetch rewards:', err));
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleCopy = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2000);
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(null), 2000);
+    }
+  };
+
+  const handleRedeem = async (couponCode: string) => {
+    setRedeemingCode(couponCode);
+    setMessage(null);
+
+    try {
+      const res = await fetch('/api/rewards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode }),
+      });
+      const data = await res.json();
+      setRedeemingCode(null);
+
+      if (data.success) {
+        setMessage({ text: `🎉 Coupon redeemed! Your voucher code: ${couponCode}` });
+        setPointsBalance((prev) => Math.max(0, prev - (data.coupon?.points_required || 50)));
+      } else {
+        setMessage({ text: data.error || 'Failed to redeem coupon.', isError: true });
+      }
+    } catch (err: any) {
+      setRedeemingCode(null);
+      setMessage({ text: err.message || 'Network error.', isError: true });
+    }
   };
 
   return (
@@ -39,7 +73,7 @@ export const RewardsModal: React.FC<RewardsModalProps> = ({
       <div className="bg-slate-900 border border-amber-500/30 w-full max-w-xl rounded-3xl p-6 shadow-2xl relative text-white space-y-6 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-slate-400 hover:text-white"
+          className="absolute top-5 right-5 text-slate-400 hover:text-white cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -57,108 +91,121 @@ export const RewardsModal: React.FC<RewardsModalProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Verified Food Rescue Impact & Partner Sustainability Rewards
+              Verified Food Rescue Impact &amp; Partner Sustainability Rewards
             </p>
           </div>
         </div>
 
-        {/* Stats Strip */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700 text-center">
-            <span className="text-[11px] text-slate-400">Meals Rescued</span>
-            <div className="text-xl font-black text-emerald-400 mt-0.5">
-              {profile.mealsRescued}
-            </div>
+        {/* Points & Stats Card */}
+        <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
+          <div>
+            <span className="text-[11px] text-slate-400 font-medium">Available Points</span>
+            <div className="text-2xl font-black text-amber-400 mt-0.5">{pointsBalance} pts</div>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700 text-center">
-            <span className="text-[11px] text-slate-400">CO₂ Offset</span>
-            <div className="text-xl font-black text-teal-400 mt-0.5">
-              {profile.co2SavedKg} kg
-            </div>
+          <div>
+            <span className="text-[11px] text-slate-400 font-medium">Meals Rescued</span>
+            <div className="text-2xl font-black text-white mt-0.5">{profile.mealsRescued}</div>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700 text-center">
-            <span className="text-[11px] text-slate-400">Reward Points</span>
-            <div className="text-xl font-black text-amber-400 mt-0.5">
-              {profile.points} pts
-            </div>
+          <div>
+            <span className="text-[11px] text-slate-400 font-medium">CO₂ Avoided</span>
+            <div className="text-2xl font-black text-emerald-400 mt-0.5">{profile.co2SavedKg} kg</div>
           </div>
         </div>
 
-        {/* Badges Section */}
+        {/* Message Banner */}
+        {message && (
+          <div
+            className={`p-3 rounded-xl text-xs font-bold border ${
+              message.isError
+                ? 'bg-red-500/20 text-red-200 border-red-500/40'
+                : 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40'
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
+
+        {/* Available Rewards & Partner Coupons */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-              Unlocked Sustainability Badges
-            </span>
-            <span className="text-xs text-emerald-400 font-semibold">Verified on Ledger</span>
+            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span>Redeem Partner Coupons</span>
+            </h4>
+            <span className="text-[11px] text-slate-400">15 pts earned per rescued meal</span>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {profile.badges.map((badge) => (
-              <div
-                key={badge.id}
-                className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/80 flex flex-col items-center text-center space-y-1.5"
-              >
-                <div className="text-3xl">{badge.icon}</div>
-                <div className="text-xs font-bold text-white">{badge.name}</div>
-                <p className="text-[10px] text-slate-400 leading-tight">
-                  {badge.description}
-                </p>
-                <span className="text-[9px] text-slate-500 font-mono pt-1">
-                  {badge.unlockedAt}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Partner Coupons */}
-        <div className="space-y-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-            Partner-Funded Eco Vouchers
-          </span>
 
           <div className="space-y-2.5">
-            {profile.unlockedVouchers.map((vch) => (
+            {(coupons.length > 0
+              ? coupons
+              : [
+                  {
+                    code: 'RESCUE10',
+                    title: '10% Off Organic Grocery Box',
+                    points_required: 50,
+                    partner_name: 'Whole Foods Co-op',
+                  },
+                  {
+                    code: 'BAKERY50',
+                    title: '$5 Off Artisan Bakery Order',
+                    points_required: 100,
+                    partner_name: 'Le Matin Boulangerie',
+                  },
+                  {
+                    code: 'CAFEFREE',
+                    title: 'Free Fair-Trade Coffee or Tea',
+                    points_required: 30,
+                    partner_name: 'Equator Roasters',
+                  },
+                ]
+            ).map((coupon) => (
               <div
-                key={vch.id}
-                className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-between gap-3"
+                key={coupon.code}
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 hover:bg-white/10 transition-colors"
               >
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <Tag className="w-3.5 h-3.5 text-amber-400" />
-                    <span className="text-xs font-bold text-white">{vch.discount}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-300">
+                    <Tag className="w-4 h-4" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {vch.partner} • {vch.expiresIn}
+                  <div>
+                    <div className="text-xs font-bold text-white">{coupon.title}</div>
+                    <div className="text-[10px] text-slate-400">
+                      {coupon.partner_name} • <strong className="text-amber-400">{coupon.points_required} pts</strong>
+                    </div>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleCopy(vch.code)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-700 hover:bg-slate-600 text-white flex items-center gap-1.5 transition-all"
-                >
-                  {copiedCode === vch.code ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>COPIED</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{vch.code}</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleCopy(coupon.code)}
+                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white text-xs font-mono transition-colors cursor-pointer"
+                    title="Copy coupon code"
+                  >
+                    {copiedCode === coupon.code ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                  <button
+                    onClick={() => handleRedeem(coupon.code)}
+                    disabled={redeemingCode === coupon.code || pointsBalance < coupon.points_required}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      pointsBalance >= coupon.points_required
+                        ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 hover:opacity-90 shadow'
+                        : 'bg-white/10 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    {redeemingCode === coupon.code ? 'Redeeming...' : 'Redeem'}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="pt-2">
+        {/* Footer */}
+        <div className="pt-2 flex items-center justify-between text-xs text-slate-400 border-t border-white/10">
+          <span>Protected by FOODLOOP Verified Collection Protocol</span>
           <button
             onClick={onClose}
-            className="w-full py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-all"
+            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold cursor-pointer"
           >
             Close
           </button>

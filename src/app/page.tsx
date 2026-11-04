@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HomePage } from '@/components/HomePage';
 import { ExploreFoodPage } from '@/components/ExploreFoodPage';
 import { Navbar } from '@/components/Navbar';
@@ -15,6 +15,10 @@ import { ImpactPage } from '@/components/ImpactPage';
 import { RewardsModal } from '@/components/RewardsModal';
 import { ApiDocsModal } from '@/components/ApiDocsModal';
 import { SponsorShowcaseModal } from '@/components/SponsorShowcaseModal';
+import { AuthModal } from '@/components/AuthModal';
+import { NotificationDrawer } from '@/components/NotificationDrawer';
+import { QrScannerModal } from '@/components/QrScannerModal';
+import { useAuth } from '@/context/AuthContext';
 
 import {
   INITIAL_FOOD_LISTINGS,
@@ -26,6 +30,7 @@ import {
 import { FoodListing, SponsorshipCampaign, DispatchSlot, RewardProfile } from '@/types/foodloop';
 
 export default function Home() {
+  const { openAuthModal } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('home');
   const [activeRole, setActiveRole] = useState<string>('donor');
   const [listings, setListings] = useState<FoodListing[]>(INITIAL_FOOD_LISTINGS);
@@ -36,6 +41,8 @@ export default function Home() {
   const [isRewardsOpen, setIsRewardsOpen] = useState(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState(false);
   const [isSponsorsOpen, setIsSponsorsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
   const [stats, setStats] = useState({
     mealsRescued: 142890,
@@ -43,6 +50,23 @@ export default function Home() {
     moneySaved: 48250,
     mealsSponsored: 1280,
   });
+
+  // Synchronize stats with live analytics endpoint
+  useEffect(() => {
+    fetch('/api/analytics')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.metrics) {
+          setStats({
+            mealsRescued: data.metrics.mealsRescued || 142890,
+            co2Kg: data.metrics.co2Kg || 89400,
+            moneySaved: data.metrics.moneySaved || 48250,
+            mealsSponsored: data.metrics.mealsSponsored || 1280,
+          });
+        }
+      })
+      .catch((err) => console.warn('Could not sync analytics:', err));
+  }, []);
 
   // Handle surplus consumer checkout via PayPal
   const handleOrderCompleted = (listingId: string, orderDetails: any) => {
@@ -235,6 +259,8 @@ export default function Home() {
           activeRole={activeRole}
           setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
+          onOpenAuth={(tab) => openAuthModal(tab || 'signin')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : activeTab === 'marketplace' ? (
         <ExploreFoodPage
@@ -243,6 +269,8 @@ export default function Home() {
           setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onOrderCompleted={handleOrderCompleted}
+          onOpenAuth={(tab) => openAuthModal(tab || 'signin')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : activeTab === 'donor' ? (
         <DonorPortal
@@ -251,6 +279,8 @@ export default function Home() {
           setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onAddListing={handleAddListing}
+          onOpenAuth={(tab) => openAuthModal(tab || 'signin')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : activeTab === 'agent' ? (
         <AutonomousAgentConsole
@@ -261,6 +291,8 @@ export default function Home() {
           initialLogs={INITIAL_AGENT_LOGS}
           onTriggerRescueChallenge={handleTriggerRescueChallenge}
           onAgentAction={handleAgentAction}
+          onOpenAuth={(tab) => openAuthModal(tab || 'profile')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : activeTab === 'ngo' ? (
         <NgoHubPage
@@ -269,6 +301,8 @@ export default function Home() {
           setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onClaimBatch={handleClaimBatch}
+          onOpenAuth={(tab) => openAuthModal(tab || 'signin')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : activeTab === 'sponsorship' ? (
         <ImpactPage
@@ -277,6 +311,8 @@ export default function Home() {
           setActiveRole={handleRoleChange}
           onOpenSponsors={() => setIsSponsorsOpen(true)}
           onSponsorshipCompleted={handleSponsorshipCompleted}
+          onOpenAuth={(tab) => openAuthModal(tab || 'signin')}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
         />
       ) : (
         <>
@@ -329,7 +365,6 @@ export default function Home() {
               />
             )}
 
-
             {activeTab === 'ngo' && (
               <div className="space-y-8">
                 <NgoLogisticsGrid
@@ -361,7 +396,20 @@ export default function Home() {
         </>
       )}
 
-      {/* Modals */}
+      {/* Global Application Modals */}
+      <AuthModal />
+
+      <NotificationDrawer
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+        onNavigate={handlePageNavigation}
+      />
+
+      <QrScannerModal
+        isOpen={isQrScannerOpen}
+        onClose={() => setIsQrScannerOpen(false)}
+      />
+
       <RewardsModal
         profile={rewardProfile}
         isOpen={isRewardsOpen}

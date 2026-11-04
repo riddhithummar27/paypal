@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface ImpactPageProps {
   onNavigate: (page: string) => void;
@@ -8,6 +9,8 @@ interface ImpactPageProps {
   setActiveRole: (role: string) => void;
   onOpenSponsors?: () => void;
   onSponsorshipCompleted?: (campaignId: string, portions: number, amount: number) => void;
+  onOpenAuth?: (tab?: 'signin' | 'signup' | 'profile') => void;
+  onOpenNotifications?: () => void;
 }
 
 interface DonorItem {
@@ -28,12 +31,38 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
   setActiveRole,
   onOpenSponsors,
   onSponsorshipCompleted,
+  onOpenAuth,
+  onOpenNotifications,
 }) => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedDonation, setSelectedDonation] = useState<number>(5);
   const [customInput, setCustomInput] = useState<string>('5');
   const [donorFilter, setDonorFilter] = useState<'all' | 'hospitality' | 'supermarket' | 'corporate' | 'culinary'>('all');
   const [isProcessingPayPal, setIsProcessingPayPal] = useState(false);
+
+  // Live analytics state
+  const [platformMetrics, setPlatformMetrics] = useState({
+    mealsRescued: 142890,
+    co2Kg: 89400,
+    moneySaved: 48250,
+    mealsSponsored: 1280,
+  });
+
+  useEffect(() => {
+    fetch('/api/analytics')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.metrics) {
+          setPlatformMetrics({
+            mealsRescued: data.metrics.mealsRescued || 142890,
+            co2Kg: data.metrics.co2Kg || 89400,
+            moneySaved: data.metrics.moneySaved || 48250,
+            mealsSponsored: data.metrics.mealsSponsored || 1280,
+          });
+        }
+      })
+      .catch((err) => console.warn('Could not fetch analytics:', err));
+  }, []);
 
   const donors: DonorItem[] = [
     {
@@ -276,6 +305,22 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                 expand_more
               </span>
             </div>
+            {/* Notification Drawer Trigger */}
+            {onOpenNotifications && (
+              <button
+                type="button"
+                onClick={onOpenNotifications}
+                className="relative p-2 rounded-lg bg-[#f2f4f7] hover:bg-[#eceef1] text-[#001d59] transition-all cursor-pointer border border-slate-200"
+                title="Notifications"
+              >
+                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+              </button>
+            )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Sponsors Showcase */}
             {onOpenSponsors && (
               <button
@@ -288,16 +333,17 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
               </button>
             )}
 
-            <div className="flex items-center gap-1 pl-1">
-              <img
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#dbe1ff]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AuBrBX3rid6pOx0dgjfFZiQuarZNC4ipbGSYhO-jY_WTb_SQbnWDrEo98Jhg-8JKphDxi4Z8NOeGzNc_hFMaRVYj-1683kiMS_dIPxVad445CjK_RrupYdLNxDmYfo7XfvTth6OG-dzgD_qIcJFkl5DrJRZWvLD0cEWGslh-BQJ5MUEt4P9QVKKCZ7ruSXqm_Nf5SXz66O5vLNy7SdUmCX3Y4GHbhC-tmHmwZ4k"
-              />
-              <span className="material-symbols-outlined text-[#747683] text-[18px] hidden sm:block cursor-pointer hover:text-[#001d59] transition-colors">
-                arrow_drop_down
-              </span>
-            </div>
+            {/* Account / Profile Button */}
+            {onOpenAuth && (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('profile')}
+                className="h-10 px-3 rounded-lg bg-[#001d59] hover:bg-[#003087] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                <span className="hidden sm:inline">Account</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -391,7 +437,7 @@ export const ImpactPage: React.FC<ImpactPageProps> = ({
                   </div>
                   <div className="mt-4">
                     <span className="text-xs sm:text-sm uppercase tracking-wider text-[#747683] font-bold">Diverted Food Stock</span>
-                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">142,890</div>
+                    <div className="text-3xl sm:text-4xl font-black text-[#001d59] mt-1.5">{platformMetrics.mealsRescued.toLocaleString()}</div>
                     <div className="text-sm sm:text-base font-bold text-[#005ab6]">Verified Meals Rescued</div>
                   </div>
                 </div>
