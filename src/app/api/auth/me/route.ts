@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getAuthenticatedUser } from '@/lib/auth-guard';
+import { createSessionToken } from '@/lib/security';
 
 export async function GET(req: NextRequest) {
   try {
-    const userId = req.cookies.get('foodloop_user_id')?.value;
-    if (!userId) {
-      // Default to initial donor session for smooth browsing if not logged in
-      const defaultUser = await db.users.findById('usr-donor-01');
-      return NextResponse.json({ authenticated: false, user: defaultUser });
-    }
+    const auth = await getAuthenticatedUser(req);
 
-    const user = await db.users.findById(userId);
-    if (!user) {
+    if (!auth) {
       return NextResponse.json({ authenticated: false, user: null });
     }
 
-    return NextResponse.json({
+    const { user, session } = auth;
+
+    const response = NextResponse.json({
       authenticated: true,
       user: {
         id: user.id,
@@ -29,6 +26,25 @@ export async function GET(req: NextRequest) {
         is_verified: user.is_verified,
       },
     });
+
+    // If session cookie is missing but legacy cookie was authenticated, upgrade with signed session cookie
+    if (!req.cookies.get('foodloop_session')?.value) {
+      const refreshedToken = createSessionToken({
+        userId: user.id,
+        role: user.role,
+        email: user.email,
+      });
+
+      response.cookies.set('foodloop_session', refreshedToken, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 30 * 86400,
+      });
+    }
+
+    return response;
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Internal server error.' }, { status: 500 });
   }

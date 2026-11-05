@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAuth } from '@/lib/auth-guard';
+import { sanitizeString } from '@/lib/security';
 
 export async function GET(req: NextRequest) {
+  // Enforce Admin RBAC
+  const authResult = await requireAuth(req, { allowedRoles: ['admin'], actionName: 'LIST_ALL_USERS' });
+  if ('response' in authResult) return authResult.response;
+
   try {
     const users = await db.users.list();
     return NextResponse.json({
@@ -28,6 +34,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const authResult = await requireAuth(req, { allowedRoles: ['admin'], actionName: 'UPDATE_USER_PERMISSIONS' });
+  if ('response' in authResult) return authResult.response;
+
   try {
     const { userId, role, is_verified } = await req.json();
     if (!userId) {
@@ -35,7 +44,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const updates: any = {};
-    if (role) updates.role = role;
+    if (role) updates.role = sanitizeString(role);
     if (typeof is_verified === 'boolean') updates.is_verified = is_verified;
 
     const updated = await db.users.update(userId, updates);
@@ -44,6 +53,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     await db.auditLogs.create({
+      user_id: authResult.auth.user.id,
       action: 'ADMIN_USER_UPDATED',
       entity_type: 'profile',
       entity_id: userId,

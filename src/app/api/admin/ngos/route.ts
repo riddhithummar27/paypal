@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAuth } from '@/lib/auth-guard';
+import { sanitizeString } from '@/lib/security';
 
 export async function GET(req: NextRequest) {
+  const authResult = await requireAuth(req, { allowedRoles: ['admin'], actionName: 'VIEW_NGO_VERIFICATIONS' });
+  if ('response' in authResult) return authResult.response;
+
   try {
     const ngos = await db.ngos.list();
     const verifications = await db.ngos.listVerifications();
@@ -18,8 +23,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const authResult = await requireAuth(req, { allowedRoles: ['admin'], actionName: 'REVIEW_NGO_VERIFICATION' });
+  if ('response' in authResult) return authResult.response;
+
   try {
-    const { verificationId, status, notes, reviewerId } = await req.json();
+    const { verificationId, status, notes } = await req.json();
 
     if (!verificationId || !status) {
       return NextResponse.json({ error: 'verificationId and status are required.' }, { status: 400 });
@@ -27,9 +35,9 @@ export async function PATCH(req: NextRequest) {
 
     const reviewed = await db.ngos.reviewVerification(
       verificationId,
-      reviewerId || 'usr-admin-01',
+      authResult.auth.user.id,
       status as 'approved' | 'rejected',
-      notes || (status === 'approved' ? 'Verified valid IRS non-profit exemption.' : 'Verification rejected.')
+      sanitizeString(notes) || (status === 'approved' ? 'Verified valid IRS non-profit exemption.' : 'Verification rejected.')
     );
 
     if (!reviewed) {
@@ -51,6 +59,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     await db.auditLogs.create({
+      user_id: authResult.auth.user.id,
       action: `NGO_VERIFICATION_${status.toUpperCase()}`,
       entity_type: 'ngo_verification',
       entity_id: verificationId,
